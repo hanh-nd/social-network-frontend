@@ -1,11 +1,7 @@
 import { AxiosInstance, AxiosPromise } from 'axios';
 import qs from 'qs';
 import { trimObject } from '../helpers';
-import {
-    IBodyResponse,
-    ICommonGetListQuery,
-    ICommonGetListResponse,
-} from '../interfaces';
+import { IBodyResponse, ICommonGetListQuery, ICommonGetListResponse } from '../interfaces';
 
 interface IServiceOption {
     baseUrl: string;
@@ -50,9 +46,7 @@ export class ApiService {
         return params;
     }
 
-    getList<T>(
-        params: ICommonGetListQuery,
-    ): Promise<IBodyResponse<ICommonGetListResponse<T>>> {
+    getList<T>(params: ICommonGetListQuery): Promise<IBodyResponse<ICommonGetListResponse<T>>> {
         return this.client.get(`${this.baseUrl}?${qs.stringify(params)}`);
     }
 

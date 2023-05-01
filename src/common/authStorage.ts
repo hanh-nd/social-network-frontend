@@ -26,8 +26,7 @@ class LocalStorageAuthService {
     }
 
     getLanguage(): SUPPORT_LANGUAGE {
-        return (storage.getLocalStorage(AUTH_SERVICE_KEY.LANGUAGE) ||
-            DEFAULT_LANGUAGE) as SUPPORT_LANGUAGE;
+        return (storage.getLocalStorage(AUTH_SERVICE_KEY.LANGUAGE) || DEFAULT_LANGUAGE) as SUPPORT_LANGUAGE;
     }
 
     getLoginUser(): IUser {
