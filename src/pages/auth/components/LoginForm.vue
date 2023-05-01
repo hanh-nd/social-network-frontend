@@ -68,11 +68,7 @@ export default class LoginForm extends GlobalMixin {
 
         const schema = yup.object({
             username: yup.string().required(),
-            password: yup
-                .string()
-                .min(FORM_VALIDATION.passwordMinLength)
-                .max(FORM_VALIDATION.textMaxLength)
-                .required(),
+            password: yup.string().min(FORM_VALIDATION.passwordMinLength).max(FORM_VALIDATION.textMaxLength).required(),
         });
 
         const { resetForm, errors, handleSubmit } = useForm({
@@ -101,9 +97,7 @@ export default class LoginForm extends GlobalMixin {
                 appModule.setLoginUser(response?.data?.user || {});
                 this.showSuccessNotificationFunction('Đăng nhập thành công');
             } else {
-                this.showErrorNotificationFunction(
-                    response?.message || 'Đăng nhập thất bại',
-                );
+                this.showErrorNotificationFunction(response?.message || 'Đăng nhập thất bại');
             }
             this.isLoggingIn = false;
         });

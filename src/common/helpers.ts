@@ -61,8 +61,6 @@ export function transformMetaResponse(obj: any) {
     const res = [] as any[];
     delete obj.id;
     Object.keys(obj).forEach((key) => res.push(obj[key]));
-    const flatRes = flatten(res).map((ele) =>
-        pick(ele, ['name', 'content', 'itemprop', 'property']),
-    );
+    const flatRes = flatten(res).map((ele) => pick(ele, ['name', 'content', 'itemprop', 'property']));
     return flatRes;
 }

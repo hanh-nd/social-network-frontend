@@ -47,11 +47,9 @@ export default class App extends Vue {
         document.removeEventListener('touchstart', this.removeReadonlyElSelect);
     }
     removeReadonlyElSelect = function () {
-        document
-            .querySelectorAll('.el-select.remove-readonly input[readonly]')
-            .forEach((el) => {
-                el.removeAttribute('readonly');
-            });
+        document.querySelectorAll('.el-select.remove-readonly input[readonly]').forEach((el) => {
+            el.removeAttribute('readonly');
+        });
     };
 }
 </script>

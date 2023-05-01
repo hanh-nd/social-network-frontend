@@ -2,11 +2,7 @@ import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
 import upperFirst from 'lodash/upperFirst';
 
-const parseFile = (
-    file: string,
-    obj: Record<string, Record<string, unknown>>,
-    type = '.vue',
-) => {
+const parseFile = (file: string, obj: Record<string, Record<string, unknown>>, type = '.vue') => {
     let filename = `${file}`.replace(/^.*[\\/]/, '');
     const arr = file.split('/');
     arr.shift();
@@ -18,9 +14,7 @@ const parseFile = (
         filename = startCase(camelCase(filename));
         file = file.replace('./', '/');
         tmp[filename] = require('@/components' + file);
-        obj[componentName] = (
-            tmp[filename] as { default: Record<string, unknown> }
-        ).default;
+        obj[componentName] = (tmp[filename] as { default: Record<string, unknown> }).default;
     }
 };
 
