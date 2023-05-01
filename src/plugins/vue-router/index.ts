@@ -1,11 +1,36 @@
 import localStorageAuthService from '@/common/authStorage';
 import { PageName } from '@/common/constants';
+import MainLayout from '@/layouts/MainLayout.vue';
+import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import MainLayout from '../../layouts/MainLayout.vue';
+import PublicLayout from '../../layouts/PublicLayout.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
+import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
+    {
+        path: '/auth',
+        component: PublicLayout,
+        children: [
+            {
+                path: '/login',
+                name: PageName.LOGIN_PAGE,
+                component: LoginPage,
+                meta: {
+                    public: true,
+                },
+            },
+            {
+                path: '/404',
+                name: PageName.NOT_FOUND_PAGE,
+                component: NotFoundPage,
+                meta: {
+                    public: true,
+                },
+            },
+        ],
+    },
     {
         path: '/',
         component: MainLayout,
@@ -15,16 +40,13 @@ const routes: Array<RouteRecordRaw> = [
                 name: PageName.HOME_PAGE,
                 component: HomePage,
             },
-            {
-                path: '/404',
-                name: PageName.NOT_FOUND_PAGE,
-                component: HomePage,
-            },
-            {
-                path: '/:catchAll(.*)*',
-                redirect: '/404',
-            },
         ],
+    },
+    {
+        path: '/:catchAll(.*)*',
+        redirect: {
+            name: PageName.NOT_FOUND_PAGE,
+        },
     },
 ];
 
@@ -37,16 +59,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const loginCustomer = localStorageAuthService.getLoginCustomer();
-    if (to.matched.some((record) => record.meta.requiredAuth)) {
-        if (isEmpty(loginCustomer)) {
-            // authModule.setIsShowLoginDialog(true);
-            next(from);
+    const loginUser = localStorageAuthService.getLoginUser();
+    if (to.matched.some((record) => record.meta.public)) {
+        next();
+    } else {
+        if (isEmpty(loginUser)) {
+            next({
+                name: PageName.LOGIN_PAGE,
+            });
         } else {
             next();
         }
-    } else {
-        next();
     }
 });
 
