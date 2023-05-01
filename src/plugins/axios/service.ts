@@ -5,7 +5,6 @@ import {
     AxiosInstance,
     AxiosRequestConfig,
     AxiosResponse,
-    InternalAxiosRequestConfig,
 } from 'axios';
 import { HttpMiddleware } from './middlewares/httpMiddleware';
 
@@ -152,13 +151,12 @@ export default class HttpMiddlewareService {
     _updateChain(): void {
         this.chain = [
             [
-                (conf: AxiosRequestConfig) =>
-                    this._onSync(
-                        this.originalAdapter?.call(
-                            this.http,
-                            conf as unknown as InternalAxiosRequestConfig,
-                        ) as Promise<unknown>,
-                    ),
+                (conf: AxiosRequestConfig) => {
+                    console.log(this.originalAdapter);
+                    return this._onSync(
+                        this.originalAdapter?.call(this.http, conf) as Promise<unknown>,
+                    );
+                },
                 undefined,
             ],
         ];

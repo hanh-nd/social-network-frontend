@@ -1,7 +1,7 @@
-import HttpMiddlewareService from './service';
 import axios, { AxiosRequestConfig } from 'axios';
 import AuthMiddleware from './middlewares/authMiddleware';
 import CommonMiddleware from './middlewares/commonMiddleware';
+import HttpMiddlewareService from './service';
 
 const options: AxiosRequestConfig = {
     baseURL: process.env.VUE_APP_API_URL,
