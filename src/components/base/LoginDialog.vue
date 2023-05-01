@@ -1,9 +1,5 @@
 <template>
-    <el-dialog
-        v-model="isShowLoginDialog"
-        @closed="onCloseLoginDialog"
-        custom-class="auth-dialog"
-    >
+    <el-dialog v-model="isShowLoginDialog" @closed="onCloseLoginDialog" custom-class="auth-dialog">
         <div class="container d-flex login-form p-0">
             <div class="login-left"></div>
             <div class="login-right d-flex">
@@ -69,9 +65,7 @@
                 <div class="bottom-text">
                     <p>
                         {{ $t('common.login.bottomText') }}
-                        <span @click="showRegisterDialog">{{
-                            $t('common.login.register')
-                        }}</span>
+                        <span @click="showRegisterDialog">{{ $t('common.login.register') }}</span>
                     </p>
                 </div>
             </div>
@@ -103,11 +97,7 @@ export default class LoginDialog extends GlobalMixin {
         };
         const schema = yup.object({
             email: yup.string().required().email(),
-            password: yup
-                .string()
-                .min(FORM_VALIDATION.passwordMinLength)
-                .max(FORM_VALIDATION.textMaxLength)
-                .required(),
+            password: yup.string().min(FORM_VALIDATION.passwordMinLength).max(FORM_VALIDATION.textMaxLength).required(),
         });
         const { resetForm, errors, handleSubmit } = useForm({
             validationSchema: schema,

@@ -1,27 +1,20 @@
 <template>
-    <div class="main-layout">
-        <MainHeader />
+    <div class="public-layout">
         <div class="app-content">
             <router-view v-slot="{ Component }" :key="`${new Date()}`">
                 <component :is="Component" />
             </router-view>
         </div>
-        <!-- <MainFooter /> -->
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import MainFooter from './components/MainFooter.vue';
-import MainHeader from './components/MainHeader.vue';
 
 @Options({
-    components: {
-        MainHeader,
-        MainFooter,
-    },
+    components: {},
 })
-export default class MainLayout extends Vue {
+export default class PublicLayout extends Vue {
     created() {
         this.loadData();
     }
@@ -35,7 +28,7 @@ export default class MainLayout extends Vue {
 body {
     padding-right: 0;
 }
-.main-layout {
+.public-layout {
     min-height: 100vh;
     display: flex;
     flex-direction: column;

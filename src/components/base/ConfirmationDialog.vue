@@ -22,9 +22,7 @@
                     ><template #loading>
                         <BaseButtonInnerLoading />
                     </template>
-                    {{
-                        isSendingRequest ? '' : $t('app.dialog.confirmation.confirm')
-                    }}</el-button
+                    {{ isSendingRequest ? '' : $t('app.dialog.confirmation.confirm') }}</el-button
                 >
             </span>
         </template>
