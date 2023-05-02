@@ -7,10 +7,15 @@ export const enum AUTH_SERVICE_KEY {
     REFRESH_TOKEN = 'REFRESH_TOKEN',
     LANGUAGE = 'LANGUAGE',
     LOGIN_USER = 'USER',
+    IS_REFRESHING = 'IS_REFRESHING',
 }
 class LocalStorageAuthService {
     setAccessToken(value: string): void {
         storage.setLocalStorage(AUTH_SERVICE_KEY.ACCESS_TOKEN, value);
+    }
+
+    setRefreshToken(value: string): void {
+        storage.setLocalStorage(AUTH_SERVICE_KEY.REFRESH_TOKEN, value);
     }
 
     setLanguage(value: SUPPORT_LANGUAGE): void {
@@ -21,8 +26,16 @@ class LocalStorageAuthService {
         storage.setLocalStorage(AUTH_SERVICE_KEY.LOGIN_USER, JSON.stringify(user || ''));
     }
 
+    setIsRefreshing(isRefreshing: number) {
+        storage.setLocalStorage(AUTH_SERVICE_KEY.IS_REFRESHING, `${isRefreshing}`);
+    }
+
     getAccessToken(): string {
         return storage.getLocalStorage(AUTH_SERVICE_KEY.ACCESS_TOKEN);
+    }
+
+    getRefreshToken(): string {
+        return storage.getLocalStorage(AUTH_SERVICE_KEY.REFRESH_TOKEN);
     }
 
     getLanguage(): SUPPORT_LANGUAGE {
@@ -31,6 +44,14 @@ class LocalStorageAuthService {
 
     getLoginUser(): IUser {
         return storage.getObjectFromKey(AUTH_SERVICE_KEY.LOGIN_USER) as IUser;
+    }
+
+    getIsRefreshing(): number {
+        return +(storage.getObjectFromKey(AUTH_SERVICE_KEY.IS_REFRESHING) as string);
+    }
+
+    resetRefreshToken(): void {
+        storage.setLocalStorage(AUTH_SERVICE_KEY.REFRESH_TOKEN, '');
     }
 
     resetAccessToken(): void {
@@ -42,6 +63,7 @@ class LocalStorageAuthService {
     }
 
     resetAll(): void {
+        this.resetRefreshToken();
         this.resetAccessToken();
         this.resetLoginUser();
     }

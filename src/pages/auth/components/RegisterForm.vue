@@ -18,11 +18,11 @@ import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
+import { isEmpty } from 'lodash';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 import RegisterFormStepOne from './RegisterFormStepOne.vue';
 import RegisterFormStepTwo from './RegisterFormStepTwo.vue';
-import _, { isEmpty } from 'lodash';
 
 @Options({
     components: {
@@ -51,7 +51,7 @@ export default class RegisterForm extends GlobalMixin {
             fullName: yup.string().required(),
             email: yup.string().required().email(),
             phone: yup.string().optional(),
-            birthday: yup.string().optional(),
+            birthday: yup.date().optional(),
             address: yup
                 .object({
                     province: yup.string(),
@@ -87,6 +87,7 @@ export default class RegisterForm extends GlobalMixin {
                 birthday: values.birthday,
             });
             if (response.success) {
+                localStorageAuthService.setRefreshToken(response?.data?.refreshToken || '');
                 localStorageAuthService.setAccessToken(response?.data?.accessToken || '');
                 localStorageAuthService.setLoginUser(response?.data?.user || {});
                 appModule.setLoginUser(response?.data?.user || {});

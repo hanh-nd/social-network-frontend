@@ -85,6 +85,7 @@ export default class LoginForm extends GlobalMixin {
                 password: values.password,
             });
             if (response.success) {
+                localStorageAuthService.setRefreshToken(response?.data?.refreshToken || '');
                 localStorageAuthService.setAccessToken(response?.data?.accessToken || '');
                 localStorageAuthService.setLoginUser(response?.data?.user || {});
                 appModule.setLoginUser(response?.data?.user || {});

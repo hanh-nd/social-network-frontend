@@ -29,11 +29,11 @@
 
         <div class="birthday form-items">
             <div>Ngày sinh</div>
-            <el-input
-                @keydown.space.prevent
+            <el-date-picker
                 @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.birthday }"
                 v-model="formData.birthday"
+                type="date"
+                :class="{ 'input-error': formData.errors.birthday }"
                 placeholder="Ngày sinh"
             />
             <span v-show="formData.errors.birthday" class="form-error">
