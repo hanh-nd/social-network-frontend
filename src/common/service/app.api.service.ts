@@ -3,6 +3,14 @@ import { ApiService } from '@/common/service/api';
 import { ILoginForm, ILoginResponse, IRegisterForm } from '@/pages/auth/interface';
 import axiosService from '@/plugins/axios';
 class AppApiService extends ApiService {
+    async refreshToken(refreshToken: string): Promise<IBodyResponse<ILoginResponse>> {
+        return await this.client.post('/refresh-token', undefined, {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
+    }
+
     async login(data: ILoginForm): Promise<IBodyResponse<ILoginResponse>> {
         return await this.client.post('/login', data);
     }

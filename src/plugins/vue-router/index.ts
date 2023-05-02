@@ -67,7 +67,12 @@ const router = createRouter({
     },
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+    let isRefreshing = localStorageAuthService.getIsRefreshing();
+    while (isRefreshing) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        isRefreshing = localStorageAuthService.getIsRefreshing();
+    }
     const loginUser = localStorageAuthService.getLoginUser();
     if (to.matched.some((record) => record.meta.public)) {
         next();
