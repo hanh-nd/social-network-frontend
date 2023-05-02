@@ -30,7 +30,7 @@ export default class MenuHeader extends GlobalMixin {
 
 <style lang="scss" scoped>
 .header-wrapper {
-    background-color: $color-pink-light;
+    background-color: $color-green;
 }
 
 .header-container {
