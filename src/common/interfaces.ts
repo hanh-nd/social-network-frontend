@@ -9,11 +9,6 @@ export interface IBodyResponse<T> extends AxiosResponse {
     error?: { key: string; message: string; errorCode: HttpStatus };
 }
 
-export interface ILoginForm {
-    username: string;
-    password: string;
-}
-
 export interface IChangePasswordForm {
     newPassword: string;
 }
@@ -27,21 +22,8 @@ export interface IVerifyTokenRequest {
     email: string;
 }
 
-export interface IRegisterForm {
-    username: string;
-    phoneNumber: string;
-    email: string;
-    password: string;
-}
-
 export interface IResetPasswordForm {
     password: string;
-}
-
-export interface ILoginResponse {
-    user: IUser;
-    accessToken: string;
-    refreshToken: string;
 }
 
 export interface IRequestForgotPasswordResponse {
@@ -116,4 +98,11 @@ export interface IUser {
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date;
+}
+
+export interface IAddress {
+    province: string;
+    ward: string;
+    district: string;
+    detail?: string;
 }

@@ -46,12 +46,12 @@ export default class Pagination extends Vue {
 
     li.is-active,
     li.is-active:hover {
-        background: $color-red;
+        background: $color-green;
         color: $color-white;
     }
 
     li:hover {
-        color: $color-red;
+        color: $color-green;
     }
 }
 </style>

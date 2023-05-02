@@ -45,7 +45,7 @@ export default class MainMenu extends Vue {
     }
     .router-link-black:hover,
     .router-link:hover {
-        color: $color-red !important;
+        color: $color-green !important;
     }
 }
 .router-link-black.router-link-exact-active {
@@ -57,6 +57,6 @@ export default class MainMenu extends Vue {
 }
 
 .router-link-exact-active {
-    color: $color-red !important;
+    color: $color-green !important;
 }
 </style>

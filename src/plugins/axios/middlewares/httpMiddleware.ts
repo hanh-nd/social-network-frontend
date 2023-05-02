@@ -1,4 +1,4 @@
-import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export class HttpMiddleware {
     async onRequest(config: AxiosRequestConfig): Promise<AxiosRequestConfig> {
@@ -17,7 +17,7 @@ export class HttpMiddleware {
         return response;
     }
 
-    onResponseError(err: AxiosError): void {
+    async onResponseError(err: AxiosError, http: AxiosInstance | null): Promise<unknown> {
         throw err;
     }
 }
