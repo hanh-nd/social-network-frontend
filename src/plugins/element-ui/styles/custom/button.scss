@@ -8,42 +8,42 @@
 
 @include b(button) {
     background-color: $color-blue-1 !important;
-    border-color: $color-red !important;
-    color: $color-red !important;
+    border-color: $color-green !important;
+    color: $color-green !important;
 
     &.is-plain,
     &:focus,
     &.is-plain:focus {
-        color: $color-red !important;
+        color: $color-green !important;
         background: $color-blue-1 !important;
-        border-color: $color-red !important;
+        border-color: $color-green !important;
     }
 
     &:hover,
     &.is-plain:hover {
-        background-color: $color-red-2 !important;
-        border-color: $color-red !important;
-        color: $color-red !important;
+        background-color: $color-green-2 !important;
+        border-color: $color-green !important;
+        color: $color-green !important;
     }
 
     &.is-disabled,
     &.is-disabled:hover,
     &.is-disabled:focus {
-        background-color: $color-red !important;
+        background-color: $color-green !important;
         opacity: 0.5 !important;
     }
 
     &--primary {
-        background-color: $color-red !important;
-        border-color: $color-red !important;
+        background-color: $color-green !important;
+        border-color: $color-green !important;
         color: $color-white !important;
 
         &.is-plain,
         &:focus,
         &.is-plain:focus {
             color: $color-white !important;
-            background: $color-red !important;
-            border-color: $color-red !important;
+            background: $color-green !important;
+            border-color: $color-green !important;
         }
 
         &:hover,
@@ -56,43 +56,43 @@
 
     &--success {
         background-color: $color-white !important;
-        border-color: $color-red !important;
-        color: $color-red !important;
+        border-color: $color-green !important;
+        color: $color-green !important;
 
         &.is-plain,
         &:focus,
         &.is-plain:focus {
             color: $color-white !important;
-            background: $color-red !important;
-            border-color: $color-red !important;
+            background: $color-green !important;
+            border-color: $color-green !important;
         }
 
         &:hover,
         &.is-plain:hover {
             background-color: $color-blue-1 !important;
-            border-color: $color-red !important;
-            color: $color-red !important;
+            border-color: $color-green !important;
+            color: $color-green !important;
         }
     }
 
     &--info {
         background-color: $color-blue-1 !important;
         border-color: $color-blue-1 !important;
-        color: $color-red !important;
+        color: $color-green !important;
 
         &.is-plain,
         &:focus,
         &.is-plain:focus {
             color: $color-white !important;
-            background: $color-red !important;
-            border-color: $color-red !important;
+            background: $color-green !important;
+            border-color: $color-green !important;
         }
 
         &:hover,
         &.is-plain:hover {
-            background-color: $color-red-2 !important;
-            border-color: $color-red-2 !important;
-            color: $color-red !important;
+            background-color: $color-green-2 !important;
+            border-color: $color-green-2 !important;
+            color: $color-green !important;
         }
     }
 

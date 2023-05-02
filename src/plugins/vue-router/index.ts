@@ -2,6 +2,7 @@ import localStorageAuthService from '@/common/authStorage';
 import { PageName } from '@/common/constants';
 import MainLayout from '@/layouts/MainLayout.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
+import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
@@ -17,6 +18,14 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/login',
                 name: PageName.LOGIN_PAGE,
                 component: LoginPage,
+                meta: {
+                    public: true,
+                },
+            },
+            {
+                path: '/register',
+                name: PageName.REGISTER_PAGE,
+                component: RegisterPage,
                 meta: {
                     public: true,
                 },
@@ -64,9 +73,15 @@ router.beforeEach((to, from, next) => {
         next();
     } else {
         if (isEmpty(loginUser)) {
-            next({
-                name: PageName.LOGIN_PAGE,
-            });
+            if (from.name === PageName.REGISTER_PAGE) {
+                next({
+                    name: PageName.REGISTER_PAGE,
+                });
+            } else {
+                next({
+                    name: PageName.LOGIN_PAGE,
+                });
+            }
         } else {
             next();
         }
