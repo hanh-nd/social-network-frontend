@@ -6,11 +6,11 @@
             </div>
             <div class="welcome">Xin chào bạn!</div>
             <div class="login">
-                <LoginForm />
+                <RegisterForm />
             </div>
             <div class="register">
-                Chưa có tài khoản?
-                <span class="btn" @click="goToRegisterPage">Đăng ký</span>
+                Đã có tài khoản?
+                <span class="btn" @click="goToLoginPage">Đăng nhập</span>
             </div>
         </div>
         <div class="right-panel"></div>
@@ -20,15 +20,15 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
-import LoginForm from '../components/LoginForm.vue';
+import RegisterForm from '../components/RegisterForm.vue';
 
 @Options({
-    components: { LoginForm },
+    components: { RegisterForm },
 })
-export default class LoginPage extends GlobalMixin {
-    goToRegisterPage() {
+export default class RegisterPage extends GlobalMixin {
+    goToLoginPage() {
         this.$router.push({
-            name: this.PageName.REGISTER_PAGE,
+            name: this.PageName.LOGIN_PAGE,
         });
     }
 }

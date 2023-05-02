@@ -37,7 +37,7 @@ export default class ImageLoadingSpinner extends Vue {}
     display: block;
     width: 25%;
     height: 25%;
-    background-color: $color-red;
+    background-color: $color-green;
     border-radius: 100%;
     animation: sk-chase-dot-before 2s infinite ease-in-out both;
     opacity: 0.7;
