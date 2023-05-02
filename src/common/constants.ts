@@ -3,6 +3,7 @@ export enum PageName {
     LOGIN_PAGE = 'LoginPage',
     REGISTER_PAGE = 'RegisterPage',
     NOT_FOUND_PAGE = 'NotFoundPage',
+    WELCOME_PAGE = 'WelcomePage',
 }
 
 export const PROVINCE_LIMIT = 100;

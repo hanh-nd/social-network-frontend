@@ -106,3 +106,32 @@ export interface IAddress {
     district: string;
     detail?: string;
 }
+
+export interface IFile {
+    originalname: string;
+    mimetype: string;
+    id: string;
+    filename: string;
+    metadata: {
+        uploadedBy: {
+            _id: string;
+            username: string;
+        };
+    };
+    bucketName: string;
+    chunkSize: number;
+    size: number;
+    uploadDate: Date;
+    contentType: string;
+}
+
+export interface IUpdateProfileBody {
+    avatarId?: string;
+    coverId?: string;
+    phone?: string;
+    fullName?: string;
+    birthday?: Date;
+    address?: IAddress;
+    describe?: string;
+    private?: boolean;
+}

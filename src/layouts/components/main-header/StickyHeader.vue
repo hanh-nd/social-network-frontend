@@ -73,7 +73,7 @@ export default class StickyHeader extends Vue {
     animation-name: fixedHeaderShow;
     animation-duration: 0.3s;
     box-shadow: 0 3px 6px rgba(51, 51, 51, 0.05);
-    background-color: $color-pink-light;
+    background-color: $color-green;
 }
 
 :deep(.sticky-header.fade) {
