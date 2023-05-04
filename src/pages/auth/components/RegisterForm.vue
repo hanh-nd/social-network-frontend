@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import localStorageAuthService from '@/common/authStorage';
-import { FORM_VALIDATION } from '@/common/constants';
+import { ValidationForm } from '@/common/constants';
 import { IAddress } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
@@ -47,7 +47,11 @@ export default class RegisterForm extends GlobalMixin {
 
         const schema = yup.object({
             username: yup.string().required(),
-            password: yup.string().min(FORM_VALIDATION.passwordMinLength).max(FORM_VALIDATION.textMaxLength).required(),
+            password: yup
+                .string()
+                .min(ValidationForm.PASSWORD_MIN_LENGTH)
+                .max(ValidationForm.INPUT_TEXT_MAX_LENGTH)
+                .required(),
             fullName: yup.string().required(),
             email: yup.string().required().email(),
             phone: yup.string().optional(),

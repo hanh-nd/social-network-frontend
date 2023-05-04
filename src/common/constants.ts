@@ -33,7 +33,7 @@ export enum HttpStatus {
     SERVICE_UNAVAILABLE = 503,
 }
 
-export enum DATE_TIME_FORMAT {
+export enum DateFormat {
     YYYY_MM_DD_HYPHEN = 'YYYY_MM_DD',
     DD_MM_YYYY_DASH = 'DD/MM/YYYY',
     hh_mm_L_COLON = 'h:mm L',
@@ -46,13 +46,13 @@ export enum DATE_TIME_FORMAT {
     HH_mm = 'HH:mm',
 }
 
-export const FORM_VALIDATION = {
-    textMaxLength: 255,
-    textAreaMaxLength: 2000,
-    passwordMinLength: 6,
-    phoneRegExp:
+export const ValidationForm = {
+    INPUT_TEXT_MAX_LENGTH: 255,
+    INPUT_TEXT_AREA_MAX_LENGTH: 2000,
+    PASSWORD_MIN_LENGTH: 6,
+    PHONE_REG_EXP:
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-    nameRegExp: /^([^!@`~#$:%^*&()<>?\\/\\+|=]+?)$/,
+    NAME_REG_EXP: /^([^!@`~#$:%^*&()<>?\\/\\+|=]+?)$/,
 };
 
 export enum DeviceType {
@@ -84,3 +84,7 @@ export enum NotificationPermission {
 export const MAX_SUGGESTION_LENGTH = 75; // characters
 
 export const ORDER_WAITING_DAY_COUNT = 2;
+
+export enum KeyCode {
+    ENTER = 'Enter',
+}

@@ -15,6 +15,10 @@ class AppApiService extends ApiService {
         return await this.client.post('/login', data);
     }
 
+    async logout(): Promise<IBodyResponse<boolean>> {
+        return await this.client.post('/logout');
+    }
+
     async register(data: IRegisterForm): Promise<IBodyResponse<ILoginResponse>> {
         return await this.client.post('/register', data);
     }
