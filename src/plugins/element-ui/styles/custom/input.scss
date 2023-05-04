@@ -1,0 +1,12 @@
+@use 'sass:map';
+@import '../../../../assets/styles/variables.scss';
+
+.el-input {
+    height: 42px;
+    --el-input-placeholder-color: $color-black-2v !important;
+
+    .el-input__wrapper.is-focus {
+        border: 2px solid $color-green;
+        box-shadow: none;
+    }
+}
