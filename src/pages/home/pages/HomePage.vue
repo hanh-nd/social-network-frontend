@@ -1,6 +1,8 @@
 <template>
-    <div class="container">
-        <el-button @click="goToLoginPage">CLICK</el-button>
+    <div class="home-wrapper">
+        <div class="home-container mx-auto">
+            <el-button @click="goToLoginPage">CLICK</el-button>
+        </div>
     </div>
 </template>
 
@@ -28,4 +30,9 @@ export default class HomePage extends GlobalMixin {
     }
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.home-container {
+    max-width: $content-max-width + $content-padding * 2;
+    padding: 0 $content-padding;
+}
+</style>

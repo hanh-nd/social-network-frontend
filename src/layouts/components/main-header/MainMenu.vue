@@ -1,6 +1,9 @@
 <template>
     <div class="main-menu-header">
-        <div class="menu-list"></div>
+        <div class="menu-list">
+            <router-link to="/"> Trang chủ </router-link>
+            <router-link to="/"> Truyền cảm hứng </router-link>
+        </div>
     </div>
 </template>
 

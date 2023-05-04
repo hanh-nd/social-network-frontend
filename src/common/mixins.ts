@@ -2,12 +2,12 @@ import i18n from '@/plugins/vue-i18n';
 import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
-import { DATE_TIME_FORMAT, DEFAULT_LANGUAGE, PageName } from './constants';
+import { DateFormat, DEFAULT_LANGUAGE, PageName } from './constants';
 import { IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {
     // constants
-    DATE_TIME_FORMAT = DATE_TIME_FORMAT;
+    DATE_TIME_FORMAT = DateFormat;
     PageName = PageName;
     //
     parseDateTime(dateTime: Date | string, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
