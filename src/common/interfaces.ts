@@ -135,3 +135,19 @@ export interface IUpdateProfileBody {
     describe?: string;
     private?: boolean;
 }
+
+export interface IPost {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+    author: Partial<IUser>;
+    content: string;
+    privacy: number;
+    pictureIds: string[];
+    videoIds: string[];
+    numberOfComments: number;
+    numberOfReacts: number;
+    numberOfShares: number;
+    isReacted: boolean;
+}

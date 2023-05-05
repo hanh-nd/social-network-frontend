@@ -28,7 +28,7 @@ import LoginForm from '../components/LoginForm.vue';
 export default class LoginPage extends GlobalMixin {
     goToRegisterPage() {
         this.$router.push({
-            name: this.PageName.HOME_PAGE,
+            name: this.PageName.REGISTER_PAGE,
         });
     }
 }

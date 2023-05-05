@@ -1,31 +1,23 @@
 <template>
     <div class="form">
         <div class="username form-items">
-            <div>Tên tài khoản</div>
-            <el-input
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': loginForm.errors.username }"
-                v-model="loginForm.username"
+            <BaseInputText
+                v-model:value="loginForm.username"
+                label="Tên tài khoản"
                 placeholder="Tên tài khoản"
+                :error="translateYupError(loginForm.errors.username as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="loginForm.errors.username" class="form-error">
-                {{ translateYupError(loginForm.errors.username as IYupError) }}</span
-            >
         </div>
 
         <div class="password form-items">
-            <div>Mật khẩu</div>
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': loginForm.errors.password }"
-                v-model="loginForm.password"
+            <BaseInputPassword
+                v-model:value="loginForm.password"
+                label="Mật khẩu"
                 placeholder="Mật khẩu"
-                type="password"
+                :error="translateYupError(loginForm.errors.password as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="loginForm.errors.username" class="form-error">
-                {{ translateYupError(loginForm.errors.password as IYupError) }}</span
-            >
         </div>
 
         <el-button @click="onSubmit" :disabled="isLoggingIn" :loading="isLoggingIn" class="login-btn" type="primary">
