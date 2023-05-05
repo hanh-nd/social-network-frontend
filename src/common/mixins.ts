@@ -2,13 +2,16 @@ import i18n from '@/plugins/vue-i18n';
 import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
-import { DateFormat, DEFAULT_LANGUAGE, PageName } from './constants';
+import { DateFormat, DEFAULT_LANGUAGE, PageName, DeviceType, ValidationForm } from './constants';
 import { IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {
     // constants
     DATE_TIME_FORMAT = DateFormat;
     PageName = PageName;
+    DeviceType = DeviceType;
+    ValidationForm = ValidationForm;
+
     //
     parseDateTime(dateTime: Date | string, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
         if (!moment(dateTime).isValid) {

@@ -1,46 +1,36 @@
 <template>
     <div class="form">
         <div class="username form-items">
-            <div>Tên tài khoản</div>
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="nextStep"
-                :class="{ 'input-error': formData.errors.username }"
-                v-model="formData.username"
+            <BaseInputText
+                v-model:value="formData.username"
+                label="Tên tài khoản"
                 placeholder="Tên tài khoản"
+                :error="translateYupError(formData.errors.username as IYupError)"
+                @on-enter="nextStep"
+                isRequired="true"
             />
-            <span v-show="formData.errors.username" class="form-error">
-                {{ translateYupError(formData.errors.username as IYupError) }}</span
-            >
         </div>
 
         <div class="password form-items">
-            <div>Mật khẩu</div>
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="nextStep"
-                :class="{ 'input-error': formData.errors.password }"
-                v-model="formData.password"
+            <BaseInputPassword
+                v-model:value="formData.password"
+                label="Mật khẩu"
                 placeholder="Mật khẩu"
-                type="password"
+                :error="translateYupError(formData.errors.password as IYupError)"
+                @on-enter="nextStep"
+                isRequired="true"
             />
-            <span v-show="formData.errors.password" class="form-error">
-                {{ translateYupError(formData.errors.password as IYupError) }}</span
-            >
         </div>
 
         <div class="email form-items">
-            <div>Địa chỉ email</div>
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="nextStep"
-                :class="{ 'input-error': formData.errors.email }"
-                v-model="formData.email"
+            <BaseInputText
+                v-model:value="formData.email"
+                label="Địa chỉ email"
                 placeholder="Địa chỉ email"
+                :error="translateYupError(formData.errors.email as IYupError)"
+                @on-enter="nextStep"
+                isRequired="true"
             />
-            <span v-show="formData.errors.email" class="form-error">
-                {{ translateYupError(formData.errors.email as IYupError) }}</span
-            >
         </div>
 
         <el-button @click="nextStep" class="next-step-btn" type="primary"> Tiếp theo </el-button>

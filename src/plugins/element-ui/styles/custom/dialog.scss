@@ -1,6 +1,17 @@
 @import '../../../../assets/styles/variables.scss';
 
 .el-dialog {
+    border-radius: 8px;
+
+    .el-dialog__body {
+        word-break: break-word;
+        padding-bottom: 8px;
+    }
+
+    .el-dialog__footer {
+        text-align: end;
+    }
+
     .el-dialog__headerbtn:hover,
     .el-dialog__headerbtn:focus {
         .el-dialog__close {
@@ -8,17 +19,5 @@
             background-color: transparent;
             border: none;
         }
-    }
-}
-
-.base-confirmation-dialog {
-    border-radius: 8px;
-
-    .el-dialog__body {
-        word-break: break-word;
-    }
-
-    .el-dialog__footer {
-        text-align: end;
     }
 }
