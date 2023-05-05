@@ -40,6 +40,7 @@ export default class MenuHeader extends GlobalMixin {
 .header-wrapper {
     background-color: $color-white;
     box-shadow: 0px 2px $color-black-opacity-3;
+    margin-bottom: 2px;
 }
 
 .header-container {

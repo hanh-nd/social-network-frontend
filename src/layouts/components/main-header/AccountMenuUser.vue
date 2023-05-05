@@ -2,7 +2,7 @@
     <div class="account-menu-wrapper">
         <el-dropdown :hide-on-click="true" placement="top-start" ref="dropdown" trigger="click">
             <div class="d-flex user-info" :class="{ sticky: isSticky }">
-                <img :src="avatar" alt="" class="avatar" />
+                <BaseRoundAvatar :user="loginUser" :size="32" />
                 <p class="text-truncate">{{ name }}</p>
             </div>
 
@@ -10,7 +10,7 @@
                 <el-dropdown-menu>
                     <router-link class="router-link" to="/my-account">
                         <el-dropdown-item class="dropdown-item">
-                            <p>Tài khoản của tôi</p>
+                            <p>Trang cá nhân</p>
                         </el-dropdown-item>
                     </router-link>
                     <hr />
@@ -56,6 +56,10 @@ export default class AccountMenuUser extends GlobalMixin {
             : require('@/assets/images/common/default-avatar.svg');
     }
 
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
     mounted(): void {
         window.addEventListener('scroll', this.scrollHandler, {
             passive: true,
@@ -96,15 +100,10 @@ hr {
     justify-content: space-between;
     align-items: center;
     color: $color-black;
+    gap: 8px;
+
     cursor: pointer;
-    .avatar {
-        vertical-align: middle;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        margin-left: 35px;
-        margin-right: 8px;
-    }
+
     p {
         max-width: 150px;
         color: #1d1d1d;

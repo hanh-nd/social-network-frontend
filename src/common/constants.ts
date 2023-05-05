@@ -34,6 +34,7 @@ export enum HttpStatus {
 }
 
 export enum DateFormat {
+    YYYY_MM_DD = 'YYYY/MM/DD',
     YYYY_MM_DD_HYPHEN = 'YYYY_MM_DD',
     DD_MM_YYYY_DASH = 'DD/MM/YYYY',
     hh_mm_L_COLON = 'h:mm L',
@@ -88,3 +89,15 @@ export const ORDER_WAITING_DAY_COUNT = 2;
 export enum KeyCode {
     ENTER = 'Enter',
 }
+
+export const Privacy = {
+    PUBLIC: 1,
+    SUBSCRIBED: 2,
+    PRIVATE: 3,
+};
+
+export const PrivacyName = {
+    [Privacy.PUBLIC]: 'Công khai',
+    [Privacy.SUBSCRIBED]: 'Những người theo dõi tôi',
+    [Privacy.PRIVATE]: 'Riêng tư',
+};

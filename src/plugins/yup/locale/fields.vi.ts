@@ -10,4 +10,6 @@ export const fields = {
     'address.ward': 'Quận/Huyện',
     'address.district': 'Phường/Xã',
     'address.detail': 'Đia chỉ chi tiết',
+    content: 'Nội dung',
+    privacy: 'Quyền riêng tư',
 };
