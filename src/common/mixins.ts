@@ -99,4 +99,8 @@ export class GlobalMixin extends Vue {
                 )
         );
     }
+
+    getImageSourceById(id: string) {
+        return `${process.env.VUE_APP_API_URL}/files/${id}`;
+    }
 }
