@@ -101,3 +101,5 @@ export const PrivacyName = {
     [Privacy.SUBSCRIBED]: 'Những người theo dõi tôi',
     [Privacy.PRIVATE]: 'Riêng tư',
 };
+
+export const MAX_UPLOAD_FILE_SIZE_IN_BYTE = 100000000;
