@@ -28,4 +28,10 @@ export default class PostList extends GlobalMixin {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.post-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+</style>

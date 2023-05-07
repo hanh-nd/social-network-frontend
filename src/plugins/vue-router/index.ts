@@ -9,6 +9,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
+import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -49,6 +50,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/',
                 name: PageName.HOME_PAGE,
                 component: HomePage,
+            },
+            {
+                path: '/profile/:id',
+                name: PageName.PROFILE_PAGE,
+                component: ProfilePage,
             },
             {
                 path: '/welcome',
