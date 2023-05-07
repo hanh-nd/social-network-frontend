@@ -2,13 +2,13 @@
     <div class="account-menu-wrapper">
         <el-dropdown :hide-on-click="true" placement="top-start" ref="dropdown" trigger="click">
             <div class="d-flex user-info" :class="{ sticky: isSticky }">
-                <BaseRoundAvatar :user="loginUser" :size="32" />
+                <BaseRoundAvatar :user="loginUser" :size="32" :onClick="() => {}" />
                 <p class="text-truncate">{{ name }}</p>
             </div>
 
             <template #dropdown>
                 <el-dropdown-menu>
-                    <router-link class="router-link" to="/my-account">
+                    <router-link class="router-link" :to="`/profile/${loginUser._id}`">
                         <el-dropdown-item class="dropdown-item">
                             <p>Trang cá nhân</p>
                         </el-dropdown-item>

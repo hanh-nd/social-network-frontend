@@ -1,6 +1,5 @@
-import { IBodyResponse, ICreateReactionBody, IPost } from '@/common/interfaces';
+import { IBodyResponse, ICreateNewPostBody, ICreateReactionBody, IPost } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
-import { ICreateNewPostBody } from '@/pages/home/interfaces';
 import axiosService from '@/plugins/axios';
 
 class PostApiService extends ApiService {

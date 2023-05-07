@@ -7,6 +7,8 @@
             </router-view>
         </div>
         <!-- <MainFooter /> -->
+        <!-- Common Dialog-->
+        <BaseCreateNewPostDialog />
     </div>
 </template>
 

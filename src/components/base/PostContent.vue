@@ -5,7 +5,7 @@
                 <BaseRoundAvatar :user="post?.author" :size="42" />
             </div>
             <div class="information">
-                <div class="name">
+                <div class="name" @click="goToProfilePage">
                     {{ post?.author.fullName || 'hihi' }}
                 </div>
                 <div class="created-at">
@@ -46,6 +46,15 @@ import { Prop } from 'vue-property-decorator';
 })
 export default class PostContent extends GlobalMixin {
     @Prop() post!: IPost;
+
+    goToProfilePage() {
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: this.post?.author?._id,
+            },
+        });
+    }
 }
 </script>
 
@@ -67,6 +76,7 @@ export default class PostContent extends GlobalMixin {
 
             .name {
                 font-weight: 500;
+                cursor: pointer;
             }
 
             .created-at {

@@ -19,7 +19,6 @@ import { getAvatarUrl } from '@/common/helpers';
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
-import { homeModule } from '../store';
 
 @Options({
     components: {},
@@ -33,7 +32,7 @@ export default class CreateNewPostBar extends GlobalMixin {
     }
 
     openCreatePostDialog() {
-        homeModule.setIsShowCreatePostDialog(true);
+        appModule.setIsShowCreatePostDialog(true);
     }
 }
 </script>

@@ -14,6 +14,7 @@ import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-dec
     store,
 })
 class AppModule extends VuexModule {
+    isShowCreatePostDialog = false;
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
     isRefreshing = false;
@@ -44,6 +45,11 @@ class AppModule extends VuexModule {
     }
 
     @Action
+    setIsShowCreatePostDialog(isShowCreatePostDialog: boolean) {
+        this.SET_IS_SHOW_CREATE_POST_DIALOG(isShowCreatePostDialog);
+    }
+
+    @Action
     setScreenWidth(screenWidth: number) {
         this.SET_SCREEN_WIDTH(screenWidth);
     }
@@ -56,6 +62,11 @@ class AppModule extends VuexModule {
     @Mutation
     SET_SCREEN_WIDTH(screenWidth: number) {
         this.screenWidth = screenWidth;
+    }
+
+    @Mutation
+    SET_IS_SHOW_CREATE_POST_DIALOG(isShowCreatePostDialog: boolean) {
+        this.isShowCreatePostDialog = isShowCreatePostDialog;
     }
 }
 

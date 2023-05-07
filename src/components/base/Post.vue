@@ -96,7 +96,6 @@ export default class Post extends GlobalMixin {
     background: $color-white;
     border-radius: 6px;
     padding: 16px;
-    margin: 16px 0;
 
     .post-info {
         display: flex;
