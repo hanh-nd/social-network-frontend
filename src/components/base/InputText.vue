@@ -10,7 +10,7 @@
         >
             {{ label }}<span v-if="isRequired" class="mark-required"> *</span></label
         >
-        <div class="position-relative" :class="{ 'w-100': !isHorizontal, input: isHorizontal }">
+        <div class="input-container position-relative" :class="{ 'w-100': !isHorizontal, input: isHorizontal }">
             <div class="icon-left" v-if="hasIconLeft">
                 <slot name="iconLeft"></slot>
             </div>
