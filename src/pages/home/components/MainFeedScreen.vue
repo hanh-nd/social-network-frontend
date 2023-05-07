@@ -1,7 +1,7 @@
 <template>
     <div class="main-feed-screen-wrapper">
         <div class="create-new-post-bar">
-            <CreateNewPostBar />
+            <BaseCreateNewPostBar />
         </div>
 
         <div class="news-feed">
@@ -14,12 +14,9 @@
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { homeModule } from '../store';
-import CreateNewPostBar from './CreateNewPostBar.vue';
 
 @Options({
-    components: {
-        CreateNewPostBar,
-    },
+    components: {},
 })
 export default class MainFeedScreen extends GlobalMixin {
     get postList() {
@@ -42,6 +39,9 @@ export default class MainFeedScreen extends GlobalMixin {
 
 <style lang="scss" scoped>
 .main-feed-screen-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin: auto;
     max-width: map-get($grid-breakpoints, sm);
 

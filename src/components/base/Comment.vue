@@ -5,7 +5,7 @@
         </div>
         <div class="body">
             <div class="body-content">
-                <div class="author-name">
+                <div class="author-name" @click="goToProfilePage">
                     {{ comment?.author?.fullName || comment?.author?.username }}
                 </div>
                 <div class="content">
@@ -36,6 +36,15 @@ import { Prop } from 'vue-property-decorator';
 })
 export default class Comment extends GlobalMixin {
     @Prop() comment!: IComment;
+
+    goToProfilePage() {
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: this.comment?.author?._id,
+            },
+        });
+    }
 }
 </script>
 
@@ -58,6 +67,7 @@ export default class Comment extends GlobalMixin {
 
             .author-name {
                 font-weight: 700;
+                cursor: pointer;
             }
         }
 

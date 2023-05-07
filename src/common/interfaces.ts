@@ -88,6 +88,7 @@ export interface IUser {
     fullName: string;
     avatarId?: string;
     coverId?: string;
+    describe?: string;
     email: string;
     active: boolean;
     private: boolean;
@@ -150,6 +151,13 @@ export interface IPost {
     numberOfReacts: number;
     numberOfShares: number;
     isReacted: boolean;
+}
+
+export interface ICreateNewPostBody {
+    privacy: number;
+    content: string;
+    pictureIds: string[];
+    videoIds: string[];
 }
 
 export interface ICreateReactionBody {
