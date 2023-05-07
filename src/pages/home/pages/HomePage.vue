@@ -1,10 +1,13 @@
 <template>
     <div class="home-wrapper">
         <div class="home-container mx-auto">
-            <div class="feed-tab col-9">
-                <FeedTab />
+            <div class="feed-menu col-sm-2">
+                <FeedMenu />
             </div>
-            <div class="right-contact col-3">
+            <div class="feed-screen col-sm-8">
+                <FeedScreen />
+            </div>
+            <div class="right-contact col-sm-2 d-none d-sm-block">
                 <RightContact />
             </div>
         </div>
@@ -18,13 +21,15 @@
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
-import FeedTab from '../components/FeedTab.vue';
-import RightContact from '../components/RightContact.vue';
 import CreateNewPostDialog from '../components/CreateNewPostDialog.vue';
+import FeedMenu from '../components/FeedMenu.vue';
+import FeedScreen from '../components/FeedScreen.vue';
+import RightContact from '../components/RightContact.vue';
 
 @Options({
     components: {
-        FeedTab,
+        FeedMenu,
+        FeedScreen,
         RightContact,
         CreateNewPostDialog,
     },
@@ -52,16 +57,28 @@ export default class HomePage extends GlobalMixin {
     .home-container {
         display: flex;
         flex-direction: row;
+        height: 100%;
 
-        .feed-tab {
+        .feed-menu {
+            height: calc(100vh - 60px);
             padding-top: 8px;
+        }
+
+        .feed-screen {
+            padding-top: 8px;
+            margin: 0 8px;
         }
 
         .right-contact {
-            padding-top: 8px;
-
             height: calc(100vh - 60px);
+            padding-top: 8px;
         }
+    }
+}
+
+@media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+    .feed-screen {
+        flex: 1;
     }
 }
 </style>

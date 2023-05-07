@@ -151,3 +151,24 @@ export interface IPost {
     numberOfShares: number;
     isReacted: boolean;
 }
+
+export interface ICreateReactionBody {
+    type: string;
+}
+
+export interface ICreateCommentBody {
+    content: string;
+    pictureId?: string;
+    videoId?: string;
+}
+
+export interface IComment {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date;
+    author: Partial<IUser>;
+    post: Partial<IPost>;
+    content: string;
+    numberOfReactions: number;
+}

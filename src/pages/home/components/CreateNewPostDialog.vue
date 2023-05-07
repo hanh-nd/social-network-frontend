@@ -36,9 +36,7 @@
                     :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
                 />
             </div>
-            <div class="image-list">
-                <GiGridImages :items="images" />
-            </div>
+            <BaseImageGrid :items="createPostForm.pictureIds" :cells="3" />
             <BaseDivider />
             <div class="image-chooser">
                 <BaseUploadSingleButton @on-file-uploaded="onSelectPictures">Chọn ảnh</BaseUploadSingleButton>
@@ -64,19 +62,12 @@ import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 import { ICreateNewPostBody } from '../interfaces';
 import { homeModule } from '../store';
-import GiGridImages from '@chinhpd/vue3-grid-images';
 
 @Options({
-    components: {
-        GiGridImages,
-    },
+    components: {},
     emits: ['on-close-dialog', 'on-click-cancel-button', 'on-click-confirm-button'],
 })
 export default class CreateNewPostDialog extends GlobalMixin {
-    get images() {
-        return this.createPostForm.pictureIds.map((id) => this.getImageSourceById(id));
-    }
-
     get privacyOptions() {
         return Object.values(Privacy).map((value) => {
             return {
@@ -205,10 +196,6 @@ export default class CreateNewPostDialog extends GlobalMixin {
                 box-shadow: none !important;
                 background-color: transparent !important;
             }
-        }
-
-        .image-list {
-            height: 200px;
         }
 
         .image-chooser {
