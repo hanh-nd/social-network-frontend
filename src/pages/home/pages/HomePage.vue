@@ -60,6 +60,8 @@ export default class HomePage extends GlobalMixin {
         height: 100%;
 
         .feed-menu {
+            position: sticky;
+            top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
         }
@@ -70,6 +72,8 @@ export default class HomePage extends GlobalMixin {
         }
 
         .right-contact {
+            position: sticky;
+            top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
         }
