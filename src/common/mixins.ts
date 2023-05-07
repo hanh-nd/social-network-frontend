@@ -2,22 +2,36 @@ import i18n from '@/plugins/vue-i18n';
 import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
-import { DateFormat, DEFAULT_LANGUAGE, PageName, DeviceType, ValidationForm } from './constants';
+import { DEFAULT_LANGUAGE, DateFormat, DeviceType, PageName, ValidationForm } from './constants';
 import { IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {
     // constants
-    DATE_TIME_FORMAT = DateFormat;
+    DateFormat = DateFormat;
     PageName = PageName;
     DeviceType = DeviceType;
     ValidationForm = ValidationForm;
 
     //
-    parseDateTime(dateTime: Date | string, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
+    parseDateTime(dateTime: Date | string | undefined, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
         if (!moment(dateTime).isValid) {
             return '';
         }
         return moment(dateTime).locale(language).format(dateTimeFormat);
+    }
+
+    //
+    parseDateTimeRelative(dateTime: Date | string | undefined, language = DEFAULT_LANGUAGE): string {
+        if (!moment(dateTime).isValid) {
+            return '';
+        }
+        const date = moment(dateTime).locale(language);
+        if (moment().diff(date, 'years') > 1) {
+            return date.format(DateFormat.DD_vi_MM_YYYY_HH_mm);
+        } else if (moment().diff(date, 'days') > 1) {
+            return date.format(DateFormat.DD_vi_MM_HH_mm);
+        }
+        return date.fromNow(true);
     }
 
     translateYupError(yupError: IYupError): string {
@@ -98,5 +112,9 @@ export class GlobalMixin extends Vue {
                     ) + 1,
                 )
         );
+    }
+
+    getImageSourceById(id: string) {
+        return `${process.env.VUE_APP_API_URL}/files/${id}`;
     }
 }

@@ -38,7 +38,8 @@ export enum DateFormat {
     YYYY_MM_DD_HYPHEN = 'YYYY_MM_DD',
     DD_MM_YYYY_DASH = 'DD/MM/YYYY',
     hh_mm_L_COLON = 'h:mm L',
-    HH_mm_vi_DD_MM_YYYY_DOT = 'HH:mm [Ngày] DD.MM.YYYY',
+    DD_vi_MM_YYYY_HH_mm = 'DD [tháng] MM, YYYY [lúc] HH:mm',
+    DD_vi_MM_HH_mm = 'DD [tháng] MM [lúc] HH:mm',
     dddd_vi_DD_MM_YYYY_DASH = 'dddd [Ngày] DD/MM/YYYY',
     DD_MM_YY_DASH = 'DD/MM/YYYY',
     dddd_vi_L_SPACE = 'dddd, [ngày] L',
@@ -100,4 +101,59 @@ export const PrivacyName = {
     [Privacy.PUBLIC]: 'Công khai',
     [Privacy.SUBSCRIBED]: 'Những người theo dõi tôi',
     [Privacy.PRIVATE]: 'Riêng tư',
+};
+
+export const MAX_UPLOAD_FILE_SIZE_IN_BYTE = 100000000;
+
+export enum SubscribeRequestStatus {
+    PENDING = 1,
+    ACCEPTED = 2,
+    REJECTED = 3,
+}
+
+export enum ReactionType {
+    LIKE = 'LIKE',
+    EMPATHIZE = 'EMPATHIZE',
+    CELEBRATE = 'CELEBRATE',
+    LOVE = 'LOVE',
+    ANGRY = 'ANGRY',
+}
+
+export const ReactionTargetType = {
+    POST: 'Post',
+    COMMENT: 'Comment',
+};
+
+export enum ReportAction {
+    PENDING = 'PENDING',
+    IN_PROGRESS = 'IN_PROGRESS',
+    RESOLVED = 'RESOLVED',
+    REJECTED = 'REJECTED',
+}
+
+export const ReportTargetType = {
+    POST: 'Post',
+    COMMENT: 'Comment',
+    MESSAGE: 'Message',
+    USER: 'User',
+};
+
+export const NotificationTargetType = {
+    POST: 'Post',
+    COMMENT: 'Comment',
+    MESSAGE: 'Message',
+    USER: 'User',
+};
+
+export const NotificationAction = {
+    REACT: 'REACT',
+    COMMENT: 'COMMENT',
+    SHARE: 'SHARE',
+    ACCEPT_SUBSCRIBE_REQUEST: 'ACCEPT_SUBSCRIBE_REQUEST',
+};
+
+export const SocketEvent = {
+    USER_REACT: 'USER_REACT',
+    USER_SUBSCRIBE_PUBLIC: 'USER_SUBSCRIBE_PUBLIC',
+    USER_SUBSCRIBE_PRIVATE: 'USER_SUBSCRIBE_PRIVATE',
 };
