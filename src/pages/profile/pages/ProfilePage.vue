@@ -6,13 +6,9 @@
             </div>
 
             <div class="body w-100">
-                <div class="overview">
-                    <ProfileOverview />
-                </div>
-
-                <div class="content">
-                    <ProfileContent @on-load-more-profile-posts="onLoadMoreProfilePosts" />
-                </div>
+                <MainProfileScreen v-if="profileScreenTab === ProfileScreenTab.MAIN" />
+                <SubscriberScreen v-if="profileScreenTab === ProfileScreenTab.SUBSCRIBERS" />
+                <SubscribingScreen v-if="profileScreenTab === ProfileScreenTab.SUBSCRIBING" />
             </div>
         </div>
     </div>
@@ -21,26 +17,30 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
-import ProfileContent from '../components/ProfileContent.vue';
 import ProfileHeader from '../components/ProfileHeader.vue';
-import ProfileMenu from '../components/ProfileMenu.vue';
-import ProfileOverview from '../components/ProfileOverview.vue';
+import MainProfileScreen from '../components/main-profile-screen/MainProfileScreen.vue';
+import SubscriberScreen from '../components/subscribers/SubscriberScreen.vue';
+import SubscribingScreen from '../components/subscribing/SubscribingScreen.vue';
+import { ProfileScreenTab } from '../constants';
 import { profileModule } from '../store';
 @Options({
     components: {
         ProfileHeader,
-        ProfileMenu,
-        ProfileOverview,
-        ProfileContent,
+        MainProfileScreen,
+        SubscriberScreen,
+        SubscribingScreen,
     },
 })
 export default class ProfilePage extends GlobalMixin {
+    ProfileScreenTab = ProfileScreenTab;
+
     get userId() {
         return this.$route.params?.id as string;
     }
 
     created() {
         this.loadData();
+        profileModule.setProfileScreenTab(ProfileScreenTab.MAIN);
     }
 
     async loadData() {
@@ -48,8 +48,8 @@ export default class ProfilePage extends GlobalMixin {
         profileModule.getProfilePostList(this.userId);
     }
 
-    onLoadMoreProfilePosts() {
-        profileModule.getProfilePostList(this.userId);
+    get profileScreenTab() {
+        return profileModule.profileScreenTab;
     }
 }
 </script>
@@ -58,6 +58,7 @@ export default class ProfilePage extends GlobalMixin {
 .profile-page-container {
     width: 100%;
     background: $color-gray;
+    min-height: calc(100vh - 50px);
 }
 
 .profile-page-wrapper {
@@ -68,41 +69,5 @@ export default class ProfilePage extends GlobalMixin {
     display: flex;
     flex-direction: column;
     gap: 8px;
-
-    .body {
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-
-        .overview {
-            flex: 2;
-            position: sticky;
-            top: 65px;
-            align-self: flex-start;
-        }
-
-        .content {
-            flex: 3;
-        }
-    }
-}
-
-@media only screen and (max-width: map-get($grid-breakpoints, sm)) {
-    .profile-page-wrapper {
-        .body {
-            flex-direction: column;
-
-            .overview {
-                position: unset;
-                width: 100%;
-                flex: unset;
-            }
-
-            .content {
-                width: 100%;
-                flex: unset;
-            }
-        }
-    }
 }
 </style>

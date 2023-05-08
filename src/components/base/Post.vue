@@ -35,9 +35,8 @@
 <script lang="ts">
 import { ReactionType } from '@/common/constants';
 import { getAvatarUrl } from '@/common/helpers';
-import { IComment, IPost } from '@/common/interfaces';
+import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
-import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
@@ -49,23 +48,8 @@ import { Prop } from 'vue-property-decorator';
 export default class Post extends GlobalMixin {
     @Prop() post!: IPost;
 
-    commentList: IComment[] = [];
-
     get authorAvatar() {
         return getAvatarUrl(this.post.author);
-    }
-
-    created(): void {
-        this.loadData();
-    }
-
-    async loadData() {
-        const response = await commentApiService.getComment(this.post._id);
-        if (response.success) {
-            this.commentList = response?.data || [];
-        } else {
-            this.commentList = [];
-        }
     }
 
     async onLike() {
@@ -74,11 +58,6 @@ export default class Post extends GlobalMixin {
         await postApiService.react(this.post._id, {
             type: ReactionType.LIKE,
         });
-    }
-
-    onCommented() {
-        this.post.numberOfComments++;
-        this.loadData();
     }
 
     openPostDetailDialog() {
