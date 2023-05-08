@@ -1,6 +1,6 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { IUser } from '@/common/interfaces';
+import { IPost, IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
 import store from '@/plugins/vuex';
 import { isEmpty } from 'lodash';
@@ -15,6 +15,8 @@ import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-dec
 })
 class AppModule extends VuexModule {
     isShowCreatePostDialog = false;
+    isShowPostDetailDialog = false;
+    postDetail: IPost = {} as IPost;
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
     isRefreshing = false;
@@ -67,6 +69,26 @@ class AppModule extends VuexModule {
     @Mutation
     SET_IS_SHOW_CREATE_POST_DIALOG(isShowCreatePostDialog: boolean) {
         this.isShowCreatePostDialog = isShowCreatePostDialog;
+    }
+
+    @Action
+    setIsShowPostDetailDialog(isShowPostDetailDialog: boolean) {
+        this.SET_IS_SHOW_POST_DETAIL_DIALOG(isShowPostDetailDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_POST_DETAIL_DIALOG(isShowPostDetailDialog: boolean) {
+        this.isShowPostDetailDialog = isShowPostDetailDialog;
+    }
+
+    @Action
+    setPostDetail(post: IPost) {
+        this.SET_POST_DETAIL(post);
+    }
+
+    @Mutation
+    SET_POST_DETAIL(post: IPost) {
+        this.postDetail = post;
     }
 }
 

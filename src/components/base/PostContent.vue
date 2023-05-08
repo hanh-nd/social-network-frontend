@@ -26,7 +26,7 @@
             </div>
 
             <div class="post-data">
-                <div class="images">
+                <div class="images" @click="openPostDetailDialog">
                     <BaseImageGrid :items="post?.pictureIds" />
                 </div>
             </div>
@@ -37,6 +37,7 @@
 <script lang="ts">
 import { IComment, IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -54,6 +55,11 @@ export default class PostContent extends GlobalMixin {
                 id: this.post?.author?._id,
             },
         });
+    }
+
+    openPostDetailDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowPostDetailDialog(true);
     }
 }
 </script>

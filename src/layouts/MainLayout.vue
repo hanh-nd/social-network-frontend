@@ -9,6 +9,7 @@
         <!-- <MainFooter /> -->
         <!-- Common Dialog-->
         <BaseCreateNewPostDialog />
+        <BasePostDetailDialog />
     </div>
 </template>
 

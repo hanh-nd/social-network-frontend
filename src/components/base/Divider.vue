@@ -14,7 +14,7 @@ import { Prop } from 'vue-property-decorator';
 })
 export default class Divider extends GlobalMixin {
     @Prop({ default: 'horizontal' }) direction!: string;
-    @Prop({ default: 24 }) height!: number;
+    @Prop({ default: 1 }) height!: number;
 
     get style() {
         return {
