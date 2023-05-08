@@ -1,12 +1,12 @@
 <template>
-    <div class="post-content-wrapper">
+    <div class="post-shared-content-wrapper">
         <div class="header">
             <div class="avatar">
                 <BaseRoundAvatar :user="post?.author" :size="42" />
             </div>
             <div class="information">
                 <div class="name" @click="goToProfilePage">
-                    {{ post?.author.fullName || 'hihi' }}
+                    {{ post?.author?.fullName || 'hihi' }}
                 </div>
                 <div class="created-at">
                     <el-tooltip
@@ -26,9 +26,6 @@
             </div>
 
             <div class="post-data">
-                <div class="post-shared" v-if="post?.postShared">
-                    <BasePostSharedContent :post="post.postShared" />
-                </div>
                 <div class="images" @click="openPostDetailDialog">
                     <BaseImageGrid :items="post?.pictureIds" />
                 </div>
@@ -38,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { IComment, IPost } from '@/common/interfaces';
+import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
@@ -68,7 +65,7 @@ export default class PostContent extends GlobalMixin {
 </script>
 
 <style lang="scss" scoped>
-.post-content-wrapper {
+.post-shared-content-wrapper {
     display: flex;
     flex-direction: column;
 
@@ -90,16 +87,6 @@ export default class PostContent extends GlobalMixin {
 
             .created-at {
                 font-size: 12px;
-            }
-        }
-    }
-
-    .main-content {
-        .post-data {
-            .post-shared {
-                padding: 16px;
-                box-shadow: 0 0 0 1px $scroll-bar-dark;
-                border-radius: 8px;
             }
         }
     }

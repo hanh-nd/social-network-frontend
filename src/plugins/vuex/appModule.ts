@@ -20,6 +20,7 @@ class AppModule extends VuexModule {
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
     isRefreshing = false;
+    isShowSharePostDialog = false;
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
@@ -89,6 +90,16 @@ class AppModule extends VuexModule {
     @Mutation
     SET_POST_DETAIL(post: IPost) {
         this.postDetail = post;
+    }
+
+    @Action
+    setIsShowSharePostDialog(isShowSharePostDialog: boolean) {
+        this.SET_IS_SHOW_SHARE_POST_DIALOG(isShowSharePostDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_SHARE_POST_DIALOG(isShowSharePostDialog: boolean) {
+        this.isShowSharePostDialog = isShowSharePostDialog;
     }
 }
 
