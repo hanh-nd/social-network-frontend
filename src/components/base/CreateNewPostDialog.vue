@@ -97,6 +97,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             content: '',
             pictureIds: [],
             videoIds: [],
+            postSharedId: undefined,
         };
 
         const schema = yup.object({
@@ -106,7 +107,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             videoIds: yup.array().of(yup.string()),
         });
 
-        const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm({
+        const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateNewPostBody>({
             validationSchema: schema,
             initialValues: initValues,
         });

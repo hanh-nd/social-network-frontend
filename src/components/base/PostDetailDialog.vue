@@ -64,7 +64,7 @@
                     <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
                 </div>
                 <div class="btn share">
-                    <el-button>Chia sẻ</el-button>
+                    <el-button @click="openSharePostDialog">Chia sẻ</el-button>
                 </div>
             </div>
             <BaseDivider />
@@ -162,6 +162,11 @@ export default class PostDetailDialog extends GlobalMixin {
 
     onLoadMoreComments() {
         this.loadData();
+    }
+
+    openSharePostDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowSharePostDialog(true);
     }
 }
 </script>

@@ -145,6 +145,7 @@ export interface IPost {
     author: Partial<IUser>;
     content: string;
     privacy: number;
+    postShared: Partial<IPost>;
     pictureIds: string[];
     videoIds: string[];
     numberOfComments: number;
@@ -158,6 +159,7 @@ export interface ICreateNewPostBody {
     content: string;
     pictureIds: string[];
     videoIds: string[];
+    postSharedId?: string;
 }
 
 export interface ICreateReactionBody {

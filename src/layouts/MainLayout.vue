@@ -10,6 +10,7 @@
         <!-- Common Dialog-->
         <BaseCreateNewPostDialog />
         <BasePostDetailDialog />
+        <BaseSharePostDialog />
     </div>
 </template>
 

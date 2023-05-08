@@ -26,7 +26,7 @@
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
             </div>
             <div class="btn share">
-                <el-button>Chia sẻ</el-button>
+                <el-button @click="openSharePostDialog">Chia sẻ</el-button>
             </div>
         </div>
     </div>
@@ -84,6 +84,11 @@ export default class Post extends GlobalMixin {
     openPostDetailDialog() {
         appModule.setPostDetail(this.post);
         appModule.setIsShowPostDetailDialog(true);
+    }
+
+    openSharePostDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowSharePostDialog(true);
     }
 }
 </script>
