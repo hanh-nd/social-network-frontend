@@ -99,6 +99,7 @@ export interface IUser {
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date;
+    isSubscribing?: boolean;
 }
 
 export interface IAddress {

@@ -207,7 +207,7 @@ export default class PostDetailDialog extends GlobalMixin {
         .images {
             img {
                 width: 100%;
-                object-fit: contain;
+                object-fit: cover;
             }
         }
     }
