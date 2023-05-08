@@ -13,6 +13,18 @@ class UserApiService extends ApiService {
     async getUserPostList(userId: string): Promise<IBodyResponse<IPost[]>> {
         return await this.client.get(`${this.baseUrl}/${userId}/posts`);
     }
+
+    async getSubscriberList(userId: string): Promise<IBodyResponse<IUser[]>> {
+        return await this.client.get(`${this.baseUrl}/${userId}/subscribers`);
+    }
+
+    async getSubscribingList(userId: string): Promise<IBodyResponse<IUser[]>> {
+        return await this.client.get(`${this.baseUrl}/${userId}/subscribing`);
+    }
+
+    async subscribeOrUnsubscribe(userId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/${userId}/subscribe`);
+    }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);
 

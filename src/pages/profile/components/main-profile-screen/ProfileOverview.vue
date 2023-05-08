@@ -26,7 +26,7 @@
 import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
-import { profileModule } from '../store';
+import { profileModule } from '../../store';
 
 @Options({
     components: {},
