@@ -23,18 +23,11 @@
                 <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
             </div>
             <div class="btn comment">
-                <el-button>Bình luận</el-button>
+                <el-button @click="openPostDetailDialog">Bình luận</el-button>
             </div>
             <div class="btn share">
                 <el-button>Chia sẻ</el-button>
             </div>
-        </div>
-        <BaseDivider />
-        <div class="comment-list">
-            <BaseCommentList :commentList="commentList" />
-        </div>
-        <div class="create-comment">
-            <BaseCreateCommentBar :postId="post._id" @on-commented="onCommented" />
         </div>
     </div>
 </template>
@@ -46,6 +39,7 @@ import { IComment, IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -85,6 +79,11 @@ export default class Post extends GlobalMixin {
     onCommented() {
         this.post.numberOfComments++;
         this.loadData();
+    }
+
+    openPostDetailDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowPostDetailDialog(true);
     }
 }
 </script>

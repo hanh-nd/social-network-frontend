@@ -1,5 +1,5 @@
 <template>
-    <div class="comment-list-wrapper">
+    <div class="comment-list-wrapper" v-infinite-scroll="onLoadMore">
         <div class="comment" v-for="comment in commentList" :key="comment._id">
             <Comment :comment="comment" />
         </div>
@@ -20,6 +20,10 @@ import Comment from './Comment.vue';
 })
 export default class CommentList extends GlobalMixin {
     @Prop() commentList!: IComment[];
+
+    onLoadMore() {
+        this.$emit('on-load-more');
+    }
 }
 </script>
 

@@ -963,11 +963,6 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@chinhpd/vue3-grid-images@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@chinhpd/vue3-grid-images/-/vue3-grid-images-1.0.3.tgz#4df71e815643caf47cc75f17156bba1b812d2afb"
-  integrity sha512-xkJkaHmdHqG8cI/ywaQeCMclE2DDJScBBm0a24ireeMcDA9UUaP7KssQFMVHOOSqd3t1rXeY6lQcz1Vi42Gs0A==
-
 "@ctrl/tinycolor@^3.4.1":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.6.0.tgz#53fa5fe9c34faee89469e48f91d51a3766108bc8"
@@ -1238,6 +1233,18 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
+
+"@splidejs/splide@^3.6.12":
+  version "3.6.12"
+  resolved "https://registry.yarnpkg.com/@splidejs/splide/-/splide-3.6.12.tgz#9b6bede5c99140fd06754990c91e474374566c30"
+  integrity sha512-ggOUAuSxjWuxxL0IQEZcux26KByfKWfYM2HYmvDBdxkXc5evVW+xuECO+3iuciyrJpgcbYTr4hn0cHfbNlYIeA==
+
+"@splidejs/vue-splide@^0.5.18":
+  version "0.5.18"
+  resolved "https://registry.yarnpkg.com/@splidejs/vue-splide/-/vue-splide-0.5.18.tgz#9e674a1f29ecf0fee4bd11d186db739cef3c4e9e"
+  integrity sha512-S6mt03sRLipoTLz/aq+4AXoc58obe8uEH0X0uE5poCmW3mPwUiyu1ZqX/96EWoRQdrajlV7AFEXDFTS8Upy6FQ==
+  dependencies:
+    "@splidejs/splide" "^3.6.12"
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
