@@ -7,8 +7,8 @@
 
             <div class="body w-100">
                 <MainProfileScreen v-if="profileScreenTab === ProfileScreenTab.MAIN" />
-                <SubscriberScreen v-if="profileScreenTab === ProfileScreenTab.SUBSCRIBERS" />
-                <SubscribingScreen v-if="profileScreenTab === ProfileScreenTab.SUBSCRIBING" />
+                <SubscriberScreen v-else-if="profileScreenTab === ProfileScreenTab.SUBSCRIBERS" />
+                <SubscribingScreen v-else-if="profileScreenTab === ProfileScreenTab.SUBSCRIBING" />
             </div>
         </div>
     </div>
