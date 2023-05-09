@@ -26,7 +26,7 @@ export default class CommonMiddleware extends HttpMiddleware {
         return response.data;
     }
 
-    onResponseError(error: AxiosError): IBodyResponse<unknown> {
+    async onResponseError(error: AxiosError): Promise<IBodyResponse<unknown>> {
         if (error.response) {
             if (typeof error?.response?.data === 'string') {
                 error.response.data = JSON.parse(error.response.data);

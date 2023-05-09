@@ -1,45 +1,39 @@
 <template>
-    <div class="container">
-        <div class="form">
-            <div class="username form-items">
-                <el-input
-                    @keyup.enter="onSubmit"
-                    :class="{ 'input-error': loginForm.errors.username }"
-                    v-model="loginForm.username"
-                    placeholder="Địa chỉ username"
-                />
-                <span v-show="loginForm.errors.username" class="form-error">
-                    {{ translateYupError(loginForm.errors.username as IYupError) }}</span
-                >
-            </div>
-
-            <div class="password form-items">
-                <el-input
-                    @keydown.space.prevent
-                    @keyup.enter="onSubmit"
-                    :class="{ 'input-error': loginForm.errors.password }"
-                    v-model="loginForm.password"
-                    placeholder="Mật khẩu"
-                    type="password"
-                />
-                <span v-show="loginForm.errors.username" class="form-error">
-                    {{ translateYupError(loginForm.errors.password as IYupError) }}</span
-                >
-            </div>
-
-            <el-button
-                @click="onSubmit"
-                :disabled="isLoggingIn"
-                :loading="isLoggingIn"
-                class="login-btn"
-                type="primary"
+    <div class="form">
+        <div class="username form-items">
+            <div>Tên tài khoản</div>
+            <el-input
+                @keyup.enter="onSubmit"
+                :class="{ 'input-error': loginForm.errors.username }"
+                v-model="loginForm.username"
+                placeholder="Tên tài khoản"
+            />
+            <span v-show="loginForm.errors.username" class="form-error">
+                {{ translateYupError(loginForm.errors.username as IYupError) }}</span
             >
-                <template #loading>
-                    <BaseButtonInnerLoading />
-                </template>
-                {{ isLoggingIn ? '' : 'Đăng nhập' }}
-            </el-button>
         </div>
+
+        <div class="password form-items">
+            <div>Mật khẩu</div>
+            <el-input
+                @keydown.space.prevent
+                @keyup.enter="onSubmit"
+                :class="{ 'input-error': loginForm.errors.password }"
+                v-model="loginForm.password"
+                placeholder="Mật khẩu"
+                type="password"
+            />
+            <span v-show="loginForm.errors.username" class="form-error">
+                {{ translateYupError(loginForm.errors.password as IYupError) }}</span
+            >
+        </div>
+
+        <el-button @click="onSubmit" :disabled="isLoggingIn" :loading="isLoggingIn" class="login-btn" type="primary">
+            <template #loading>
+                <BaseButtonInnerLoading />
+            </template>
+            {{ isLoggingIn ? '' : 'Đăng nhập' }}
+        </el-button>
     </div>
 </template>
 
@@ -90,8 +84,8 @@ export default class LoginForm extends GlobalMixin {
                 username: values.username,
                 password: values.password,
             });
-            console.log({ response });
             if (response.success) {
+                localStorageAuthService.setRefreshToken(response?.data?.refreshToken || '');
                 localStorageAuthService.setAccessToken(response?.data?.accessToken || '');
                 localStorageAuthService.setLoginUser(response?.data?.user || {});
                 appModule.setLoginUser(response?.data?.user || {});
@@ -116,6 +110,13 @@ export default class LoginForm extends GlobalMixin {
 
     async onSubmit() {
         await this.loginForm.submit();
+        this.goToHomePage();
+    }
+
+    goToHomePage() {
+        this.$router.push({
+            name: this.PageName.HOME_PAGE,
+        });
     }
 }
 </script>
@@ -129,7 +130,7 @@ export default class LoginForm extends GlobalMixin {
     display: block !important;
     height: 24px;
     font-size: 13px;
-    color: $color-red;
+    color: $color-red !important;
     width: 100%;
     word-break: break-word;
 }
@@ -144,7 +145,7 @@ export default class LoginForm extends GlobalMixin {
         font-size: 11px;
         font-weight: 400;
         line-height: 15px;
-        color: $color-red;
+        color: $color-green;
         padding-top: 2px;
     }
 }
@@ -152,6 +153,11 @@ export default class LoginForm extends GlobalMixin {
 :deep(.el-input) {
     height: 42px;
     --el-input-placeholder-color: $color-black-2v !important;
+
+    .el-input__wrapper.is-focus {
+        border: 2px solid $color-green;
+        box-shadow: none;
+    }
 }
 
 .input-error {
@@ -170,7 +176,7 @@ export default class LoginForm extends GlobalMixin {
     width: 100%;
 }
 :deep(.login-btn:hover) {
-    background-color: $color-red !important;
+    background-color: $color-green !important;
 }
 .password {
     margin-bottom: 0px !important;

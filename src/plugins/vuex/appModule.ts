@@ -16,6 +16,7 @@ import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-dec
 class AppModule extends VuexModule {
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
+    isRefreshing = false;
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;

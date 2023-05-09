@@ -130,7 +130,8 @@ export default class HttpMiddlewareService {
 
         this.chain.push([
             middleware.onResponse && ((response: AxiosResponse) => middleware.onResponse(response)),
-            middleware.onResponseError && ((error: AxiosError) => middleware.onResponseError(error)),
+            middleware.onResponseError &&
+                (async (error: AxiosError) => await middleware.onResponseError(error, this.http)),
         ]);
     }
 
@@ -141,7 +142,6 @@ export default class HttpMiddlewareService {
         this.chain = [
             [
                 (conf: AxiosRequestConfig) => {
-                    console.log(this.originalAdapter);
                     return this._onSync(this.originalAdapter?.call(this.http, conf) as Promise<unknown>);
                 },
                 undefined,
