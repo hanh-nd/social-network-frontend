@@ -1,6 +1,6 @@
 <template>
     <div class="profile-content-wrapper">
-        <div class="create-new-post">
+        <div class="create-new-post" v-if="isLoginUser(user)">
             <BaseCreateNewPostBar />
         </div>
         <div class="post-list">

@@ -11,6 +11,8 @@
         <BaseCreateNewPostDialog />
         <BasePostDetailDialog />
         <BaseSharePostDialog />
+        <BaseEditPostDialog />
+        <BaseReportPostDialog />
     </div>
 </template>
 

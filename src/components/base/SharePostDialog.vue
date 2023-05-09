@@ -50,16 +50,11 @@ import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
-import '@splidejs/splide/dist/css/splide.min.css';
-import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 
 @Options({
-    components: {
-        Splide,
-        SplideSlide,
-    },
+    components: {},
     emits: [],
 })
 export default class PostDetailDialog extends GlobalMixin {

@@ -16,6 +16,8 @@ import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-dec
 class AppModule extends VuexModule {
     isShowCreatePostDialog = false;
     isShowPostDetailDialog = false;
+    isShowEditPostDialog = false;
+    isShowReportPostDialog = false;
     postDetail: IPost = {} as IPost;
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
@@ -100,6 +102,26 @@ class AppModule extends VuexModule {
     @Mutation
     SET_IS_SHOW_SHARE_POST_DIALOG(isShowSharePostDialog: boolean) {
         this.isShowSharePostDialog = isShowSharePostDialog;
+    }
+
+    @Action
+    setIsShowEditPostDialog(isShowEditPostDialog: boolean) {
+        this.SET_IS_SHOW_EDIT_POST_DIALOG(isShowEditPostDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_EDIT_POST_DIALOG(isShowEditPostDialog: boolean) {
+        this.isShowEditPostDialog = isShowEditPostDialog;
+    }
+
+    @Action
+    setIsShowReportPostDialog(isShowReportPostDialog: boolean) {
+        this.SET_IS_SHOW_REPORT_POST_DIALOG(isShowReportPostDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_REPORT_POST_DIALOG(isShowReportPostDialog: boolean) {
+        this.isShowReportPostDialog = isShowReportPostDialog;
     }
 }
 

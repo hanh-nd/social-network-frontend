@@ -2,11 +2,11 @@
     <div class="feed-menu-wrapper">
         <el-menu :default-active="FeedScreenType.MAIN" :collapse="isCollapse" @select="onSelect">
             <el-menu-item :index="FeedScreenType.MAIN">
-                <el-icon><icon-menu /></el-icon>
+                <el-icon><Menu /></el-icon>
                 <template #title>Trang chủ</template>
             </el-menu-item>
             <el-menu-item :index="FeedScreenType.EXPLORE">
-                <el-icon><icon-notification /></el-icon>
+                <el-icon><Notification /></el-icon>
                 <template #title>Khám phá</template>
             </el-menu-item>
         </el-menu>
@@ -16,7 +16,6 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
-import { Menu as IconMenu, Notification as IconNotification } from '@element-plus/icons-vue';
 import { Options } from 'vue-class-component';
 import { FeedScreenType } from '../constants';
 import { homeModule } from '../store';

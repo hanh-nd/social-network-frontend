@@ -8,6 +8,7 @@ import plugins from './plugins';
 import router from './plugins/vue-router';
 import store from './plugins/vuex';
 // import './registerServiceWorker';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 const app = createApp(App)
     .use(store)
@@ -23,6 +24,10 @@ const app = createApp(App)
 // load all components under the folder @/components as glolal components
 forEach(getGlobalComponents(), (component, name) => {
     app.component(name, component as Component);
+});
+
+forEach(Object.entries(ElementPlusIconsVue), ([key, component]) => {
+    app.component(key, component);
 });
 
 router.isReady().then(() => {

@@ -163,6 +163,17 @@ export interface ICreateNewPostBody {
     postSharedId?: string;
 }
 
+export interface IUpdatePostBody {
+    privacy?: number;
+    content?: string;
+    pictureIds?: string[];
+    videoIds?: string[];
+}
+
+export interface IReportPostBody {
+    reportReason: string;
+}
+
 export interface ICreateReactionBody {
     type: string;
 }
