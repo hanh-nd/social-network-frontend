@@ -25,6 +25,10 @@ class UserApiService extends ApiService {
     async subscribeOrUnsubscribe(userId: string): Promise<IBodyResponse<boolean>> {
         return await this.client.patch(`${this.baseUrl}/${userId}/subscribe`);
     }
+
+    async blockUser(targetUserId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/${targetUserId}/block`);
+    }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="post-shared-content-wrapper">
+    <div class="post-shared-content-wrapper" v-if="isShowPost">
         <div class="header">
             <div class="avatar">
                 <BaseRoundAvatar :user="post?.author" :size="42" />
@@ -32,12 +32,16 @@
             </div>
         </div>
     </div>
+    <div class="error" v-else>
+        <el-empty description="Bài viết không tồn tại hoặc đã bị xóa" />
+    </div>
 </template>
 
 <script lang="ts">
 import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
+import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -60,6 +64,10 @@ export default class PostContent extends GlobalMixin {
     openPostDetailDialog() {
         appModule.setPostDetail(this.post);
         appModule.setIsShowPostDetailDialog(true);
+    }
+
+    get isShowPost() {
+        return _.isNil(this.post.deletedAt);
     }
 }
 </script>

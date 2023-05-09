@@ -34,11 +34,11 @@
                     {{ post?.content }}
                 </div>
                 <div class="images">
-                    <Splide :options="splideOptions">
-                        <SplideSlide v-for="image in post.pictureIds" :key="image">
+                    <el-carousel width="100%">
+                        <el-carousel-item v-for="image in post.pictureIds" :key="image">
                             <img :src="getImageSourceById(image)" alt="" />
-                        </SplideSlide>
-                    </Splide>
+                        </el-carousel-item>
+                    </el-carousel>
                 </div>
             </div>
 
@@ -86,15 +86,10 @@ import { GlobalMixin } from '@/common/mixins';
 import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
-import '@splidejs/splide/dist/css/splide.min.css';
-import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import { Options } from 'vue-class-component';
 
 @Options({
-    components: {
-        Splide,
-        SplideSlide,
-    },
+    components: {},
     emits: [],
 })
 export default class PostDetailDialog extends GlobalMixin {
@@ -111,13 +106,6 @@ export default class PostDetailDialog extends GlobalMixin {
     get deviceType() {
         return appModule.deviceType;
     }
-
-    splideOptions = {
-        rewind: true,
-        gap: '16px',
-        drag: 'free',
-        perPage: 1,
-    };
 
     goToProfilePage() {
         this.onClose();
