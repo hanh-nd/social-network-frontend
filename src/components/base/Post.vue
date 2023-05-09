@@ -1,5 +1,5 @@
 <template>
-    <div class="post-wrapper">
+    <div class="post-wrapper" v-if="isShowPost">
         <BasePostContent :post="post" />
         <BaseDivider />
         <div class="post-info">
@@ -39,6 +39,7 @@ import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -50,6 +51,10 @@ export default class Post extends GlobalMixin {
 
     get authorAvatar() {
         return getAvatarUrl(this.post.author);
+    }
+
+    get isShowPost() {
+        return _.isNil(this.post.deletedAt);
     }
 
     async onLike() {

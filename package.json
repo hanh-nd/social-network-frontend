@@ -12,7 +12,7 @@
         "format": "prettier --write ./src"
     },
     "dependencies": {
-        "@splidejs/vue-splide": "^0.5.18",
+        "@element-plus/icons-vue": "^2.1.0",
         "@intlify/runtime": "^9.1.10",
         "@popperjs/core": "^2.11.7",
         "axios": "0.26",

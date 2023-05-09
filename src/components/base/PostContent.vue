@@ -1,23 +1,46 @@
 <template>
     <div class="post-content-wrapper">
         <div class="header">
-            <div class="avatar">
-                <BaseRoundAvatar :user="post?.author" :size="42" />
-            </div>
-            <div class="information">
-                <div class="name" @click="goToProfilePage">
-                    {{ post?.author.fullName || 'hihi' }}
+            <div class="left-section">
+                <div class="avatar">
+                    <BaseRoundAvatar :user="post?.author" :size="42" />
                 </div>
-                <div class="created-at">
-                    <el-tooltip
-                        :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
-                        :hide-after="100"
-                    >
-                        {{ parseDateTimeRelative(post?.createdAt) }}
-                    </el-tooltip>
+                <div class="information">
+                    <div class="name" @click="goToProfilePage">
+                        {{ post?.author.fullName || 'hihi' }}
+                    </div>
+                    <div class="created-at">
+                        <el-tooltip
+                            :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
+                            :hide-after="100"
+                        >
+                            {{ parseDateTimeRelative(post?.createdAt) }}
+                        </el-tooltip>
+                    </div>
                 </div>
             </div>
-            <div class="settings"></div>
+            <div class="right-section">
+                <div class="author-settings" v-if="isAuthor()">
+                    <BaseThreeDotMenu>
+                        <el-dropdown-item @click="editPost"
+                            ><el-icon :size="16"><Edit /></el-icon>Chỉnh sửa bài viết</el-dropdown-item
+                        >
+                        <el-dropdown-item @click="deletePost"
+                            ><el-icon :size="16"><Delete /></el-icon>Xóa</el-dropdown-item
+                        >
+                    </BaseThreeDotMenu>
+                </div>
+                <div class="guest-settings" v-else>
+                    <BaseThreeDotMenu>
+                        <el-dropdown-item @click="reportPost"
+                            ><el-icon :size="16"><Service /></el-icon>Báo cáo bài viết</el-dropdown-item
+                        >
+                        <el-dropdown-item @click="blockUser"
+                            ><el-icon :size="16"><Remove /></el-icon>Chặn người dùng này</el-dropdown-item
+                        >
+                    </BaseThreeDotMenu>
+                </div>
+            </div>
         </div>
 
         <div class="main-content">
@@ -38,8 +61,10 @@
 </template>
 
 <script lang="ts">
-import { IComment, IPost } from '@/common/interfaces';
+import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import postApiService from '@/common/service/post.api.service';
+import userApiService from '@/common/service/user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
@@ -64,6 +89,42 @@ export default class PostContent extends GlobalMixin {
         appModule.setPostDetail(this.post);
         appModule.setIsShowPostDetailDialog(true);
     }
+
+    isAuthor() {
+        return appModule.loginUser?._id === this.post?.author?._id;
+    }
+
+    editPost() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowEditPostDialog(true);
+    }
+
+    async deletePost() {
+        const response = await postApiService.deletePost(this.post._id);
+        if (response?.success) {
+            this.showSuccessNotificationFunction(`Xóa bài viết thành công`);
+            Object.assign(this.post, {
+                deletedAt: new Date(),
+            });
+        } else {
+            this.showErrorNotificationFunction(`Xóa bài viết thất bại`);
+        }
+    }
+
+    async reportPost() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowReportPostDialog(true);
+    }
+
+    async blockUser() {
+        if (!this.post?.author?._id) return;
+        const response = await userApiService.blockUser(this.post?.author?._id);
+        if (response?.success) {
+            this.showSuccessNotificationFunction(`Chặn người dùng thành công`);
+        } else {
+            this.showErrorNotificationFunction(`Chặn người dùng thất bại`);
+        }
+    }
 }
 </script>
 
@@ -76,8 +137,18 @@ export default class PostContent extends GlobalMixin {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         gap: 8px;
         margin-bottom: 8px;
+
+        .left-section {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
 
         .information {
             display: flex;

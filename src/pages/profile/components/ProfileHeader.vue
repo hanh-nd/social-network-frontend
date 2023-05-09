@@ -13,12 +13,22 @@
                 {{ user?.fullName }}
             </div>
             <div class="describe">
-                <ProfileDescribeForm />
+                <div class="login-user" v-if="isLoginUser(user)">
+                    <ProfileDescribeForm />
+                </div>
+                <div class="guest" v-else>
+                    {{ user.describe }}
+                </div>
             </div>
         </div>
 
-        <div class="menu">
-            <ProfileMenu />
+        <div class="footer">
+            <div class="menu">
+                <ProfileMenu />
+            </div>
+            <div class="action">
+                <ProfileAction />
+            </div>
         </div>
     </div>
 </template>
@@ -30,11 +40,13 @@ import { Options } from 'vue-class-component';
 import { profileModule } from '../store';
 import ProfileDescribeForm from './ProfileDescribeForm.vue';
 import ProfileMenu from './ProfileMenu.vue';
+import ProfileAction from './ProfileAction.vue';
 
 @Options({
     components: {
         ProfileMenu,
         ProfileDescribeForm,
+        ProfileAction,
     },
 })
 export default class ProfileHeader extends GlobalMixin {
@@ -75,6 +87,13 @@ export default class ProfileHeader extends GlobalMixin {
             font-size: 24px;
             font-weight: 700;
         }
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 </style>
