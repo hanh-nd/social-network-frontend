@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-    AxiosAdapter,
-    AxiosError,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    InternalAxiosRequestConfig,
-} from 'axios';
+import { AxiosAdapter, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { HttpMiddleware } from './middlewares/httpMiddleware';
 
 /**
@@ -40,8 +33,7 @@ export default class HttpMiddlewareService {
         if (axios) {
             this.http = axios;
             this.originalAdapter = axios.defaults.adapter as unknown as AxiosAdapter;
-            axios.defaults.adapter = ((config: AxiosRequestConfig) =>
-                this.adapter(config)) as unknown as AxiosAdapter;
+            axios.defaults.adapter = ((config: AxiosRequestConfig) => this.adapter(config)) as unknown as AxiosAdapter;
         }
         return this;
     }
@@ -132,17 +124,13 @@ export default class HttpMiddlewareService {
      */
     _addMiddleware<T extends HttpMiddleware>(middleware: T): void {
         this.chain.unshift([
-            middleware.onRequest &&
-                ((conf: AxiosRequestConfig) => middleware.onRequest(conf)),
-            middleware.onRequestError &&
-                ((error: AxiosError) => middleware.onRequestError(error)),
+            middleware.onRequest && ((conf: AxiosRequestConfig) => middleware.onRequest(conf)),
+            middleware.onRequestError && ((error: AxiosError) => middleware.onRequestError(error)),
         ]);
 
         this.chain.push([
-            middleware.onResponse &&
-                ((response: AxiosResponse) => middleware.onResponse(response)),
-            middleware.onResponseError &&
-                ((error: AxiosError) => middleware.onResponseError(error)),
+            middleware.onResponse && ((response: AxiosResponse) => middleware.onResponse(response)),
+            middleware.onResponseError && ((error: AxiosError) => middleware.onResponseError(error)),
         ]);
     }
 
@@ -152,13 +140,10 @@ export default class HttpMiddlewareService {
     _updateChain(): void {
         this.chain = [
             [
-                (conf: AxiosRequestConfig) =>
-                    this._onSync(
-                        this.originalAdapter?.call(
-                            this.http,
-                            conf as unknown as InternalAxiosRequestConfig,
-                        ) as Promise<unknown>,
-                    ),
+                (conf: AxiosRequestConfig) => {
+                    console.log(this.originalAdapter);
+                    return this._onSync(this.originalAdapter?.call(this.http, conf) as Promise<unknown>);
+                },
                 undefined,
             ],
         ];

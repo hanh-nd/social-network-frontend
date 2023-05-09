@@ -10,11 +10,7 @@ export class GlobalMixin extends Vue {
     DATE_TIME_FORMAT = DATE_TIME_FORMAT;
     PageName = PageName;
     //
-    parseDateTime(
-        dateTime: Date | string,
-        dateTimeFormat: string,
-        language = DEFAULT_LANGUAGE,
-    ): string {
+    parseDateTime(dateTime: Date | string, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
         if (!moment(dateTime).isValid) {
             return '';
         }
@@ -63,15 +59,11 @@ export class GlobalMixin extends Vue {
 
     vietnameseStringInclude(str: string, keyword: string): boolean {
         if (!str || !keyword) return false;
-        return this.removeAccents(str.toLowerCase()).includes(
-            this.removeAccents(keyword.toLowerCase()),
-        );
+        return this.removeAccents(str.toLowerCase()).includes(this.removeAccents(keyword.toLowerCase()));
     }
 
     vietnameseStringStartsWith(str: string, keyword: string): boolean {
-        return this.removeAccents(str.toLowerCase()).startsWith(
-            this.removeAccents(keyword.toLowerCase()),
-        );
+        return this.removeAccents(str.toLowerCase()).startsWith(this.removeAccents(keyword.toLowerCase()));
     }
 
     removeTextBeforeSubstring(str: string, substr: string): string {
@@ -99,9 +91,7 @@ export class GlobalMixin extends Vue {
                 .substring(
                     str.lastIndexOf(
                         ' ',
-                        this.removeAccents(str)
-                            .toLowerCase()
-                            .indexOf(this.removeAccents(substr).toLowerCase()),
+                        this.removeAccents(str).toLowerCase().indexOf(this.removeAccents(substr).toLowerCase()),
                     ) + 1,
                 )
         );

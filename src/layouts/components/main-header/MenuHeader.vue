@@ -1,9 +1,6 @@
 <template>
     <div class="header-wrapper">
-        <div
-            class="header-container mx-auto"
-            :class="{ sticky: isSticky, ontop: !isSticky }"
-        >
+        <div class="header-container mx-auto" :class="{ sticky: isSticky, ontop: !isSticky }">
             <!-- Main Menu -->
             <MainMenu class="main-menu"></MainMenu>
         </div>

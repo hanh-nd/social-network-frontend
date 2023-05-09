@@ -1,8 +1,12 @@
-import { IBodyResponse, ICustomer } from '@/common/interfaces';
+import { IBodyResponse, ILoginForm, ILoginResponse, IUser } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import axiosService from '@/plugins/axios';
 class AppApiService extends ApiService {
-    async getCustomerProfile(): Promise<IBodyResponse<ICustomer>> {
+    async login(data: ILoginForm): Promise<IBodyResponse<ILoginResponse>> {
+        return await this.client.post('/login', data);
+    }
+
+    async getUserProfile(): Promise<IBodyResponse<IUser>> {
         return await this.client.get(`/users/me`);
     }
 }

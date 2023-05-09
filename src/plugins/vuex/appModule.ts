@@ -1,6 +1,6 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { ICustomer } from '@/common/interfaces';
+import { IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
 import store from '@/plugins/vuex';
 import { isEmpty } from 'lodash';
@@ -14,33 +14,31 @@ import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-dec
     store,
 })
 class AppModule extends VuexModule {
-    loginCustomer: ICustomer = {} as ICustomer;
+    loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
 
     get deviceType() {
-        return this.screenWidth <= MD_GRID_BREAKPOINT
-            ? DeviceType.MOBILE
-            : DeviceType.DESKTOP;
+        return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
     }
 
-    get isCustomerLogin() {
-        return !isEmpty(this.loginCustomer);
-    }
-
-    @Action
-    setLoginCustomer(customer: ICustomer) {
-        this.SET_LOGIN_CUSTOMER(customer);
+    get isLogin() {
+        return !isEmpty(this.loginUser);
     }
 
     @Action
-    async getCustomerProfile() {
-        const response = await appApiService.getCustomerProfile();
+    setLoginUser(user: IUser) {
+        this.SET_LOGIN_USER(user);
+    }
+
+    @Action
+    async getUserProfile() {
+        const response = await appApiService.getUserProfile();
         if (response?.success) {
-            this.setLoginCustomer(response?.data || {});
-            authStorageService.setLoginCustomer(response?.data || {});
+            this.setLoginUser(response?.data || {});
+            authStorageService.setLoginUser(response?.data || {});
         } else {
-            this.setLoginCustomer({} as ICustomer);
-            authStorageService.setLoginCustomer({} as ICustomer);
+            this.setLoginUser({} as IUser);
+            authStorageService.setLoginUser({} as IUser);
         }
     }
 
@@ -50,8 +48,8 @@ class AppModule extends VuexModule {
     }
 
     @Mutation
-    SET_LOGIN_CUSTOMER(customer: ICustomer) {
-        this.loginCustomer = customer;
+    SET_LOGIN_USER(loginUser: IUser) {
+        this.loginUser = loginUser;
     }
 
     @Mutation

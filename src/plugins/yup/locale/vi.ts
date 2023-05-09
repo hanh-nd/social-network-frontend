@@ -18,9 +18,7 @@ export const yupVi = {
         }) as MessageFunctionCallable,
         notOneOf: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
-            return capitalize(
-                `${fieldName} phải là giá trị ngoại trừ: ${ctx.named('values')}`,
-            );
+            return capitalize(`${fieldName} phải là giá trị ngoại trừ: ${ctx.named('values')}`);
         }) as MessageFunctionCallable,
         defined: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
@@ -35,15 +33,11 @@ export const yupVi = {
         }) as MessageFunctionCallable,
         min: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
-            return capitalize(
-                `${fieldName} phải có ít nhất  ${ctx.named('length')} ký tự`,
-            );
+            return capitalize(`${fieldName} phải có ít nhất  ${ctx.named('length')} ký tự`);
         }) as MessageFunctionCallable,
         max: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
-            return capitalize(
-                `${fieldName} không được vượt quá ${ctx.named('length')} ký tự`,
-            );
+            return capitalize(`${fieldName} không được vượt quá ${ctx.named('length')} ký tự`);
         }) as MessageFunctionCallable,
         matches: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
@@ -78,9 +72,7 @@ export const yupVi = {
     number: {
         min: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
-            return capitalize(
-                `${fieldName} phải có giá trị thấp nhất là ${ctx.named('min')}`,
-            );
+            return capitalize(`${fieldName} phải có giá trị thấp nhất là ${ctx.named('min')}`);
         }) as MessageFunctionCallable,
         max: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
@@ -133,9 +125,7 @@ export const yupVi = {
         }) as MessageFunctionCallable,
         max: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);
-            return capitalize(
-                `${fieldName} phải ít hơn hoặc bằng ${ctx.named('max')} phần tử`,
-            );
+            return capitalize(`${fieldName} phải ít hơn hoặc bằng ${ctx.named('max')} phần tử`);
         }) as MessageFunctionCallable,
         length: ((ctx: MessageContext) => {
             const fieldName = ctx.linked(`yupFields.${ctx.named('path')}`);

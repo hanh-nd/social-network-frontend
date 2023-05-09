@@ -1,5 +1,6 @@
 export enum PageName {
     HOME_PAGE = 'HomePage',
+    LOGIN_PAGE = 'LoginPage',
     NOT_FOUND_PAGE = 'NotFoundPage',
 }
 

@@ -7,7 +7,7 @@ import { getGlobalComponents } from './common/loadGlobalComponents';
 import plugins from './plugins';
 import router from './plugins/vue-router';
 import store from './plugins/vuex';
-import './registerServiceWorker';
+// import './registerServiceWorker';
 
 const app = createApp(App)
     .use(store)

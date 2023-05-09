@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { HttpStatus, OrderDirection, PageName } from './constants';
+import { HttpStatus, OrderDirection } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
     isRequestError?: boolean;
@@ -10,7 +10,7 @@ export interface IBodyResponse<T> extends AxiosResponse {
 }
 
 export interface ILoginForm {
-    identifier: string;
+    username: string;
     password: string;
 }
 
@@ -39,8 +39,9 @@ export interface IResetPasswordForm {
 }
 
 export interface ILoginResponse {
-    jwt: string;
-    user: ICustomer;
+    user: IUser;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export interface IRequestForgotPasswordResponse {
@@ -93,14 +94,26 @@ export interface IYupError {
     params?: Record<string, string>;
 }
 
-export interface ICustomer {
-    id: number;
-    fullName: string;
-    phoneNumber?: string;
-    email?: string;
-}
-
 export interface IDropDownOption {
     value?: string | number;
     label?: string;
+}
+
+export interface IUser {
+    _id: string;
+    username: string;
+    roleId: string;
+    fullName: string;
+    avatarId?: string;
+    coverId?: string;
+    email: string;
+    active: boolean;
+    private: boolean;
+    point: number;
+    lastOnlineAt?: Date;
+    numberOfSubscribers: number;
+    numberOfSubscribing: number;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date;
 }

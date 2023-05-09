@@ -1,12 +1,12 @@
 import { DEFAULT_LANGUAGE, SUPPORT_LANGUAGE } from './constants';
-import { ICustomer } from './interfaces';
+import { IUser } from './interfaces';
 import { storage } from './localStorage';
 
 export const enum AUTH_SERVICE_KEY {
     ACCESS_TOKEN = 'ACCESS_TOKEN',
     REFRESH_TOKEN = 'REFRESH_TOKEN',
-    LANGUAGUE = 'LANGUAGE',
-    LOGIN_CUSTOMER = 'CUSTOMER',
+    LANGUAGE = 'LANGUAGE',
+    LOGIN_USER = 'USER',
 }
 class LocalStorageAuthService {
     setAccessToken(value: string): void {
@@ -14,14 +14,11 @@ class LocalStorageAuthService {
     }
 
     setLanguage(value: SUPPORT_LANGUAGE): void {
-        storage.setLocalStorage(AUTH_SERVICE_KEY.LANGUAGUE, value);
+        storage.setLocalStorage(AUTH_SERVICE_KEY.LANGUAGE, value);
     }
 
-    setLoginCustomer(customer: ICustomer | null) {
-        storage.setLocalStorage(
-            AUTH_SERVICE_KEY.LOGIN_CUSTOMER,
-            JSON.stringify(customer || ''),
-        );
+    setLoginUser(user: IUser | null) {
+        storage.setLocalStorage(AUTH_SERVICE_KEY.LOGIN_USER, JSON.stringify(user || ''));
     }
 
     getAccessToken(): string {
@@ -29,25 +26,24 @@ class LocalStorageAuthService {
     }
 
     getLanguage(): SUPPORT_LANGUAGE {
-        return (storage.getLocalStorage(AUTH_SERVICE_KEY.LANGUAGUE) ||
-            DEFAULT_LANGUAGE) as SUPPORT_LANGUAGE;
+        return (storage.getLocalStorage(AUTH_SERVICE_KEY.LANGUAGE) || DEFAULT_LANGUAGE) as SUPPORT_LANGUAGE;
     }
 
-    getLoginCustomer(): ICustomer {
-        return storage.getObjectFromKey(AUTH_SERVICE_KEY.LOGIN_CUSTOMER) as ICustomer;
+    getLoginUser(): IUser {
+        return storage.getObjectFromKey(AUTH_SERVICE_KEY.LOGIN_USER) as IUser;
     }
 
     resetAccessToken(): void {
         storage.setLocalStorage(AUTH_SERVICE_KEY.ACCESS_TOKEN, '');
     }
 
-    resetLoginCustomer(): void {
-        storage.setLocalStorage(AUTH_SERVICE_KEY.LOGIN_CUSTOMER, '');
+    resetLoginUser(): void {
+        storage.setLocalStorage(AUTH_SERVICE_KEY.LOGIN_USER, '');
     }
 
     resetAll(): void {
         this.resetAccessToken();
-        this.resetLoginCustomer();
+        this.resetLoginUser();
     }
 }
 
