@@ -1,20 +1,32 @@
 <template>
     <div class="profile-action-wrapper">
-        <el-button>HIIH</el-button>
-        <el-button>HIIH</el-button>
-        <el-button>HIIH</el-button>
-        <el-button>HIIH</el-button>
+        <div class="login-user" v-if="isLoginUser(profileUser)">
+            <LoginUserProfileAction />
+        </div>
+        <div class="user" v-else>
+            <UserProfileAction />
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
+import { profileModule } from '../store';
+import LoginUserProfileAction from './LoginUserProfileAction.vue';
+import UserProfileAction from './UserProfileAction.vue';
 
 @Options({
-    components: {},
+    components: {
+        LoginUserProfileAction,
+        UserProfileAction,
+    },
 })
-export default class ProfileAction extends GlobalMixin {}
+export default class ProfileAction extends GlobalMixin {
+    get profileUser() {
+        return profileModule.profileUser;
+    }
+}
 </script>
 
 <style lang="scss" scoped>

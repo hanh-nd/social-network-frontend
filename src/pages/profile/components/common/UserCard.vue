@@ -1,8 +1,8 @@
 <template>
-    <div class="user-card-wrapper">
-        <div class="top-section" @click="goToProfilePage">
-            <div class="avatar" v-if="user?.avatarId">
-                <img :src="getImageSourceById(user?.avatarId)" alt="" />
+    <div class="user-card-wrapper h-100">
+        <div class="top-section h-100" @click="goToProfilePage">
+            <div class="avatar h-100">
+                <img :src="getAvatarUrl(user)" alt="" />
             </div>
         </div>
         <div class="bottom-section">

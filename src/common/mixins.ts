@@ -119,9 +119,15 @@ export class GlobalMixin extends Vue {
         return `${process.env.VUE_APP_API_URL}/files/${id}`;
     }
 
-    isLoginUser(user: Partial<IUser>) {
+    isLoginUser(user: Partial<IUser> | null) {
         if (!user?._id) return false;
 
         return user?._id === localStorageAuthService.getLoginUser()._id;
+    }
+
+    getAvatarUrl(user?: Partial<IUser>) {
+        return user?.avatarId
+            ? `${process.env.VUE_APP_API_URL}/files/${user.avatarId}`
+            : require('@/assets/images/common/default-avatar.svg');
     }
 }

@@ -47,6 +47,8 @@ export default class FeedMenu extends GlobalMixin {
 
     :deep(.el-menu-item) {
         --el-menu-active-color: #79bf43;
+        --el-menu-hover-text-color: #79bf43;
+        --el-menu-hover-bg-color: #effdfa;
 
         &.is-active {
             font-weight: 700;
