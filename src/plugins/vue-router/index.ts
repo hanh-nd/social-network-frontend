@@ -3,13 +3,14 @@ import { PageName } from '@/common/constants';
 import MainLayout from '@/layouts/MainLayout.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
+import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
+import SearchPage from '@/pages/search/pages/SearchPage.vue';
 import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
-import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -60,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/welcome',
                 name: PageName.WELCOME_PAGE,
                 component: WelcomePage,
+            },
+            {
+                path: '/search',
+                name: PageName.SEARCH_PAGE,
+                component: SearchPage,
             },
         ],
     },

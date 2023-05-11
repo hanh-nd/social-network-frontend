@@ -7,7 +7,7 @@
         </div>
         <div class="bottom-section">
             <div class="name">
-                {{ user.fullName || ' ' }}
+                {{ user?.fullName || 'undefined' }}
             </div>
             <div class="button">
                 <el-button @click="subscribeOrUnsubscribe">{{

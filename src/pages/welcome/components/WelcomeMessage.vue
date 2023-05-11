@@ -1,6 +1,6 @@
 <template>
     <div class="welcome-message">
-        Xin chào, <span class="name">{{ loginUser.fullName }}</span
+        Xin chào, <span class="name">{{ loginUser?.fullName }}</span
         >!
     </div>
 </template>

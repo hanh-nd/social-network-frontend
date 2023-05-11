@@ -194,3 +194,12 @@ export interface IComment {
     content: string;
     numberOfReactions: number;
 }
+
+export interface ISearchResults {
+    posts: IPost[];
+    users: IUser[];
+}
+
+export interface ISearchQuery extends ICommonGetListQuery {
+    size?: number;
+}
