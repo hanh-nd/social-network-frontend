@@ -1,5 +1,5 @@
 <template>
-    <div class="post-list-wrapper" v-infinite-scroll="onLoadMore">
+    <div class="post-list-wrapper" :style="style" v-infinite-scroll="onLoadMore">
         <div class="post" v-for="post in postList" :key="post._id">
             <Post :post="post" />
         </div>
@@ -21,6 +21,13 @@ import Post from './Post.vue';
 })
 export default class PostList extends GlobalMixin {
     @Prop() postList!: IPost[];
+    @Prop({ default: 0 }) gap!: number;
+
+    get style() {
+        return {
+            gap: this.gap,
+        };
+    }
 
     onLoadMore() {
         this.$emit('on-load-more');

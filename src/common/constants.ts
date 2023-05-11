@@ -5,6 +5,7 @@ export enum PageName {
     NOT_FOUND_PAGE = 'NotFoundPage',
     WELCOME_PAGE = 'WelcomePage',
     PROFILE_PAGE = 'ProfilePage',
+    SEARCH_PAGE = 'SEARCH_PAGE',
 }
 
 export const PROVINCE_LIMIT = 100;

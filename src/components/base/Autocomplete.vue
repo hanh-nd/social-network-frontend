@@ -8,7 +8,7 @@
             :size="size"
             @focus="onFocus"
             @blur="onBlur"
-            @keyup="onChangeKeyword"
+            @keyup="onKeyup"
             :teleported="false"
         >
             <template #prefix>
@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+import { KeyCode } from '@/common/constants';
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { Model, Prop } from 'vue-property-decorator';
@@ -59,6 +60,14 @@ export default class Autocomplete extends GlobalMixin {
 
     handleSelect(value: any): void {
         this.$emit('select-suggestion', value);
+    }
+
+    onKeyup(event: KeyboardEvent) {
+        if (event.code === KeyCode.ENTER) {
+            this.$emit('on-enter');
+        }
+
+        this.onChangeKeyword();
     }
 }
 </script>

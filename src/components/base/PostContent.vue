@@ -7,7 +7,7 @@
                 </div>
                 <div class="information">
                     <div class="name" @click="goToProfilePage">
-                        {{ post?.author.fullName || 'hihi' }}
+                        {{ post?.author?.fullName || 'hihi' }}
                     </div>
                     <div class="created-at">
                         <el-tooltip

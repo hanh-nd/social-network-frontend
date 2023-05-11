@@ -13,7 +13,7 @@
                 <BaseRoundAvatar :user="loginUser" :size="42" />
             </div>
             <div class="information">
-                <div class="user-name">{{ loginUser.fullName || loginUser.email }}</div>
+                <div class="user-name">{{ loginUser?.fullName || loginUser?.email }}</div>
                 <div class="privacy">
                     <BaseSingleSelect
                         v-model:value="editPostForm.privacy"

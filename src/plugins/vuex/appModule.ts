@@ -23,6 +23,7 @@ class AppModule extends VuexModule {
     screenWidth = window.innerWidth;
     isRefreshing = false;
     isShowSharePostDialog = false;
+    searchKeyword = '';
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
@@ -122,6 +123,16 @@ class AppModule extends VuexModule {
     @Mutation
     SET_IS_SHOW_REPORT_POST_DIALOG(isShowReportPostDialog: boolean) {
         this.isShowReportPostDialog = isShowReportPostDialog;
+    }
+
+    @Action
+    setSearchKeyword(searchKeyword: string) {
+        this.SET_SEARCH_KEYWORD(searchKeyword);
+    }
+
+    @Mutation
+    SET_SEARCH_KEYWORD(searchKeyword: string) {
+        this.searchKeyword = searchKeyword;
     }
 }
 
