@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         custom-class="report-post-dialog"
-        :model-value="isShowReportPostDialog"
+        :model-value="isShowReportCommentDialog"
         @closed="onClose"
         title="Báo cáo bài viết"
         :width="deviceType === DeviceType.MOBILE ? '80%' : '30%'"
@@ -10,8 +10,8 @@
         <div class="body">
             <div class="content">
                 <BaseInputText
-                    v-model:value="reportPostForm.reportReason"
-                    :error="translateYupError(reportPostForm.errors.reportReason as IYupError)"
+                    v-model:value="reportCommentForm.reportReason"
+                    :error="translateYupError(reportCommentForm.errors.reportReason as IYupError)"
                     placeholder="Bài viết vi phạm điều gì?"
                     type="textarea"
                     :autosize="{
@@ -33,7 +33,7 @@
 import { DeviceType, ValidationForm } from '@/common/constants';
 import { IReportPostBody, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
-import postApiService from '@/common/service/post.api.service';
+import commentApiService from '@/common/service/comment.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
@@ -43,24 +43,24 @@ import { Options, setup } from 'vue-class-component';
     components: {},
     emits: ['on-close-dialog', 'on-click-cancel-button', 'on-click-confirm-button'],
 })
-export default class ReportPostDialog extends GlobalMixin {
+export default class ReportCommentDialog extends GlobalMixin {
     get deviceType() {
         return appModule.deviceType;
     }
 
-    get isShowReportPostDialog() {
-        return appModule.isShowReportPostDialog;
+    get isShowReportCommentDialog() {
+        return appModule.isShowReportCommentDialog;
     }
 
-    get postDetail() {
-        return appModule.postDetail;
+    get commentDetail() {
+        return appModule.commentDetail;
     }
 
     onClose() {
-        appModule.setIsShowReportPostDialog(false);
+        appModule.setIsShowReportCommentDialog(false);
     }
 
-    reportPostForm = setup(() => {
+    reportCommentForm = setup(() => {
         const initValues: IReportPostBody = {
             reportReason: '',
         };
@@ -83,13 +83,19 @@ export default class ReportPostDialog extends GlobalMixin {
         };
 
         const submit = handleSubmit(async (values) => {
-            const response = await postApiService.reportPost(this.postDetail._id, values);
+            if (!this.commentDetail?.post?._id) return;
+
+            const response = await commentApiService.reportComment(
+                this.commentDetail?.post?._id,
+                this.commentDetail?._id,
+                values,
+            );
             if (response.success) {
-                this.showSuccessNotificationFunction('Báo cáo bài viết thành công');
-                appModule.setIsShowReportPostDialog(false);
+                this.showSuccessNotificationFunction('Báo cáo bình luận thành công');
+                appModule.setIsShowReportCommentDialog(false);
                 clearFormData();
             } else {
-                this.showErrorNotificationFunction(response?.message || 'Báo cáo bài viết thất bại');
+                this.showErrorNotificationFunction(response?.message || 'Báo cáo bình luận thất bại');
             }
         });
 
@@ -106,7 +112,7 @@ export default class ReportPostDialog extends GlobalMixin {
     });
 
     async onSubmit() {
-        await this.reportPostForm.submit();
+        await this.reportCommentForm.submit();
     }
 }
 </script>

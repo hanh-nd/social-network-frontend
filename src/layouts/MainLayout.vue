@@ -13,6 +13,7 @@
         <BaseSharePostDialog />
         <BaseEditPostDialog />
         <BaseReportPostDialog />
+        <BaseReportCommentDialog />
         <BaseReactionListDialog />
         <BaseShareListDialog />
     </div>

@@ -11,6 +11,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
+import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -66,6 +67,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/search',
                 name: PageName.SEARCH_PAGE,
                 component: SearchPage,
+            },
+            {
+                path: '/posts/:id',
+                name: PageName.POST_DETAIL_PAGE,
+                component: PostDetailPage,
             },
         ],
     },

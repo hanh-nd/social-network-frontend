@@ -1,6 +1,6 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { IPost, IUser } from '@/common/interfaces';
+import { IComment, IPost, IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
 import store from '@/plugins/vuex';
 import { isEmpty } from 'lodash';
@@ -18,9 +18,11 @@ class AppModule extends VuexModule {
     isShowPostDetailDialog = false;
     isShowEditPostDialog = false;
     isShowReportPostDialog = false;
+    isShowReportCommentDialog = false;
     isShowReactionListDialog = false;
     isShowShareListDialog = false;
     postDetail: IPost = {} as IPost;
+    commentDetail: IComment = {} as IComment;
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
     isRefreshing = false;
@@ -98,6 +100,16 @@ class AppModule extends VuexModule {
     }
 
     @Action
+    setCommentDetail(comment: IComment) {
+        this.SET_COMMENT_DETAIL(comment);
+    }
+
+    @Mutation
+    SET_COMMENT_DETAIL(comment: IComment) {
+        this.commentDetail = comment;
+    }
+
+    @Action
     setIsShowSharePostDialog(isShowSharePostDialog: boolean) {
         this.SET_IS_SHOW_SHARE_POST_DIALOG(isShowSharePostDialog);
     }
@@ -125,6 +137,16 @@ class AppModule extends VuexModule {
     @Mutation
     SET_IS_SHOW_REPORT_POST_DIALOG(isShowReportPostDialog: boolean) {
         this.isShowReportPostDialog = isShowReportPostDialog;
+    }
+
+    @Action
+    setIsShowReportCommentDialog(isShowReportCommentDialog: boolean) {
+        this.SET_IS_SHOW_REPORT_COMMENT_DIALOG(isShowReportCommentDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_REPORT_COMMENT_DIALOG(isShowReportCommentDialog: boolean) {
+        this.isShowReportCommentDialog = isShowReportCommentDialog;
     }
 
     @Action
