@@ -46,6 +46,10 @@ class PostApiService extends ApiService {
     async reactComment(postId: string, commentId: string, body: ICreateReactionBody): Promise<IBodyResponse<boolean>> {
         return await this.client.post(`${this.baseUrl}/${postId}/comments/${commentId}/react`, body);
     }
+
+    async getPostDetail(postId: string): Promise<IBodyResponse<IPost>> {
+        return await this.client.get(`${this.baseUrl}/${postId}`);
+    }
 }
 const postApiService = new PostApiService({ baseUrl: '/posts' }, axiosService);
 

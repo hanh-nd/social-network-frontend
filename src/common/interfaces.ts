@@ -184,6 +184,12 @@ export interface ICreateCommentBody {
     videoId?: string;
 }
 
+export interface IEditCommentBody {
+    content: string;
+    pictureId?: string;
+    videoId?: string;
+}
+
 export interface IComment {
     _id: string;
     createdAt: Date;
