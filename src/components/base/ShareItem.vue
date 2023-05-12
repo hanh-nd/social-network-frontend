@@ -1,10 +1,12 @@
 <template>
-    <div class="post-wrapper" v-if="isShowPost">
-        <BasePostContent :post="post" />
+    <div class="share-item">
+        <div class="top-section">
+            <BasePostContent :post="post" />
+        </div>
         <BaseDivider />
         <div class="post-info">
             <div class="left-section">
-                <div class="reaction-count" @click="openReactionListDialog">
+                <div class="reaction-count">
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
@@ -12,13 +14,13 @@
                 <div class="comment-count">
                     {{ post?.numberOfComments }}
                 </div>
-                <div class="share-count" @click="openShareListDialog">
+                <div class="share-count">
                     {{ post?.numberOfShares }}
                 </div>
             </div>
         </div>
         <BaseDivider />
-        <div class="action-group">
+        <div class="bottom-section">
             <div class="btn react">
                 <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
             </div>
@@ -34,27 +36,29 @@
 
 <script lang="ts">
 import { ReactionType } from '@/common/constants';
-import { getAvatarUrl } from '@/common/helpers';
 import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
-import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
-@Options({
-    components: {},
-})
-export default class Post extends GlobalMixin {
+@Options({})
+export default class ShareItem extends GlobalMixin {
     @Prop() post!: IPost;
 
-    get authorAvatar() {
-        return getAvatarUrl(this.post.author);
+    onMessageOrSubscribe() {
+        //
     }
 
-    get isShowPost() {
-        return _.isNil(this.post.deletedAt);
+    goToUserProfile() {
+        appModule.setIsShowReactionListDialog(false);
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: this.post?.author?._id,
+            },
+        });
     }
 
     async onLike() {
@@ -74,26 +78,23 @@ export default class Post extends GlobalMixin {
         appModule.setPostDetail(this.post);
         appModule.setIsShowSharePostDialog(true);
     }
-
-    openReactionListDialog() {
-        appModule.setPostDetail(this.post);
-        appModule.setIsShowReactionListDialog(true);
-    }
-
-    openShareListDialog() {
-        appModule.setPostDetail(this.post);
-        appModule.setIsShowShareListDialog(true);
-    }
 }
 </script>
 
 <style lang="scss" scoped>
-.post-wrapper {
+.share-item {
     display: flex;
     flex-direction: column;
-    background: $color-white;
-    border-radius: 6px;
-    padding: 16px;
+    padding: 8px;
+
+    .top-section {
+        display: flex;
+        flex-direction: column;
+
+        .name {
+            cursor: pointer;
+        }
+    }
 
     .post-info {
         display: flex;
@@ -117,7 +118,7 @@ export default class Post extends GlobalMixin {
         }
     }
 
-    .action-group {
+    .bottom-section {
         display: flex;
         flex-direction: row;
         justify-content: space-between;

@@ -3,6 +3,7 @@ import {
     ICreateNewPostBody,
     ICreateReactionBody,
     IPost,
+    IReaction,
     IReportPostBody,
     IUpdatePostBody,
 } from '@/common/interfaces';
@@ -32,6 +33,18 @@ class PostApiService extends ApiService {
 
     async reportPost(id: string, body: IReportPostBody): Promise<IBodyResponse<boolean>> {
         return await this.client.post(`${this.baseUrl}/${id}/report`, body);
+    }
+
+    async getPostReactions(id: string): Promise<IBodyResponse<IReaction[]>> {
+        return await this.client.get(`${this.baseUrl}/${id}/reactions`);
+    }
+
+    async getPostShares(id: string): Promise<IBodyResponse<IPost[]>> {
+        return await this.client.get(`${this.baseUrl}/${id}/shares`);
+    }
+
+    async reactComment(postId: string, commentId: string, body: ICreateReactionBody): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${postId}/comments/${commentId}/react`, body);
     }
 }
 const postApiService = new PostApiService({ baseUrl: '/posts' }, axiosService);
