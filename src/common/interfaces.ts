@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { HttpStatus, OrderDirection } from './constants';
+import { HttpStatus, OrderDirection, ReactionType } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
     isRequestError?: boolean;
@@ -193,6 +193,7 @@ export interface IComment {
     post: Partial<IPost>;
     content: string;
     numberOfReactions: number;
+    isReacted: boolean;
 }
 
 export interface ISearchResults {
@@ -202,4 +203,22 @@ export interface ISearchResults {
 
 export interface ISearchQuery extends ICommonGetListQuery {
     size?: number;
+}
+
+export interface IReaction {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+    author: {
+        _id: string;
+        username: string;
+        fullName: string;
+        isSubscribing?: boolean;
+    };
+    target: {
+        _id: string;
+    };
+    targetType: string;
+    type: ReactionType;
 }

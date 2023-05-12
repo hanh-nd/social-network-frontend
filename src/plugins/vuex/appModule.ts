@@ -18,6 +18,8 @@ class AppModule extends VuexModule {
     isShowPostDetailDialog = false;
     isShowEditPostDialog = false;
     isShowReportPostDialog = false;
+    isShowReactionListDialog = false;
+    isShowShareListDialog = false;
     postDetail: IPost = {} as IPost;
     loginUser: IUser = {} as IUser;
     screenWidth = window.innerWidth;
@@ -133,6 +135,26 @@ class AppModule extends VuexModule {
     @Mutation
     SET_SEARCH_KEYWORD(searchKeyword: string) {
         this.searchKeyword = searchKeyword;
+    }
+
+    @Action
+    setIsShowReactionListDialog(isShowReactionListDialog: boolean) {
+        this.SET_IS_SHOW_REACTION_LIST_DIALOG(isShowReactionListDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_REACTION_LIST_DIALOG(isShowReactionListDialog: boolean) {
+        this.isShowReactionListDialog = isShowReactionListDialog;
+    }
+
+    @Action
+    setIsShowShareListDialog(isShowShareListDialog: boolean) {
+        this.SET_IS_SHOW_SHARE_LIST_DIALOG(isShowShareListDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_SHARE_LIST_DIALOG(isShowShareListDialog: boolean) {
+        this.isShowShareListDialog = isShowShareListDialog;
     }
 }
 

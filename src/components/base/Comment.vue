@@ -13,8 +13,8 @@
                 </div>
             </div>
             <div class="action-group">
-                <div class="react">
-                    <div>Thích</div>
+                <div class="react" @click="reactComment()">
+                    <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
                 </div>
                 <div class="created-at">
                     {{ parseDateTimeRelative(comment?.createdAt) }}
@@ -25,8 +25,10 @@
 </template>
 
 <script lang="ts">
+import { ReactionType } from '@/common/constants';
 import { IComment } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import postApiService from '@/common/service/post.api.service';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -44,6 +46,19 @@ export default class Comment extends GlobalMixin {
                 id: this.comment?.author?._id,
             },
         });
+    }
+
+    async reactComment(type = ReactionType.LIKE) {
+        if (!this.comment?.post?._id) return;
+
+        const response = await postApiService.reactComment(this.comment?.post?._id, this.comment?._id, {
+            type,
+        });
+        if (response?.success) {
+            this.comment.isReacted = !this.comment.isReacted;
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi tương tác bình luận này.`);
+        }
     }
 }
 </script>
@@ -76,6 +91,14 @@ export default class Comment extends GlobalMixin {
             flex-direction: row;
             gap: 8px;
             align-items: center;
+
+            .react {
+                cursor: pointer;
+                .reacted {
+                    color: $color-green;
+                    font-weight: 700;
+                }
+            }
         }
     }
 }
