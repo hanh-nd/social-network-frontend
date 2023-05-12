@@ -9,7 +9,7 @@
                     <div class="name" @click="goToProfilePage">
                         {{ post?.author?.fullName || 'hihi' }}
                     </div>
-                    <div class="created-at">
+                    <div class="created-at" @click="goToPostDetailPage">
                         <el-tooltip
                             :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
                             :hide-after="100"
@@ -125,6 +125,15 @@ export default class PostContent extends GlobalMixin {
             this.showErrorNotificationFunction(`Chặn người dùng thất bại`);
         }
     }
+
+    goToPostDetailPage() {
+        this.$router.push({
+            name: this.PageName.POST_DETAIL_PAGE,
+            params: {
+                id: this.post._id,
+            },
+        });
+    }
 }
 </script>
 
@@ -161,6 +170,7 @@ export default class PostContent extends GlobalMixin {
 
             .created-at {
                 font-size: 12px;
+                cursor: pointer;
             }
         }
     }

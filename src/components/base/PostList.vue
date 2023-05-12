@@ -21,7 +21,7 @@ import Post from './Post.vue';
 })
 export default class PostList extends GlobalMixin {
     @Prop() postList!: IPost[];
-    @Prop({ default: 0 }) gap!: number;
+    @Prop({ default: 8 }) gap!: number;
 
     get style() {
         return {
