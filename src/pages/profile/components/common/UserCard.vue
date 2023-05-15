@@ -43,7 +43,7 @@ export default class UserCard extends GlobalMixin {
     async subscribeOrUnsubscribe() {
         const response = await userApiService.subscribeOrUnsubscribe(this.user._id);
         if (response?.success) {
-            //
+            this.user.isSubscribing = !this.user.isSubscribing;
         } else {
             this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra.');
         }
