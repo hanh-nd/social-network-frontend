@@ -1,7 +1,7 @@
 <template>
     <div class="feed-menu-wrapper">
         <el-menu :default-active="FeedScreenType.MAIN" :collapse="isCollapse" @select="onSelect">
-            <el-menu-item index="-1">
+            <el-menu-item :index="1">
                 <div class="login-user" @click="goToProfilePage">
                     <BaseRoundAvatar :user="loginUser" :size="36" />
                     <div class="name" v-if="!isCollapse">
@@ -16,6 +16,10 @@
             <el-menu-item :index="FeedScreenType.EXPLORE">
                 <el-icon><Notification /></el-icon>
                 <template #title>Khám phá</template>
+            </el-menu-item>
+            <el-menu-item :index="2" @click="goToGroupPage">
+                <el-icon><Connection /></el-icon>
+                <template #title>Hội nhóm</template>
             </el-menu-item>
         </el-menu>
     </div>
@@ -43,7 +47,7 @@ export default class FeedMenu extends GlobalMixin {
     }
 
     onSelect(screen: FeedScreenType) {
-        if (`${screen}` === '-1') return;
+        if (!Object.values(FeedScreenType).includes(screen)) return;
         homeModule.setFeedScreenType(screen);
     }
 
@@ -53,6 +57,12 @@ export default class FeedMenu extends GlobalMixin {
             params: {
                 id: this.loginUser._id,
             },
+        });
+    }
+
+    goToGroupPage() {
+        this.$router.push({
+            name: this.PageName.GROUP_PAGE,
         });
     }
 }

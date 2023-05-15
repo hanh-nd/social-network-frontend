@@ -9,6 +9,8 @@ import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
+import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
+import GroupPage from '../../pages/groups/pages/GroupPage.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
 import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
@@ -72,6 +74,16 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/posts/:id',
                 name: PageName.POST_DETAIL_PAGE,
                 component: PostDetailPage,
+            },
+            {
+                path: '/groups',
+                name: PageName.GROUP_PAGE,
+                component: GroupPage,
+            },
+            {
+                path: '/group-details',
+                name: PageName.GROUP_DETAIL_PAGE,
+                component: GroupDetailPage,
             },
         ],
     },
