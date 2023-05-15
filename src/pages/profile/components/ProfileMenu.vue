@@ -58,10 +58,14 @@ export default class ProfileMenu extends GlobalMixin {
         border-radius: 0 6px 0 0;
     }
 
-    :deep(.el-menu-item) {
+    :deep(.el-menu) {
         --el-menu-active-color: #79bf43;
         --el-menu-hover-text-color: #79bf43;
         --el-menu-hover-bg-color: #effdfa;
+        --el-menu-active-color: #79bf43;
+    }
+
+    :deep(.el-menu-item) {
         &.is-active {
             font-weight: 700;
         }

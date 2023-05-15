@@ -25,6 +25,7 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { searchModule } from '../store';
 import UserSearchItem from './UserSearchItem.vue';
+import * as _ from 'lodash';
 
 @Options({
     components: {
@@ -37,7 +38,7 @@ export default class AllSearchResultList extends GlobalMixin {
     }
 
     get userSearchResults() {
-        return searchModule.searchResults.users;
+        return _.orderBy(searchModule.searchResults.users, 'isSubscribing', 'desc');
     }
 
     get postSearchResults() {
