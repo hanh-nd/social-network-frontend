@@ -1,6 +1,14 @@
 <template>
     <div class="feed-menu-wrapper">
         <el-menu :default-active="FeedScreenType.MAIN" :collapse="isCollapse" @select="onSelect">
+            <el-menu-item index="-1">
+                <div class="login-user" @click="goToProfilePage">
+                    <BaseRoundAvatar :user="loginUser" :size="36" />
+                    <div class="name" v-if="!isCollapse">
+                        {{ loginUser.fullName }}
+                    </div>
+                </div>
+            </el-menu-item>
             <el-menu-item :index="FeedScreenType.MAIN">
                 <el-icon><Menu /></el-icon>
                 <template #title>Trang chủ</template>
@@ -27,11 +35,25 @@ export default class FeedMenu extends GlobalMixin {
     FeedScreenType = FeedScreenType;
 
     get isCollapse() {
-        return appModule.screenWidth < 576;
+        return appModule.screenWidth < 768;
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
     }
 
     onSelect(screen: FeedScreenType) {
+        if (`${screen}` === '-1') return;
         homeModule.setFeedScreenType(screen);
+    }
+
+    goToProfilePage() {
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: this.loginUser._id,
+            },
+        });
     }
 }
 </script>
@@ -50,8 +72,23 @@ export default class FeedMenu extends GlobalMixin {
         --el-menu-hover-text-color: #79bf43;
         --el-menu-hover-bg-color: #effdfa;
 
+        * {
+            vertical-align: middle;
+        }
+
         &.is-active {
             font-weight: 700;
+        }
+
+        .login-user {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+
+            .name {
+                font-size: 16px;
+            }
         }
     }
 }

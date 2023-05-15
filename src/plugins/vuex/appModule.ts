@@ -33,6 +33,10 @@ class AppModule extends VuexModule {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
     }
 
+    get isMobile() {
+        return this.screenWidth <= MD_GRID_BREAKPOINT;
+    }
+
     get isLogin() {
         return !isEmpty(this.loginUser);
     }

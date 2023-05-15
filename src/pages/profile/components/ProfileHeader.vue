@@ -94,6 +94,27 @@ export default class ProfileHeader extends GlobalMixin {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+
+        .menu {
+            width: 50%;
+        }
+
+        .action {
+            width: 50%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+    }
+}
+
+@media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+    .profile-header-wrapper {
+        .footer {
+            .menu {
+                width: 0;
+            }
+        }
     }
 }
 </style>
