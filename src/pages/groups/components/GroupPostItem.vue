@@ -1,21 +1,26 @@
 <template>
-    <div class="post-content-wrapper">
+    <div class="group-post-item">
         <div class="header">
             <div class="left-section">
                 <div class="avatar">
                     <BaseRoundAvatar :user="post?.author" :size="42" />
                 </div>
                 <div class="information">
-                    <div class="name" @click="goToProfilePage">
-                        {{ post?.author?.fullName || 'hihi' }}
+                    <div class="top-section">
+                        {{ group?.name }}
                     </div>
-                    <div class="created-at" @click="goToPostDetailPage">
-                        <el-tooltip
-                            :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
-                            :hide-after="100"
-                        >
-                            {{ parseDateTimeRelative(post?.createdAt) }}
-                        </el-tooltip>
+                    <div class="bottom-section">
+                        <div class="author-name">
+                            {{ post?.author?.fullName }}
+                        </div>
+                        <div class="created-at" @click="goToPostDetailPage">
+                            <el-tooltip
+                                :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
+                                :hide-after="100"
+                            >
+                                {{ parseDateTimeRelative(post?.createdAt) }}
+                            </el-tooltip>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,11 +51,41 @@
         <div class="main-content">
             <BasePostMainContent :post="post" />
         </div>
+
+        <BaseDivider />
+        <div class="post-info">
+            <div class="left-section">
+                <div class="reaction-count" @click="openReactionListDialog">
+                    {{ post?.numberOfReacts }}
+                </div>
+            </div>
+            <div class="right-section">
+                <div class="comment-count">
+                    {{ post?.numberOfComments }}
+                </div>
+                <div class="share-count" @click="openShareListDialog">
+                    {{ post?.numberOfShares }}
+                </div>
+            </div>
+        </div>
+        <BaseDivider />
+        <div class="action-group">
+            <div class="btn react">
+                <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+            </div>
+            <div class="btn comment">
+                <el-button @click="openPostDetailDialog">Bình luận</el-button>
+            </div>
+            <div class="btn share">
+                <el-button @click="openSharePostDialog">Chia sẻ</el-button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { IPost } from '@/common/interfaces';
+import { ReactionType } from '@/common/constants';
+import { IGroupPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
@@ -63,7 +98,15 @@ import { Prop } from 'vue-property-decorator';
     emits: [],
 })
 export default class PostContent extends GlobalMixin {
-    @Prop() post!: IPost;
+    @Prop() groupPost!: IGroupPost;
+
+    get post() {
+        return this.groupPost.post;
+    }
+
+    get group() {
+        return this.groupPost.group;
+    }
 
     goToProfilePage() {
         this.$router.push({
@@ -123,13 +166,39 @@ export default class PostContent extends GlobalMixin {
             },
         });
     }
+
+    async onLike() {
+        this.post.isReacted = !this.post.isReacted;
+        this.post.numberOfReacts += this.post.isReacted ? 1 : -1;
+        await postApiService.react(this.post._id, {
+            type: ReactionType.LIKE,
+        });
+    }
+
+    openSharePostDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowSharePostDialog(true);
+    }
+
+    openReactionListDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowReactionListDialog(true);
+    }
+
+    openShareListDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowShareListDialog(true);
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-.post-content-wrapper {
+.group-post-item {
     display: flex;
     flex-direction: column;
+    background: $color-white;
+    border-radius: 6px;
+    padding: 16px;
 
     .header {
         display: flex;
@@ -152,14 +221,56 @@ export default class PostContent extends GlobalMixin {
             display: flex;
             flex-direction: column;
 
-            .name {
+            .top-section {
                 font-weight: 500;
                 cursor: pointer;
             }
 
-            .created-at {
-                font-size: 12px;
+            .bottom-section {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+
+                .created-at {
+                    font-size: 12px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .post-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .left-section {
+            .reaction-count {
                 cursor: pointer;
+            }
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+
+            .share-count {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .action-group {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .btn {
+            width: 100%;
+
+            .el-button {
+                width: 100%;
             }
         }
     }

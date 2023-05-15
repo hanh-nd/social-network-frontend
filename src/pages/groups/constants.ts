@@ -1,0 +1,5 @@
+export enum FeedScreenType {
+    MAIN = 'MAIN',
+    CREATED_GROUP_LIST = 'CREATED_GROUP_LIST',
+    JOINED_GROUP_LIST = 'JOINED_GROUP_LIST',
+}
