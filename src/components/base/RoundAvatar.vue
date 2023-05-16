@@ -8,9 +8,9 @@
 import { getAvatarUrl } from '@/common/helpers';
 import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import * as _ from 'lodash';
 
 @Options({
     components: {},
@@ -20,9 +20,10 @@ export default class CreateNewPost extends GlobalMixin {
     @Prop({ default: 32 }) size!: number;
     @Prop({ default: '' }) linkTo!: string;
     @Prop() onClick!: CallableFunction;
+    @Prop() fileId!: string;
 
     get avatar() {
-        return getAvatarUrl(this.user);
+        return getAvatarUrl(this.user || { avatarId: this.fileId });
     }
 
     get style() {

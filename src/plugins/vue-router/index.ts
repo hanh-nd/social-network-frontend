@@ -10,6 +10,7 @@ import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
 import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
+import JoinGroupRequestPage from '../../pages/group-detail/pages/JoinGroupRequestPage.vue';
 import GroupPage from '../../pages/groups/pages/GroupPage.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
@@ -84,6 +85,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/groups/:id',
                 name: PageName.GROUP_DETAIL_PAGE,
                 component: GroupDetailPage,
+            },
+            {
+                path: '/groups/:id/requests',
+                name: PageName.JOIN_GROUP_REQUEST_PAGE,
+                component: JoinGroupRequestPage,
             },
         ],
     },
