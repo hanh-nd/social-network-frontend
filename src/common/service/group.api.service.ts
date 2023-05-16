@@ -79,7 +79,7 @@ class GroupApiService extends ApiService {
         return await this.client.post(`${this.baseUrl}/${groupId}/leave`);
     }
 
-    async getPosts(groupId: string, query?: IGetGroupPostListQuery): Promise<IBodyResponse<boolean>> {
+    async getPosts(groupId: string, query?: IGetGroupPostListQuery): Promise<IBodyResponse<IGroupPost[]>> {
         return await this.client.get(`${this.baseUrl}/${groupId}/group-posts`, {
             params: query,
         });
