@@ -81,7 +81,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: GroupPage,
             },
             {
-                path: '/group-details',
+                path: '/groups/:id',
                 name: PageName.GROUP_DETAIL_PAGE,
                 component: GroupDetailPage,
             },

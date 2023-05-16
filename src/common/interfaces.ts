@@ -244,7 +244,7 @@ export interface IGroup {
     summary: string;
     coverId: string;
     memberIds: string[];
-    pinnedPostIds: IGroupPost[];
+    pinnedPosts: IGroupPost[];
     blockIds: IUser[];
 }
 

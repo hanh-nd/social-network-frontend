@@ -25,7 +25,18 @@
                 </div>
             </div>
             <div class="right-section">
-                <div class="author-settings" v-if="isAuthor()">
+                <div class="admin-settings" v-if="isAdministrator">
+                    <BaseThreeDotMenu>
+                        <el-dropdown-item @click="pinPost"
+                            ><el-icon :size="16"><Edit /></el-icon
+                            >{{ isPostPinned ? `Bỏ ghim bài viết` : `Ghim bài viết` }}</el-dropdown-item
+                        >
+                        <el-dropdown-item @click="deletePost"
+                            ><el-icon :size="16"><Delete /></el-icon>Xóa</el-dropdown-item
+                        >
+                    </BaseThreeDotMenu>
+                </div>
+                <div class="author-settings" v-else-if="isAuthor()">
                     <BaseThreeDotMenu>
                         <el-dropdown-item @click="editPost"
                             ><el-icon :size="16"><Edit /></el-icon>Chỉnh sửa bài viết</el-dropdown-item
@@ -63,7 +74,7 @@
                 <div class="comment-count">
                     {{ post?.numberOfComments }}
                 </div>
-                <div class="share-count" @click="openShareListDialog">
+                <div class="share-count" @click="openShareListDialog" v-if="!group.private">
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -76,7 +87,7 @@
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
             </div>
-            <div class="btn share">
+            <div class="btn share" v-if="!group.private">
                 <el-button @click="openSharePostDialog">Chia sẻ</el-button>
             </div>
         </div>
@@ -87,11 +98,13 @@
 import { ReactionType } from '@/common/constants';
 import { IGroupPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import groupApiService from '@/common/service/group.api.service';
 import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
+import { groupDetailModule } from '@/pages/group-detail/store';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 
 @Options({
     components: {},
@@ -99,6 +112,16 @@ import { Prop } from 'vue-property-decorator';
 })
 export default class PostContent extends GlobalMixin {
     @Prop() groupPost!: IGroupPost;
+    isPostPinned = false;
+
+    mounted() {
+        this.isPostPinned = this.group.pinnedPosts?.includes(`${this.groupPost._id}` as unknown as IGroupPost);
+    }
+
+    @Watch('group')
+    setIsPinnedPost() {
+        this.isPostPinned = this.group.pinnedPosts.includes(`${this.groupPost._id}` as unknown as IGroupPost);
+    }
 
     get post() {
         return this.groupPost.post;
@@ -106,6 +129,18 @@ export default class PostContent extends GlobalMixin {
 
     get group() {
         return this.groupPost.group;
+    }
+
+    get administratorIds() {
+        return this.group?.administrators?.map((admin) => `${admin.user}`) || [];
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    get isAdministrator() {
+        return this.administratorIds.includes(`${this.loginUser?._id}`);
     }
 
     goToProfilePage() {
@@ -126,13 +161,24 @@ export default class PostContent extends GlobalMixin {
         return appModule.loginUser?._id === this.post?.author?._id;
     }
 
+    async pinPost() {
+        const response = await groupApiService.pinOrUnpinGroupPost(this.group._id, this.groupPost._id);
+        if (response?.success) {
+            this.showSuccessNotificationFunction(`${this.isPostPinned ? `Bỏ ghim` : `Ghim`} bài viết thành công.`);
+            groupDetailModule.getGroupDetail(this.group._id);
+            this.isPostPinned = !this.isPostPinned;
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Ghim bài viết thất bại.`);
+        }
+    }
+
     editPost() {
         appModule.setPostDetail(this.post);
         appModule.setIsShowEditPostDialog(true);
     }
 
     async deletePost() {
-        const response = await postApiService.deletePost(this.post._id);
+        const response = await groupApiService.deletePost(this.group._id, this.groupPost._id);
         if (response?.success) {
             this.showSuccessNotificationFunction(`Xóa bài viết thành công`);
             Object.assign(this.post, {
