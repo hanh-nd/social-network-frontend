@@ -8,7 +8,7 @@
             <div class="name">
                 {{ group?.name }}
             </div>
-            <div class="members">{{ group?.memberIds?.length || 0 }} thành viên</div>
+            <div class="members" @click="openMembersScreen">{{ group?.memberIds?.length || 0 }} thành viên</div>
         </div>
 
         <div class="footer">
@@ -25,7 +25,9 @@
 <script lang="ts">
 import { IGroup } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { Options } from 'vue-class-component';
+import { GroupDetailScreenTab } from '../constants';
 import { groupDetailModule } from '../store';
 import GroupDetailAction from './GroupDetailAction.vue';
 import GroupDetailMenu from './GroupDetailMenu.vue';
@@ -39,6 +41,10 @@ import GroupDetailMenu from './GroupDetailMenu.vue';
 export default class GroupDetailHeader extends GlobalMixin {
     get group() {
         return groupDetailModule.groupDetail || ({} as IGroup);
+    }
+
+    openMembersScreen() {
+        EventEmitter.emit(EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB, GroupDetailScreenTab.MEMBERS);
     }
 }
 </script>
@@ -72,6 +78,10 @@ export default class GroupDetailHeader extends GlobalMixin {
         .name {
             font-size: 24px;
             font-weight: 700;
+        }
+
+        .members {
+            cursor: pointer;
         }
     }
 
