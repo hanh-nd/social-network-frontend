@@ -24,6 +24,7 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { Options } from 'vue-class-component';
 import { GroupDetailScreenTab } from '../constants';
 import { groupDetailModule } from '../store';
@@ -38,6 +39,11 @@ export default class ProfileMenu extends GlobalMixin {
         return groupDetailModule.groupDetailScreenTab;
     }
 
+    mounted(): void {
+        EventEmitter.on(EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB, (tab: GroupDetailScreenTab) => {
+            (document.getElementById(tab) as HTMLDivElement)?.click();
+        });
+    }
     onSelectProfileScreen(screen: GroupDetailScreenTab) {
         groupDetailModule.setGroupDetailScreenTab(screen);
     }

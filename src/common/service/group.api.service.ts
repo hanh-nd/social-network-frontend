@@ -13,6 +13,7 @@ import {
     IUpdateGroupBody,
     IUpdateGroupPostBody,
     IUpdateJoinRequestBody,
+    IUser,
 } from '../interfaces';
 class GroupApiService extends ApiService {
     async createGroup(body: ICreateGroupBody): Promise<IBodyResponse<boolean>> {
@@ -67,7 +68,7 @@ class GroupApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/${groupId}`);
     }
 
-    async getMembers(groupId: string): Promise<IBodyResponse<IGroup>> {
+    async getMembers(groupId: string): Promise<IBodyResponse<IUser[]>> {
         return await this.client.get(`${this.baseUrl}/${groupId}/members`);
     }
 
