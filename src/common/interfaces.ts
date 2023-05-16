@@ -205,6 +205,7 @@ export interface IComment {
 export interface ISearchResults {
     posts: IPost[];
     users: IUser[];
+    groups: IGroup[];
 }
 
 export interface ISearchQuery extends ICommonGetListQuery {
@@ -246,6 +247,8 @@ export interface IGroup {
     memberIds: string[];
     pinnedPosts: IGroupPost[];
     blockIds: IUser[];
+    isMember?: boolean;
+    isPending?: boolean;
 }
 
 export interface IGroupPost {

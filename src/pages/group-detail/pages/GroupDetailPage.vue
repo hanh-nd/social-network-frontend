@@ -47,6 +47,7 @@ export default class GroupDetailPage extends GlobalMixin {
     }
 
     created(): void {
+        groupDetailModule.setGroupDetailScreenTab(GroupDetailScreenTab.MAIN);
         this.loadData();
     }
 
