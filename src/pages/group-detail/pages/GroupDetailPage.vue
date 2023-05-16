@@ -9,6 +9,7 @@
                 <GroupFeedScreen v-if="groupDetailScreen === GroupDetailScreenTab.MAIN" />
                 <PinnedPostScreen v-if="groupDetailScreen === GroupDetailScreenTab.PINNED" />
                 <OverviewScreen v-if="groupDetailScreen === GroupDetailScreenTab.OVERVIEW" />
+                <MembersScreen v-if="groupDetailScreen === GroupDetailScreenTab.MEMBERS" />
             </div>
         </div>
     </div>
@@ -19,6 +20,7 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import GroupDetailHeader from '../components/GroupDetailHeader.vue';
 import GroupFeedScreen from '../components/group-feed/GroupFeedScreen.vue';
+import MembersScreen from '../components/members/MembersScreen.vue';
 import OverviewScreen from '../components/overview/OverviewScreen.vue';
 import PinnedPostScreen from '../components/pinned-posts/PinnedPostScreen.vue';
 import { GroupDetailScreenTab } from '../constants';
@@ -30,6 +32,7 @@ import { groupDetailModule } from '../store';
         GroupFeedScreen,
         PinnedPostScreen,
         OverviewScreen,
+        MembersScreen,
     },
 })
 export default class GroupDetailPage extends GlobalMixin {

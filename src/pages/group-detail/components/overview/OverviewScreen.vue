@@ -10,19 +10,22 @@
 
             <div class="administrators-section">
                 <div class="header">
-                    <div class="left-section">{{ group?.memberIds?.length }} thành viên</div>
+                    <div class="left-section">Thành viên</div>
                     <div class="right-section">
                         <el-button type="info" @click="openMembersScreen">Xem tất cả</el-button>
                     </div>
                 </div>
 
                 <div class="administrators">
-                    <BaseRoundAvatar
-                        v-for="admin in group.administrators.slice(0, 5)"
-                        :key="admin.user._id"
-                        :user="admin.user"
-                        :size="56"
-                    />
+                    <div class="title">{{ group.administrators.length }} quản trị viên</div>
+                    <div class="administrator-list">
+                        <BaseRoundAvatar
+                            v-for="admin in group.administrators.slice(0, 5)"
+                            :key="admin.user._id"
+                            :user="admin.user"
+                            :size="56"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,11 +37,12 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { Options } from 'vue-class-component';
-import GroupSummaryForm from './GroupSummaryForm.vue';
-import GroupPrivacyForm from './GroupPrivacyForm.vue';
-import { groupDetailModule } from '../../store';
 import { GroupDetailScreenTab } from '../../constants';
+import { groupDetailModule } from '../../store';
+import GroupPrivacyForm from './GroupPrivacyForm.vue';
+import GroupSummaryForm from './GroupSummaryForm.vue';
 
 @Options({
     components: {
@@ -52,7 +56,7 @@ export default class OverviewScreen extends GlobalMixin {
     }
 
     openMembersScreen() {
-        groupDetailModule.setGroupDetailScreenTab(GroupDetailScreenTab.MEMBERS);
+        EventEmitter.emit(EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB, GroupDetailScreenTab.MEMBERS);
     }
 }
 </script>
@@ -92,6 +96,21 @@ export default class OverviewScreen extends GlobalMixin {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+                font-size: 24px;
+                font-weight: 500;
+            }
+
+            .administrators {
+                .title {
+                    font-weight: 500;
+                    margin-bottom: 8px;
+                }
+
+                .administrator-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
             }
         }
     }
