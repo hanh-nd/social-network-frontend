@@ -8,6 +8,7 @@
             <div class="body w-100">
                 <GroupFeedScreen v-if="groupDetailScreen === GroupDetailScreenTab.MAIN" />
                 <PinnedPostScreen v-if="groupDetailScreen === GroupDetailScreenTab.PINNED" />
+                <OverviewScreen v-if="groupDetailScreen === GroupDetailScreenTab.OVERVIEW" />
             </div>
         </div>
     </div>
@@ -18,14 +19,17 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import GroupDetailHeader from '../components/GroupDetailHeader.vue';
 import GroupFeedScreen from '../components/group-feed/GroupFeedScreen.vue';
+import OverviewScreen from '../components/overview/OverviewScreen.vue';
+import PinnedPostScreen from '../components/pinned-posts/PinnedPostScreen.vue';
 import { GroupDetailScreenTab } from '../constants';
 import { groupDetailModule } from '../store';
-import PinnedPostScreen from '../components/pinned-posts/PinnedPostScreen.vue';
+
 @Options({
     components: {
         GroupDetailHeader,
         GroupFeedScreen,
         PinnedPostScreen,
+        OverviewScreen,
     },
 })
 export default class GroupDetailPage extends GlobalMixin {
