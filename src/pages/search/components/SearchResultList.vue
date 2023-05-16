@@ -3,6 +3,7 @@
         <AllSearchResultList v-if="searchBy === SearchBy.ALL" />
         <PostSearchResultList v-else-if="searchBy === SearchBy.POST" />
         <UserSearchResultList v-else-if="searchBy === SearchBy.PROFILE" />
+        <GroupSearchResultList v-else-if="searchBy === SearchBy.GROUP" />
     </div>
 </template>
 
@@ -12,6 +13,7 @@ import { Options } from 'vue-class-component';
 import { SearchBy } from '../constants';
 import { searchModule } from '../store';
 import AllSearchResultList from './AllSearchResultList.vue';
+import GroupSearchResultList from './GroupSearchResultList.vue';
 import PostSearchResultList from './PostSearchResultList.vue';
 import UserSearchResultList from './UserSearchResultList.vue';
 
@@ -20,6 +22,7 @@ import UserSearchResultList from './UserSearchResultList.vue';
         AllSearchResultList,
         PostSearchResultList,
         UserSearchResultList,
+        GroupSearchResultList,
     },
 })
 export default class SearchResultList extends GlobalMixin {

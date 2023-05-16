@@ -4,6 +4,7 @@
             <el-radio-button :label="SearchBy.ALL">Tất cả</el-radio-button>
             <el-radio-button :label="SearchBy.POST">Bài viết</el-radio-button>
             <el-radio-button :label="SearchBy.PROFILE">Người dùng</el-radio-button>
+            <el-radio-button :label="SearchBy.GROUP">Nhóm</el-radio-button>
         </el-radio-group>
     </div>
 </template>

@@ -5,10 +5,23 @@
         </div>
 
         <div class="overview">
-            <div class="name">
-                {{ group?.name }}
+            <div class="left-section">
+                <div class="name">
+                    {{ group?.name }}
+                </div>
+                <div class="members" @click="openMembersScreen">{{ group?.memberIds?.length || 0 }} thành viên</div>
             </div>
-            <div class="members" @click="openMembersScreen">{{ group?.memberIds?.length || 0 }} thành viên</div>
+            <div class="right-section">
+                <div class="leave" v-if="group?.isMember">
+                    <el-button @click="leave">Rời khỏi nhóm</el-button>
+                </div>
+                <div class="cancel-request" v-else-if="group?.isPending">
+                    <el-button @click="cancelRequest">Hủy yêu cầu tham gia</el-button>
+                </div>
+                <div class="request-to-join" v-else>
+                    <el-button @click="requestToJoin" type="primary">Tham gia</el-button>
+                </div>
+            </div>
         </div>
 
         <div class="footer">
@@ -25,7 +38,9 @@
 <script lang="ts">
 import { IGroup } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import groupApiService from '@/common/service/group.api.service';
 import { EventEmitter, EventName } from '@/plugins/mitt';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { GroupDetailScreenTab } from '../constants';
 import { groupDetailModule } from '../store';
@@ -43,8 +58,36 @@ export default class GroupDetailHeader extends GlobalMixin {
         return groupDetailModule.groupDetail || ({} as IGroup);
     }
 
+    get isMember() {
+        return this.group?.memberIds?.includes(`${appModule?.loginUser?._id}`);
+    }
+
     openMembersScreen() {
         EventEmitter.emit(EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB, GroupDetailScreenTab.MEMBERS);
+    }
+
+    async leave() {
+        const response = await groupApiService.leave(this.group._id);
+        if (response?.success) {
+            groupDetailModule.getGroupDetail(this.group._id);
+            this.showSuccessNotificationFunction(`Yêu cầu rời khỏi nhóm thành công.`);
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Yêu cầu rời khỏi nhóm thất bại.`);
+        }
+    }
+
+    async cancelRequest() {
+        //
+    }
+
+    async requestToJoin() {
+        const response = await groupApiService.requestToJoin(this.group._id);
+        if (response?.success) {
+            groupDetailModule.getGroupDetail(this.group._id);
+            this.showSuccessNotificationFunction(`Yêu cầu tham gia nhóm thành công.`);
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Yêu cầu tham gia nhóm thất bại.`);
+        }
     }
 }
 </script>
@@ -71,17 +114,28 @@ export default class GroupDetailHeader extends GlobalMixin {
 
     .overview {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 16px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
 
-        .name {
-            font-size: 24px;
-            font-weight: 700;
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 16px;
+
+            .name {
+                font-size: 24px;
+                font-weight: 700;
+            }
+
+            .members {
+                cursor: pointer;
+            }
         }
 
-        .members {
-            cursor: pointer;
+        .right-section {
+            padding: 16px;
         }
     }
 

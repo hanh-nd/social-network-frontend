@@ -16,6 +16,7 @@ class SearchModule extends VuexModule {
     searchResults: ISearchResults = {
         posts: [],
         users: [],
+        groups: [],
     };
 
     @Action
@@ -36,6 +37,7 @@ class SearchModule extends VuexModule {
                 response?.data || {
                     posts: [],
                     users: [],
+                    groups: [],
                 },
             );
         } else {
@@ -43,6 +45,7 @@ class SearchModule extends VuexModule {
                 response?.data || {
                     posts: [],
                     users: [],
+                    groups: [],
                 },
             );
         }

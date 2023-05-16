@@ -1,7 +1,7 @@
 <template>
     <div class="administrator-group-action-wrapper">
         <BaseThreeDotMenu>
-            <el-dropdown-item>Yêu cầu tham gia</el-dropdown-item>
+            <el-dropdown-item @click="openJoinRequestPage">Yêu cầu tham gia</el-dropdown-item>
             <el-dropdown-item>Bài viết đang chờ được duyệt</el-dropdown-item>
             <el-dropdown-item @click="openOverviewScreen">Chỉnh sửa thông tin nhóm</el-dropdown-item>
         </BaseThreeDotMenu>
@@ -18,8 +18,21 @@ import { GroupDetailScreenTab } from '../constants';
     components: {},
 })
 export default class AdministratorGroupAction extends GlobalMixin {
+    get groupId() {
+        return this.$route.params.id as string;
+    }
+
     openOverviewScreen() {
         EventEmitter.emit(EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB, GroupDetailScreenTab.OVERVIEW);
+    }
+
+    openJoinRequestPage() {
+        this.$router.push({
+            name: this.PageName.JOIN_GROUP_REQUEST_PAGE,
+            params: {
+                id: this.groupId,
+            },
+        });
     }
 }
 </script>
