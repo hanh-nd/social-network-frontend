@@ -1,2 +1,6 @@
 @import '~element-plus/theme-chalk/src/index';
 @import './custom/index.scss';
+
+body {
+    --el-color-primary: #79bf43;
+}

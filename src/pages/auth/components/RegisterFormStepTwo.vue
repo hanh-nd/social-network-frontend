@@ -1,88 +1,62 @@
 <template>
     <div class="form">
         <div class="fullName form-items">
-            <div>Tên của bạn</div>
-            <el-input
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.fullName }"
-                v-model="formData.fullName"
+            <BaseInputText
+                v-model:value="formData.fullName"
+                label="Tên của bạn"
                 placeholder="Tên của bạn"
+                :error="translateYupError(formData.errors.fullName as IYupError)"
+                @on-enter="onSubmit"
+                isRequired="true"
             />
-            <span v-show="formData.errors.fullName" class="form-error">
-                {{ translateYupError(formData.errors.fullName as IYupError) }}</span
-            >
         </div>
 
         <div class="phone form-items">
-            <div>Số điện thoại</div>
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.phone }"
-                v-model="formData.phone"
+            <BaseInputText
+                v-model:value="formData.phone"
+                label="Số điện thoại"
                 placeholder="Số điện thoại"
+                :error="translateYupError(formData.errors.phone as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="formData.errors.phone" class="form-error">
-                {{ translateYupError(formData.errors.phone as IYupError) }}</span
-            >
         </div>
 
         <div class="birthday form-items">
-            <div>Ngày sinh</div>
-            <el-date-picker
-                @keyup.enter="onSubmit"
-                v-model="formData.birthday"
-                type="date"
-                :class="{ 'input-error': formData.errors.birthday }"
+            <BaseDatePicker
+                v-model:value="formData.birthday"
+                label="Ngày sinh"
                 placeholder="Ngày sinh"
+                :error="translateYupError(formData.errors.birthday as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="formData.errors.birthday" class="form-error">
-                {{ translateYupError(formData.errors.birthday as IYupError) }}</span
-            >
         </div>
 
         <div class="address form-items">
             <div>Địa chỉ</div>
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.address?.province }"
-                v-model="formData.address!.province"
+            <BaseInputText
+                v-model:value="formData.address!.province"
                 placeholder="Tỉnh/Thành phố"
+                :error="translateYupError(formData.errors.address?.province as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="formData.errors.address?.province" class="form-error">
-                {{ translateYupError(formData.errors.address?.province as IYupError) }}</span
-            >
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.address?.ward }"
-                v-model="formData.address!.ward"
+            <BaseInputText
+                v-model:value="formData.address!.ward"
                 placeholder="Quận/Huyện"
+                :error="translateYupError(formData.errors.address?.ward as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="formData.errors.address?.ward" class="form-error">
-                {{ translateYupError(formData.errors.address?.ward as IYupError) }}</span
-            >
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.address?.district }"
-                v-model="formData.address!.district"
-                placeholder="Xã"
+            <BaseInputText
+                v-model:value="formData.address!.district"
+                placeholder="Phường/Xã"
+                :error="translateYupError(formData.errors.address?.district as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="formData.errors.address?.district" class="form-error">
-                {{ translateYupError(formData.errors.address?.district as IYupError) }}</span
-            >
-            <el-input
-                @keydown.space.prevent
-                @keyup.enter="onSubmit"
-                :class="{ 'input-error': formData.errors.address?.detail }"
-                v-model="formData.address!.detail"
+            <BaseInputText
+                v-model:value="formData.address!.detail"
                 placeholder="Địa chỉ chi tiết"
+                :error="translateYupError(formData.errors.address?.detail as IYupError)"
+                @on-enter="onSubmit"
             />
-            <span v-show="formData.errors.address?.detail" class="form-error">
-                {{ translateYupError(formData.errors.address?.detail as IYupError) }}</span
-            >
         </div>
         <div class="d-flex flex-row w-100">
             <el-button @click="onPrevious" class="register-btn" type="primary">Quay lại</el-button>

@@ -4,6 +4,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import mapKeys from 'lodash/mapKeys';
 import pick from 'lodash/pick';
 import trim from 'lodash/trim';
+import { IUser } from './interfaces';
 
 export function isJson(str: string): boolean {
     try {
@@ -63,4 +64,10 @@ export function transformMetaResponse(obj: any) {
     Object.keys(obj).forEach((key) => res.push(obj[key]));
     const flatRes = flatten(res).map((ele) => pick(ele, ['name', 'content', 'itemprop', 'property']));
     return flatRes;
+}
+
+export function getAvatarUrl(user?: IUser) {
+    return user?.avatarId
+        ? `${process.env.VUE_APP_API_URL}/files/${user.avatarId}`
+        : require('@/assets/images/common/default-avatar.svg');
 }
