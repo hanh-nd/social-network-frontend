@@ -3,6 +3,7 @@ import { PageName } from '@/common/constants';
 import MainLayout from '@/layouts/MainLayout.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
+import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
@@ -48,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/',
                 name: PageName.HOME_PAGE,
                 component: HomePage,
+            },
+            {
+                path: '/welcome',
+                name: PageName.WELCOME_PAGE,
+                component: WelcomePage,
             },
         ],
     },
