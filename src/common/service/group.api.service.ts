@@ -76,6 +76,10 @@ class GroupApiService extends ApiService {
         return await this.client.post(`${this.baseUrl}/${groupId}/join-requests`);
     }
 
+    async cancelToJoin(groupId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${groupId}/cancel-join-requests`);
+    }
+
     async leave(groupId: string): Promise<IBodyResponse<boolean>> {
         return await this.client.post(`${this.baseUrl}/${groupId}/leave`);
     }
@@ -110,6 +114,20 @@ class GroupApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/group-posts`, {
             params: query,
         });
+    }
+
+    async getUserPendingPost(groupId: string, query?: IGetGroupPostListQuery): Promise<IBodyResponse<IGroupPost[]>> {
+        return await this.client.get(`${this.baseUrl}/${groupId}/my-pending`, {
+            params: query,
+        });
+    }
+
+    async makeAdministrator(groupId: string, targetId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${groupId}/make-administrator/${targetId}`);
+    }
+
+    async removeAdministrator(groupId: string, targetId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${groupId}/remove-administrator/${targetId}`);
     }
 }
 const groupApiService = new GroupApiService({ baseUrl: '/groups' }, axiosService);

@@ -37,9 +37,7 @@
 </template>
 
 <script lang="ts">
-import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
-import groupApiService from '@/common/service/group.api.service';
 import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { groupDetailModule } from '../../store';
@@ -52,10 +50,13 @@ import MemberCard from './MemberCard.vue';
 })
 export default class MembersScreen extends GlobalMixin {
     keyword = '';
-    members: IUser[] = [];
+
+    get groupId() {
+        return this.$route.params.id as string;
+    }
 
     created(): void {
-        this.getMembers();
+        groupDetailModule.getGroupMembers(this.groupId);
     }
 
     get group() {
@@ -66,19 +67,14 @@ export default class MembersScreen extends GlobalMixin {
         return this.group?.administrators || [];
     }
 
+    get members() {
+        return groupDetailModule.groupMembers;
+    }
+
     get filteredMembers() {
         return _.isEmpty(this.keyword)
             ? this.members
             : this.members.filter((member) => new RegExp(this.keyword, 'gi').test(member.fullName));
-    }
-
-    async getMembers() {
-        const response = await groupApiService.getMembers(this.group._id);
-        if (response?.success) {
-            this.members = response?.data;
-        } else {
-            this.members = [];
-        }
     }
 }
 </script>
@@ -88,6 +84,7 @@ export default class MembersScreen extends GlobalMixin {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-bottom: 16px;
 
     .top-section,
     .bottom-section {

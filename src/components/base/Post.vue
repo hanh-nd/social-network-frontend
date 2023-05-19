@@ -20,7 +20,47 @@
         <BaseDivider />
         <div class="action-group">
             <div class="btn react">
-                <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                <el-popover
+                    popper-class="full-reaction-popover"
+                    placement="top-start"
+                    :width="200"
+                    trigger="hover"
+                    :teleported="false"
+                >
+                    <div class="full-reaction">
+                        <el-button
+                            @click="onLike(ReactionType.LIKE)"
+                            :type="post.reactionType === ReactionType.LIKE ? `primary` : undefined"
+                            >Thích</el-button
+                        >
+                        <el-button
+                            @click="onLike(ReactionType.LOVE)"
+                            :type="post.reactionType === ReactionType.LOVE ? `primary` : undefined"
+                            >Yêu thích</el-button
+                        >
+                        <el-button
+                            @click="onLike(ReactionType.EMPATHIZE)"
+                            :type="post.reactionType === ReactionType.EMPATHIZE ? `primary` : undefined"
+                            >Đồng cảm</el-button
+                        >
+                        <el-button
+                            @click="onLike(ReactionType.CELEBRATE)"
+                            :type="post.reactionType === ReactionType.CELEBRATE ? `primary` : undefined"
+                            >Chúc mừng</el-button
+                        >
+                        <el-button
+                            @click="onLike(ReactionType.ANGRY)"
+                            :type="post.reactionType === ReactionType.ANGRY ? `primary` : undefined"
+                            >Giận dữ</el-button
+                        >
+                    </div>
+
+                    <template #reference>
+                        <el-button @click="onLike()" :type="post.isReacted ? `primary` : undefined">{{
+                            post.isReacted ? getReactionTypeString(post.reactionType) : `Thích`
+                        }}</el-button>
+                    </template>
+                </el-popover>
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -47,6 +87,8 @@ import { Prop } from 'vue-property-decorator';
     components: {},
 })
 export default class Post extends GlobalMixin {
+    ReactionType = ReactionType;
+
     @Prop() post!: IPost;
 
     get authorAvatar() {
@@ -57,11 +99,12 @@ export default class Post extends GlobalMixin {
         return _.isNil(this.post.deletedAt);
     }
 
-    async onLike() {
+    async onLike(type = ReactionType.LIKE) {
         this.post.isReacted = !this.post.isReacted;
         this.post.numberOfReacts += this.post.isReacted ? 1 : -1;
+        this.post.reactionType = type;
         await postApiService.react(this.post._id, {
-            type: ReactionType.LIKE,
+            type,
         });
     }
 
@@ -121,6 +164,14 @@ export default class Post extends GlobalMixin {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        :deep(.full-reaction-popover) {
+            width: 300px !important;
+            .full-reaction {
+                display: flex;
+                flex-direction: row;
+            }
+        }
 
         .btn {
             width: 100%;

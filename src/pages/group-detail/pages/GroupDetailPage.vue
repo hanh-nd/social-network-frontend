@@ -13,12 +13,16 @@
             </div>
         </div>
     </div>
+
+    <!--Dialog-->
+    <CreatePostDialog />
 </template>
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import GroupDetailHeader from '../components/GroupDetailHeader.vue';
+import CreatePostDialog from '../components/group-feed/CreatePostDialog.vue';
 import GroupFeedScreen from '../components/group-feed/GroupFeedScreen.vue';
 import MembersScreen from '../components/members/MembersScreen.vue';
 import OverviewScreen from '../components/overview/OverviewScreen.vue';
@@ -33,6 +37,7 @@ import { groupDetailModule } from '../store';
         PinnedPostScreen,
         OverviewScreen,
         MembersScreen,
+        CreatePostDialog,
     },
 })
 export default class GroupDetailPage extends GlobalMixin {

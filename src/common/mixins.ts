@@ -3,7 +3,7 @@ import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
 import localStorageAuthService from './authStorage';
-import { DEFAULT_LANGUAGE, DateFormat, DeviceType, PageName, ValidationForm } from './constants';
+import { DEFAULT_LANGUAGE, DateFormat, DeviceType, PageName, ReactionType, ValidationForm } from './constants';
 import { IUser, IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {
@@ -129,5 +129,22 @@ export class GlobalMixin extends Vue {
         return user?.avatarId
             ? `${process.env.VUE_APP_API_URL}/files/${user.avatarId}`
             : require('@/assets/images/common/default-avatar.svg');
+    }
+
+    getReactionTypeString(reactionType?: ReactionType) {
+        switch (reactionType) {
+            case ReactionType.LIKE:
+                return `Thích`;
+            case ReactionType.LOVE:
+                return `Yêu thích`;
+            case ReactionType.EMPATHIZE:
+                return `Đồng cảm`;
+            case ReactionType.CELEBRATE:
+                return `Chúc mừng`;
+            case ReactionType.ANGRY:
+                return `Giận dữ`;
+        }
+
+        return ``;
     }
 }

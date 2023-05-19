@@ -22,7 +22,23 @@
         <BaseDivider />
         <div class="bottom-section">
             <div class="btn react">
-                <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                <el-popover
+                    popper-class="full-reaction-popover"
+                    placement="top-start"
+                    :width="200"
+                    trigger="hover"
+                    :teleported="false"
+                >
+                    <div class="full-reaction">
+                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                    </div>
+
+                    <template #reference>
+                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                    </template>
+                </el-popover>
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -122,6 +138,14 @@ export default class ShareItem extends GlobalMixin {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        :deep(.full-reaction-popover) {
+            width: 300px !important;
+            .full-reaction {
+                display: flex;
+                flex-direction: row;
+            }
+        }
 
         .btn {
             width: 100%;
