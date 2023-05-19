@@ -30,6 +30,7 @@
 import { IGroup } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import groupApiService from '@/common/service/group.api.service';
+import { groupDetailModule } from '@/pages/group-detail/store';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -40,7 +41,8 @@ export default class GroupSearchItem extends GlobalMixin {
     async leave() {
         const response = await groupApiService.leave(this.group._id);
         if (response?.success) {
-            groupApiService.getDetail(this.group._id);
+            groupDetailModule.getGroupDetail(this.group._id);
+            groupDetailModule.getGroupMembers(this.group._id);
             this.showSuccessNotificationFunction(`Yêu cầu rời khỏi nhóm thành công.`);
         } else {
             this.showErrorNotificationFunction(response?.message || `Yêu cầu rời khỏi nhóm thất bại.`);
@@ -48,13 +50,20 @@ export default class GroupSearchItem extends GlobalMixin {
     }
 
     async cancelRequest() {
-        //
+        const response = await groupApiService.cancelToJoin(this.group._id);
+        if (response?.success) {
+            groupDetailModule.getGroupDetail(this.group._id);
+            this.showSuccessNotificationFunction(`Hủy yêu cầu tham gia nhóm thành công.`);
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Hủy yêu cầu tham gia nhóm thất bại.`);
+        }
     }
 
     async requestToJoin() {
         const response = await groupApiService.requestToJoin(this.group._id);
         if (response?.success) {
-            groupApiService.getDetail(this.group._id);
+            groupDetailModule.getGroupDetail(this.group._id);
+            groupDetailModule.getGroupMembers(this.group._id);
             this.showSuccessNotificationFunction(`Yêu cầu tham gia nhóm thành công.`);
         } else {
             this.showErrorNotificationFunction(response?.message || `Yêu cầu tham gia nhóm thất bại.`);
