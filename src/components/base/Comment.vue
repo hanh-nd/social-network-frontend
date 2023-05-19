@@ -27,9 +27,32 @@
                     </div>
                 </div>
                 <div class="action-group">
-                    <div class="react" @click="reactComment()">
-                        <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
-                    </div>
+                    <el-popover
+                        popper-class="full-reaction-popover"
+                        placement="top-start"
+                        :width="200"
+                        trigger="hover"
+                        :teleported="false"
+                    >
+                        <div class="full-reaction">
+                            <div class="react" @click="reactComment()">
+                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
+                            </div>
+                            <div class="react" @click="reactComment()">
+                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
+                            </div>
+                            <div class="react" @click="reactComment()">
+                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
+                            </div>
+                        </div>
+
+                        <template #reference>
+                            <div class="react" @click="reactComment()">
+                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
+                            </div>
+                        </template>
+                    </el-popover>
+
                     <div class="created-at">
                         {{ parseDateTimeRelative(comment?.createdAt) }}
                     </div>
@@ -235,6 +258,14 @@ export default class Comment extends GlobalMixin {
             flex-direction: row;
             gap: 8px;
             align-items: center;
+
+            :deep(.full-reaction-popover) {
+                width: 300px !important;
+                .full-reaction {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
 
             .react {
                 cursor: pointer;

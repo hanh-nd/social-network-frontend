@@ -146,6 +146,7 @@ export interface IPost {
     author: Partial<IUser>;
     content: string;
     privacy: number;
+    isAnonymous?: boolean;
     postShared: Partial<IPost>;
     pictureIds: string[];
     videoIds: string[];
@@ -153,6 +154,7 @@ export interface IPost {
     numberOfReacts: number;
     numberOfShares: number;
     isReacted: boolean;
+    reactionType?: ReactionType;
 }
 
 export interface ICreateNewPostBody {
@@ -161,6 +163,7 @@ export interface ICreateNewPostBody {
     pictureIds: string[];
     videoIds: string[];
     postSharedId?: string;
+    isAnonymous?: boolean;
 }
 
 export interface IUpdatePostBody {
@@ -200,6 +203,7 @@ export interface IComment {
     content: string;
     numberOfReactions: number;
     isReacted: boolean;
+    reactionType?: ReactionType;
 }
 
 export interface ISearchResults {
@@ -298,9 +302,7 @@ export interface IGetGroupPostListQuery extends ICommonGetListQuery {
     status?: SubscribeRequestStatus;
 }
 
-export interface ICreateGroupPostBody extends ICreateNewPostBody {
-    status: SubscribeRequestStatus;
-}
+export type ICreateGroupPostBody = ICreateNewPostBody;
 
 export interface IUpdateGroupPostBody {
     status: SubscribeRequestStatus;

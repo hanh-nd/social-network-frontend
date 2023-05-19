@@ -19,12 +19,17 @@
                 <div class="administrators">
                     <div class="title">{{ group.administrators.length }} quản trị viên</div>
                     <div class="administrator-list">
-                        <BaseRoundAvatar
+                        <div
+                            class="administrator"
                             v-for="admin in group.administrators.slice(0, 5)"
                             :key="admin.user._id"
-                            :user="admin.user"
-                            :size="56"
-                        />
+                            @click="goToProfilePage(admin.user._id)"
+                        >
+                            <BaseRoundAvatar :user="admin.user" :size="56" />
+                            <div class="name">
+                                {{ admin.user.fullName }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,6 +62,15 @@ export default class OverviewScreen extends GlobalMixin {
 
     openMembersScreen() {
         EventEmitter.emit(EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB, GroupDetailScreenTab.MEMBERS);
+    }
+
+    goToProfilePage(id: string) {
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id,
+            },
+        });
     }
 }
 </script>
@@ -110,6 +124,18 @@ export default class OverviewScreen extends GlobalMixin {
                     display: flex;
                     flex-direction: column;
                     gap: 8px;
+                }
+
+                .administrator {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 8px;
+                    align-items: center;
+
+                    .name {
+                        cursor: pointer;
+                        font-weight: 500;
+                    }
                 }
             }
         }
