@@ -1,5 +1,18 @@
 <template>
     <div class="account-menu-wrapper">
+        <el-popover popper-class="chat-list-dialog" placement="bottom" :width="250" trigger="click" :teleported="false">
+            <div class="chat-list">
+                <ChatListMenu />
+                <div class="see-more">
+                    <el-button type="info" @click="goToChatPage">Xem tất cả</el-button>
+                </div>
+            </div>
+
+            <template #reference>
+                <el-icon :size="24" class="chat-btn"><ChatDotRound /></el-icon>
+            </template>
+        </el-popover>
+
         <el-dropdown :hide-on-click="true" placement="top-start" ref="dropdown" trigger="click">
             <div class="d-flex user-info" :class="{ sticky: isSticky }">
                 <BaseRoundAvatar :user="loginUser" :size="32" :onClick="() => {}" />
@@ -30,6 +43,9 @@ import { HEIGHT_SHOW_STICKY_HEADER } from '@/common/constants';
 import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
+import ChatListMenu from '@/pages/chat/components/ChatListMenu.vue';
+import { chatModule } from '@/pages/chat/store';
+import { SocketProvider } from '@/plugins/socket.io';
 import { appModule } from '@/plugins/vuex/appModule';
 import { ref } from 'vue';
 import { Options } from 'vue-class-component';
@@ -40,7 +56,9 @@ interface IDropdown {
 }
 
 @Options({
-    components: {},
+    components: {
+        ChatListMenu,
+    },
 })
 export default class AccountMenuUser extends GlobalMixin {
     @Prop({ default: false }) readonly isSticky!: boolean;
@@ -64,6 +82,7 @@ export default class AccountMenuUser extends GlobalMixin {
         window.addEventListener('scroll', this.scrollHandler, {
             passive: true,
         });
+        chatModule.getChatList();
     }
     beforeDestroy(): void {
         window.removeEventListener('scroll', this.scrollHandler);
@@ -81,11 +100,49 @@ export default class AccountMenuUser extends GlobalMixin {
         localStorageAuthService.resetAll();
         this.$router.push('/login');
         appApiService.logout();
+        SocketProvider.disconnect();
+    }
+
+    goToChatPage() {
+        const chatList = chatModule.chatList;
+        if (!chatList || !chatList.length) return;
+
+        const firstChatId = chatList[0]._id;
+        this.$router.push({
+            name: this.PageName.CHAT_PAGE,
+            params: {
+                id: firstChatId,
+            },
+        });
     }
 }
 </script>
 
 <style lang="scss" scoped>
+.account-menu-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+
+    .chat-btn {
+        cursor: pointer;
+    }
+
+    :deep(.chat-list-dialog) {
+        .chat-list {
+            max-height: 500px;
+
+            .see-more {
+                margin-top: 8px;
+                .el-button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
 p {
     margin-bottom: 0px;
 }
