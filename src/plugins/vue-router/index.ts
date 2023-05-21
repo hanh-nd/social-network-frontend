@@ -3,6 +3,7 @@ import { PageName } from '@/common/constants';
 import MainLayout from '@/layouts/MainLayout.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
+import ChatPage from '@/pages/chat/pages/ChatPage.vue';
 import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
 import SearchPage from '@/pages/search/pages/SearchPage.vue';
 import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
@@ -96,6 +97,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/groups/:id/pending-posts',
                 name: PageName.PENDING_GROUP_POSTS_PAGE,
                 component: GroupPendingPostsPage,
+            },
+            {
+                path: '/chats/:id',
+                name: PageName.CHAT_PAGE,
+                component: ChatPage,
             },
         ],
     },

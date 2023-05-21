@@ -7,9 +7,11 @@
 <script lang="ts">
 import vi from '@/plugins/element-ui/locale/vi';
 import { ElConfigProvider } from 'element-plus';
-import { Options, Vue } from 'vue-class-component';
+import { Options } from 'vue-class-component';
 import { RouteRecordName } from 'vue-router';
 import localStorageAuthService from './common/authStorage';
+import { GlobalMixin } from './common/mixins';
+import { SocketProvider } from './plugins/socket.io';
 import { appModule } from './plugins/vuex/appModule';
 
 @Options({
@@ -17,12 +19,16 @@ import { appModule } from './plugins/vuex/appModule';
         ElConfigProvider,
     },
 })
-export default class App extends Vue {
+export default class App extends GlobalMixin {
     locale = vi;
 
     created(): void {
+        SocketProvider.init();
         const loginUser = localStorageAuthService.getLoginUser();
         appModule.setLoginUser(loginUser);
+        if (loginUser) {
+            SocketProvider.connect(loginUser._id);
+        }
 
         window.addEventListener('error', (e) => {
             if (e.message === 'ResizeObserver loop limit exceeded') {

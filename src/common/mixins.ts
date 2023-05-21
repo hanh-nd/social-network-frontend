@@ -3,7 +3,15 @@ import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
 import localStorageAuthService from './authStorage';
-import { DEFAULT_LANGUAGE, DateFormat, DeviceType, PageName, ReactionType, ValidationForm } from './constants';
+import {
+    DEFAULT_LANGUAGE,
+    DateFormat,
+    DeviceType,
+    PageName,
+    ReactionType,
+    SocketEvent,
+    ValidationForm,
+} from './constants';
 import { IUser, IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {

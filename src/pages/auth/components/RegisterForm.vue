@@ -16,6 +16,7 @@ import { ValidationForm } from '@/common/constants';
 import { IAddress } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
+import { SocketProvider } from '@/plugins/socket.io';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { isEmpty } from 'lodash';
@@ -95,6 +96,7 @@ export default class RegisterForm extends GlobalMixin {
                 localStorageAuthService.setAccessToken(response?.data?.accessToken || '');
                 localStorageAuthService.setLoginUser(response?.data?.user || {});
                 appModule.setLoginUser(response?.data?.user || {});
+                SocketProvider.connect(response?.data?.user?._id);
                 this.showSuccessNotificationFunction('Đăng ký thành công');
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Đăng ký thất bại');
