@@ -9,6 +9,7 @@ import router from './plugins/vue-router';
 import store from './plugins/vuex';
 // import './registerServiceWorker';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+import VueClickAway from 'vue3-click-away';
 
 const app = createApp(App)
     .use(store)
@@ -20,7 +21,9 @@ const app = createApp(App)
         i18n: (key: string) => {
             return (plugins.i18n.global as any).t(key, plugins.i18n.global.locale);
         },
-    });
+    })
+    .use(VueClickAway);
+
 // load all components under the folder @/components as glolal components
 forEach(getGlobalComponents(), (component, name) => {
     app.component(name, component as Component);

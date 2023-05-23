@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import { IChat } from '../interfaces';
@@ -29,6 +30,15 @@ export default class ChatList extends GlobalMixin {
 
     onClickChatItem(chat: IChat) {
         this.$emit(`on-click-chat-item`, chat);
+    }
+
+    mounted(): void {
+        EventEmitter.on(EventName.USER_CHAT, ({ chatId, message }) => {
+            const chat = this.chatList.find((chat) => chat._id == chatId);
+            if (!chat) return;
+
+            chat.lastMessage = message;
+        });
     }
 }
 </script>
