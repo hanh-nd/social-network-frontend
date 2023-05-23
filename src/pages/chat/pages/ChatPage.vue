@@ -2,7 +2,10 @@
     <div class="chat-page-wrapper">
         <div class="chat-page-container mx-auto">
             <div class="chat-list-menu">
-                <ChatListMenu @on-click-chat-item="onClickChatItem" />
+                <ChatListMenu
+                    @on-click-chat-item="onClickChatItem"
+                    @on-open-create-chat-dialog="openCreateChatDialog"
+                />
             </div>
             <div class="chat-detail-screen">
                 <ChatDetail />
@@ -10,6 +13,7 @@
         </div>
     </div>
     <ChatInfoDrawer />
+    <CreateChatDialog />
 </template>
 
 <script lang="ts">
@@ -22,6 +26,7 @@ import { Options } from 'vue-class-component';
 import ChatDetail from '../components/ChatDetail.vue';
 import ChatInfoDrawer from '../components/ChatInfoDrawer.vue';
 import ChatListMenu from '../components/ChatListMenu.vue';
+import CreateChatDialog from '../components/CreateChatDialog.vue';
 import { IChat } from '../interfaces';
 import { chatModule } from '../store';
 
@@ -30,6 +35,7 @@ import { chatModule } from '../store';
         ChatListMenu,
         ChatDetail,
         ChatInfoDrawer,
+        CreateChatDialog,
     },
 })
 export default class ChatPage extends GlobalMixin {
@@ -43,6 +49,9 @@ export default class ChatPage extends GlobalMixin {
 
     created(): void {
         this.loadData();
+    }
+
+    mounted(): void {
         this.registerUserChatEvent();
     }
 
@@ -59,16 +68,21 @@ export default class ChatPage extends GlobalMixin {
         });
     }
 
+    openCreateChatDialog() {
+        chatModule.setIsShowCreateChatDialog(true);
+    }
+
     registerUserChatEvent() {
+        console.log(`ce`);
         SocketProvider.socket.on(SocketEvent.USER_CHAT, ({ chatId, message }) => {
-            chatModule.unshift(message);
-            if (`${chatModule.chatDetail._id}` == chatId) {
-                chatModule.chatDetail.lastMessage = message;
-            }
-            EventEmitter.emit(EventName.USER_CHAT, {
-                chatId,
-                message,
-            });
+            console.log(`in here`);
+            chatModule.unshiftMessageList(message);
+            EventEmitter.emit(EventName.USER_CHAT);
+
+            const chat = this.chatList.find((chat) => chat._id == chatId);
+            if (!chat) return;
+
+            chat.lastMessage = message;
         });
 
         SocketProvider.socket.on(SocketEvent.USER_RECALL, ({ chatId, message: updatedMessage }) => {
@@ -77,6 +91,11 @@ export default class ChatPage extends GlobalMixin {
 
             Object.assign(message, pick(updatedMessage, 'isRecalled', 'content', 'mediaId'));
         });
+    }
+
+    unmounted(): void {
+        SocketProvider.socket.off(SocketEvent.USER_CHAT);
+        SocketProvider.socket.off(SocketEvent.USER_RECALL);
     }
 }
 </script>

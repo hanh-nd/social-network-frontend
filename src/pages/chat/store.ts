@@ -1,4 +1,6 @@
+import { IUser } from '@/common/interfaces';
 import chatApiService from '@/common/service/chat.api.service';
+import searchApiService from '@/common/service/search.api.service';
 import store from '@/plugins/vuex';
 import { cloneDeep } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
@@ -18,6 +20,8 @@ class ChatModule extends VuexModule {
     messageList: IMessage[] = [];
     isShowChatInfoDrawer = false;
     messageListQuery: IGetMessageListQuery = cloneDeep(INIT_GET_MESSAGE_LIST_QUERY);
+    isShowCreateChatDialog = false;
+    searchUsers: IUser[] = [];
 
     @Action
     async getChatList() {
@@ -75,7 +79,7 @@ class ChatModule extends VuexModule {
     }
 
     @Action
-    async unshift(message: IMessage) {
+    async unshiftMessageList(message: IMessage) {
         this.UNSHIFT_MESSAGE_LIST([message]);
     }
 
@@ -122,6 +126,34 @@ class ChatModule extends VuexModule {
     @Mutation
     RESET_MESSAGE_LIST_QUERY() {
         this.messageListQuery = cloneDeep(INIT_GET_MESSAGE_LIST_QUERY);
+    }
+
+    @Action
+    setIsShowCreateChatDialog(isShowCreateChatDialog: boolean) {
+        this.SET_IS_SHOW_CREATE_CHAT_DIALOG(isShowCreateChatDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_CREATE_CHAT_DIALOG(isShowCreateChatDialog: boolean) {
+        this.isShowCreateChatDialog = isShowCreateChatDialog;
+    }
+
+    @Action
+    async getSearchUsers(keyword: string) {
+        const response = await searchApiService.searchUsers({
+            keyword,
+        });
+        console.log(`in here`, response);
+        if (response?.success) {
+            this.SET_SEARCH_USERS(response?.data || []);
+        } else {
+            this.SET_SEARCH_USERS([]);
+        }
+    }
+
+    @Mutation
+    SET_SEARCH_USERS(searchUsers: IUser[]) {
+        this.searchUsers = searchUsers;
     }
 }
 

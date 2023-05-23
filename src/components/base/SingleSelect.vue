@@ -8,6 +8,8 @@
                 v-model="selectedValue"
                 :placeholder="selectedValue ? '' : placeholder"
                 :filterable="filterable"
+                :remote="remote"
+                :remote-method="remoteMethod"
                 popper-class="select-options"
                 :size="size"
                 :disabled="isDisabled"
@@ -61,6 +63,8 @@ export default class SingleSelect extends GlobalMixin {
     @Prop({ default: false }) readonly filterable!: boolean;
     @Prop({ default: false }) readonly isHorizontal!: boolean;
     @Prop({ default: false }) readonly isCustomOption!: boolean;
+    @Prop({ default: false }) readonly remote!: boolean;
+    @Prop({ default: () => [] }) readonly remoteMethod!: CallableFunction;
 
     @Model('value', { type: [String, Number] })
     readonly selectedValue!: string;

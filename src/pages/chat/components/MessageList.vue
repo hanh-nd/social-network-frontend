@@ -124,7 +124,7 @@ export default class MessageList extends GlobalMixin {
     }
 
     setupScrollListener() {
-        EventEmitter.on(EventName.USER_CHAT, ({ chatId, message }) => {
+        EventEmitter.on(EventName.USER_CHAT, () => {
             if (!this.isShowScrollToBottomButton) {
                 this.$nextTick(() => {
                     this.scrollToBottom();
@@ -159,10 +159,12 @@ export default class MessageList extends GlobalMixin {
 <style lang="scss" scoped>
 .message-list-wrapper {
     .message-list-container {
+        display: flex;
         overflow-y: scroll;
 
         .message-list {
             display: flex;
+            flex: 1;
             flex-direction: column-reverse;
             gap: 2px;
             justify-content: flex-start;
