@@ -1,7 +1,12 @@
 <template>
     <div class="chat-list-menu">
         <div class="header">
-            <div class="title">Nhắn tin</div>
+            <div class="top-section">
+                <div class="title">Nhắn tin</div>
+                <div class="create-chat">
+                    <el-icon :size="20" @click="openCreateChatDialog"> <CirclePlus /></el-icon>
+                </div>
+            </div>
             <div class="search-bar">
                 <BaseInputText v-model:value="keyword" placeholder="Tìm kiếm đoạn hội thoại" />
             </div>
@@ -26,7 +31,7 @@ import ChatList from './ChatList.vue';
     components: {
         ChatList,
     },
-    emits: [`on-click-chat-item`],
+    emits: [`on-click-chat-item`, 'on-open-create-chat-dialog'],
 })
 export default class ChatListMenu extends GlobalMixin {
     keyword = '';
@@ -51,6 +56,10 @@ export default class ChatListMenu extends GlobalMixin {
     onClickChatItem(chat: IChat) {
         this.$emit(`on-click-chat-item`, chat);
     }
+
+    openCreateChatDialog() {
+        this.$emit(`on-open-create-chat-dialog`);
+    }
 }
 </script>
 
@@ -63,9 +72,20 @@ export default class ChatListMenu extends GlobalMixin {
     border-radius: 8px;
 
     .header {
-        .title {
-            font-size: 24px;
-            font-weight: 700;
+        .top-section {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .title {
+                font-size: 24px;
+                font-weight: 700;
+            }
+
+            .create-chat {
+                cursor: pointer;
+            }
         }
     }
 }
