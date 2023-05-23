@@ -1,7 +1,7 @@
 <template>
     <div class="chat-page-wrapper">
         <div class="chat-page-container mx-auto">
-            <div class="chat-list-menu col-sm-2">
+            <div class="chat-list-menu">
                 <ChatListMenu @on-click-chat-item="onClickChatItem" />
             </div>
             <div class="chat-detail-screen">
@@ -15,7 +15,9 @@
 <script lang="ts">
 import { SocketEvent } from '@/common/constants';
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { SocketProvider } from '@/plugins/socket.io';
+import { pick } from 'lodash';
 import { Options } from 'vue-class-component';
 import ChatDetail from '../components/ChatDetail.vue';
 import ChatInfoDrawer from '../components/ChatInfoDrawer.vue';
@@ -46,7 +48,6 @@ export default class ChatPage extends GlobalMixin {
 
     loadData() {
         chatModule.getChatDetail(this.chatId);
-        chatModule.getMessageList(this.chatId);
     }
 
     onClickChatItem(chat: IChat) {
@@ -60,7 +61,21 @@ export default class ChatPage extends GlobalMixin {
 
     registerUserChatEvent() {
         SocketProvider.socket.on(SocketEvent.USER_CHAT, ({ chatId, message }) => {
-            chatModule.appendMessage(message);
+            chatModule.unshift(message);
+            if (`${chatModule.chatDetail._id}` == chatId) {
+                chatModule.chatDetail.lastMessage = message;
+            }
+            EventEmitter.emit(EventName.USER_CHAT, {
+                chatId,
+                message,
+            });
+        });
+
+        SocketProvider.socket.on(SocketEvent.USER_RECALL, ({ chatId, message: updatedMessage }) => {
+            const message = chatModule.messageList.find((m) => m._id == updatedMessage._id);
+            if (!message) return;
+
+            Object.assign(message, pick(updatedMessage, 'isRecalled', 'content', 'mediaId'));
         });
     }
 }
@@ -79,10 +94,12 @@ export default class ChatPage extends GlobalMixin {
             top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
+            width: 300px;
         }
 
         .chat-detail-screen {
-            flex: 1;
+            height: calc(100vh - 60px);
+            width: 100%;
             padding-top: 8px;
             margin: 0 8px;
         }
