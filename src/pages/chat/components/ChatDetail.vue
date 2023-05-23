@@ -13,7 +13,7 @@
         </div>
 
         <div class="message-list">
-            <MessageList />
+            <MessageList ref="messageList" />
         </div>
 
         <div class="send-message">
@@ -27,11 +27,10 @@ import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import _ from 'lodash';
 import { Options } from 'vue-class-component';
-import { Watch } from 'vue-property-decorator';
 import { ChatType } from '../constants';
 import { chatModule } from '../store';
-import MessageList from './MessageList.vue';
 import CreateMessageForm from './CreateMessageForm.vue';
+import MessageList from './MessageList.vue';
 
 @Options({
     components: {
@@ -42,10 +41,6 @@ import CreateMessageForm from './CreateMessageForm.vue';
 export default class ChatDetail extends GlobalMixin {
     get chat() {
         return chatModule.chatDetail;
-    }
-
-    get messageList() {
-        return chatModule.messageList;
     }
 
     get loginUser() {
@@ -62,13 +57,6 @@ export default class ChatDetail extends GlobalMixin {
 
     get name() {
         return this.chat.type === ChatType.PRIVATE ? this.targetMember?.fullName : this.chat.name;
-    }
-
-    @Watch('chat', {
-        immediate: true,
-    })
-    onUpdateChatDetail() {
-        chatModule.getMessageList(this.chat._id);
     }
 
     showChatInfo() {
@@ -105,6 +93,7 @@ export default class ChatDetail extends GlobalMixin {
 
     .message-list {
         flex: 1;
+        overflow: hidden;
     }
 }
 </style>

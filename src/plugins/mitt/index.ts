@@ -5,11 +5,13 @@ import mitt from 'mitt';
 export enum EventName {
     CHANGE_PROFILE_SCREEN_TAB = 'CHANGE_PROFILE_SCREEN_TAB',
     CHANGE_GROUP_DETAIL_SCREEN_TAB = 'CHANGE_GROUP_DETAIL_SCREEN_TAB',
+    USER_CHAT = 'USER_CHAT',
 }
 
 export type Events = {
     [EventName.CHANGE_PROFILE_SCREEN_TAB]: ProfileScreenTab;
     [EventName.CHANGE_GROUP_DETAIL_SCREEN_TAB]: GroupDetailScreenTab;
+    [EventName.USER_CHAT]: void;
 };
 
 export const EventEmitter = mitt<Events>();

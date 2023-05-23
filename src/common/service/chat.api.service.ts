@@ -48,6 +48,10 @@ class ChatApiService extends ApiService {
     async getChatDetail(id: string): Promise<IBodyResponse<IChat>> {
         return await this.client.get(`${this.baseUrl}/${id}`);
     }
+
+    async leaveChat(id: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${id}/leave`);
+    }
 }
 const chatApiService = new ChatApiService({ baseUrl: '/chats' }, axiosService);
 

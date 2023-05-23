@@ -1,8 +1,11 @@
 <template>
     <div class="chat-page-wrapper">
         <div class="chat-page-container mx-auto">
-            <div class="chat-list-menu col-sm-2">
-                <ChatListMenu @on-click-chat-item="onClickChatItem" />
+            <div class="chat-list-menu">
+                <ChatListMenu
+                    @on-click-chat-item="onClickChatItem"
+                    @on-open-create-chat-dialog="openCreateChatDialog"
+                />
             </div>
             <div class="chat-detail-screen">
                 <ChatDetail />
@@ -10,16 +13,20 @@
         </div>
     </div>
     <ChatInfoDrawer />
+    <CreateChatDialog />
 </template>
 
 <script lang="ts">
 import { SocketEvent } from '@/common/constants';
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { SocketProvider } from '@/plugins/socket.io';
+import { pick } from 'lodash';
 import { Options } from 'vue-class-component';
 import ChatDetail from '../components/ChatDetail.vue';
 import ChatInfoDrawer from '../components/ChatInfoDrawer.vue';
 import ChatListMenu from '../components/ChatListMenu.vue';
+import CreateChatDialog from '../components/CreateChatDialog.vue';
 import { IChat } from '../interfaces';
 import { chatModule } from '../store';
 
@@ -28,6 +35,7 @@ import { chatModule } from '../store';
         ChatListMenu,
         ChatDetail,
         ChatInfoDrawer,
+        CreateChatDialog,
     },
 })
 export default class ChatPage extends GlobalMixin {
@@ -41,12 +49,14 @@ export default class ChatPage extends GlobalMixin {
 
     created(): void {
         this.loadData();
+    }
+
+    mounted(): void {
         this.registerUserChatEvent();
     }
 
     loadData() {
         chatModule.getChatDetail(this.chatId);
-        chatModule.getMessageList(this.chatId);
     }
 
     onClickChatItem(chat: IChat) {
@@ -58,10 +68,34 @@ export default class ChatPage extends GlobalMixin {
         });
     }
 
+    openCreateChatDialog() {
+        chatModule.setIsShowCreateChatDialog(true);
+    }
+
     registerUserChatEvent() {
+        console.log(`ce`);
         SocketProvider.socket.on(SocketEvent.USER_CHAT, ({ chatId, message }) => {
-            chatModule.appendMessage(message);
+            console.log(`in here`);
+            chatModule.unshiftMessageList(message);
+            EventEmitter.emit(EventName.USER_CHAT);
+
+            const chat = this.chatList.find((chat) => chat._id == chatId);
+            if (!chat) return;
+
+            chat.lastMessage = message;
         });
+
+        SocketProvider.socket.on(SocketEvent.USER_RECALL, ({ chatId, message: updatedMessage }) => {
+            const message = chatModule.messageList.find((m) => m._id == updatedMessage._id);
+            if (!message) return;
+
+            Object.assign(message, pick(updatedMessage, 'isRecalled', 'content', 'mediaId'));
+        });
+    }
+
+    unmounted(): void {
+        SocketProvider.socket.off(SocketEvent.USER_CHAT);
+        SocketProvider.socket.off(SocketEvent.USER_RECALL);
     }
 }
 </script>
@@ -79,10 +113,12 @@ export default class ChatPage extends GlobalMixin {
             top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
+            width: 300px;
         }
 
         .chat-detail-screen {
-            flex: 1;
+            height: calc(100vh - 60px);
+            width: 100%;
             padding-top: 8px;
             margin: 0 8px;
         }
