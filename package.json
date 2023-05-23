@@ -12,6 +12,7 @@
         "format": "prettier --write ./src"
     },
     "dependencies": {
+        "@chinhpd/vue3-grid-images": "^1.0.3",
         "@intlify/runtime": "^9.1.10",
         "@popperjs/core": "^2.11.7",
         "axios": "0.26",

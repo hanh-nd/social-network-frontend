@@ -4,7 +4,7 @@
         :model-value="isShowCreatePostDialog"
         @closed="onClose"
         title="Tạo bài viêt mới"
-        :width="deviceType === DeviceType.MOBILE ? '80%' : '40%'"
+        :width="deviceType === DeviceType.MOBILE ? '80%' : '30%'"
         center
     >
         <div class="header">
@@ -36,9 +36,10 @@
                     :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
                 />
             </div>
+            <BaseImageGrid :items="createPostForm.pictureIds" :cells="3" />
             <BaseDivider />
             <div class="image-chooser">
-                <el-button>Chọn ảnh</el-button>
+                <BaseUploadSingleButton @on-file-uploaded="onSelectPictures">Chọn ảnh</BaseUploadSingleButton>
             </div>
             <BaseDivider />
         </div>
@@ -52,13 +53,14 @@
 
 <script lang="ts">
 import { DeviceType, Privacy, PrivacyName, ValidationForm } from '@/common/constants';
-import { IYupError } from '@/common/interfaces';
+import { IFile, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
+import { ICreateNewPostBody } from '../interfaces';
 import { homeModule } from '../store';
 
 @Options({
@@ -92,7 +94,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
     }
 
     createPostForm = setup(() => {
-        const initValues = {
+        const initValues: ICreateNewPostBody = {
             privacy: Privacy.PUBLIC,
             content: '',
             pictureIds: [],
@@ -106,7 +108,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             videoIds: yup.array().of(yup.string()),
         });
 
-        const { resetForm, errors, handleSubmit } = useForm({
+        const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm({
             validationSchema: schema,
             initialValues: initValues,
         });
@@ -130,10 +132,10 @@ export default class CreateNewPostDialog extends GlobalMixin {
             }
         });
 
-        const { value: privacy } = useField('privacy');
-        const { value: content } = useField('content');
-        const { value: pictureIds } = useField('pictureIds');
-        const { value: videoIds } = useField('videoIds');
+        const { value: privacy } = useField<number>('privacy');
+        const { value: content } = useField<string>('content');
+        const { value: pictureIds } = useField<string[]>('pictureIds');
+        const { value: videoIds } = useField<string[]>('videoIds');
 
         return {
             privacy,
@@ -143,11 +145,19 @@ export default class CreateNewPostDialog extends GlobalMixin {
             errors,
             submit,
             clearFormData,
+            setValues,
+            setFieldValue,
         };
     });
 
     async onSubmit() {
         await this.createPostForm.submit();
+    }
+
+    async onSelectPictures(file: IFile, filePreview: File) {
+        const pictureIds = this.createPostForm.pictureIds;
+        pictureIds.push(file.id);
+        this.createPostForm.setFieldValue('pictureIds', pictureIds);
     }
 }
 </script>

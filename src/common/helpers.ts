@@ -66,7 +66,7 @@ export function transformMetaResponse(obj: any) {
     return flatRes;
 }
 
-export function getAvatarUrl(user?: IUser) {
+export function getAvatarUrl(user?: Partial<IUser>) {
     return user?.avatarId
         ? `${process.env.VUE_APP_API_URL}/files/${user.avatarId}`
         : require('@/assets/images/common/default-avatar.svg');

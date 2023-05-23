@@ -20,11 +20,9 @@ import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { homeModule } from '../store';
-import MainTabPane from './MainTabPane.vue';
+
 @Options({
-    components: {
-        MainTabPane,
-    },
+    components: {},
 })
 export default class CreateNewPostBar extends GlobalMixin {
     get avatar() {
