@@ -1,8 +1,11 @@
-import { IPost } from '@/common/interfaces';
+import { IGetUserListQuery, IPost } from '@/common/interfaces';
 import postApiService from '@/common/service/post.api.service';
+import userApiService from '@/common/service/user.api.service';
 import store from '@/plugins/vuex';
+import { cloneDeep } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
-import { FeedScreenType } from './constants';
+import { IUser } from './../../common/interfaces';
+import { FeedScreenType, INIT_GET_USER_LIST_QUERY } from './constants';
 
 @Module({
     name: 'home',
@@ -15,6 +18,9 @@ class HomeModule extends VuexModule {
     isShowCreatePostDialog = false;
     feedScreenType = FeedScreenType.MAIN;
     postList: IPost[] = [];
+    contactList: IUser[] = [];
+    contactListQuery: IGetUserListQuery = cloneDeep(INIT_GET_USER_LIST_QUERY);
+    isFetchedAllContactList = false;
 
     @Action
     setIsShowCreatePostDialog(isShowCreatePostDialog: boolean) {
@@ -49,6 +55,62 @@ class HomeModule extends VuexModule {
     @Mutation
     SET_POST_LIST(postList: IPost[]) {
         this.postList.push(...postList);
+    }
+
+    @Action
+    async getSubscribing({ id, append = false }: { id: string; append?: boolean }) {
+        const response = await userApiService.getSubscribingList(id, this.contactListQuery);
+        if (response?.success) {
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_CONTACT_LIST(true);
+            }
+            if (append) {
+                this.APPEND_CONTACT_LIST(data);
+            } else {
+                this.SET_CONTACT_LIST(data);
+            }
+        } else {
+            if (append) {
+                this.APPEND_CONTACT_LIST([]);
+            } else {
+                this.SET_CONTACT_LIST([]);
+            }
+            this.SET_IS_FETCHED_ALL_CONTACT_LIST(true);
+        }
+    }
+
+    @Mutation
+    APPEND_CONTACT_LIST(contactList: IUser[]) {
+        this.contactList.push(...contactList);
+    }
+
+    @Mutation
+    SET_CONTACT_LIST(contactList: IUser[]) {
+        this.contactList = contactList;
+    }
+
+    @Action
+    resetContactListQuery() {
+        this.SET_CONTACT_LIST_QUERY(INIT_GET_USER_LIST_QUERY);
+    }
+
+    @Action
+    setContactListQuery(contactListQuery: IGetUserListQuery) {
+        this.SET_CONTACT_LIST_QUERY(contactListQuery);
+    }
+
+    @Mutation
+    SET_CONTACT_LIST_QUERY(contactListQuery: IGetUserListQuery) {
+        this.contactListQuery = {
+            ...this.contactListQuery,
+            ...contactListQuery,
+        };
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_CONTACT_LIST(isFetchedAllContactList: boolean) {
+        this.isFetchedAllContactList = isFetchedAllContactList;
     }
 }
 
