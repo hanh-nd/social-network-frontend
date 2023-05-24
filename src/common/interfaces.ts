@@ -127,6 +127,8 @@ export interface IFile {
     contentType: string;
 }
 
+export type IGetUserListQuery = ICommonGetListQuery;
+
 export interface IUpdateProfileBody {
     avatarId?: string;
     coverId?: string;
