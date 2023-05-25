@@ -135,10 +135,11 @@ export default class CreateNewGroupDialog extends GlobalMixin {
         const submit = handleSubmit(async (values) => {
             const response = await groupApiService.createGroup(values);
             if (response?.success) {
+                const createdGroup = response?.data;
                 this.showSuccessNotificationFunction('Tạo nhóm mới thành công');
                 groupModule.setIsShowCreateNewGroupDialog(false);
-                groupModule.getJoinedGroupList();
-                groupModule.getCreatedGroupList();
+                groupModule.joinedGroupList.unshift(createdGroup);
+                groupModule.createdGroupList.unshift(createdGroup);
                 clearFormData();
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Tạo nhóm mới thất bại');

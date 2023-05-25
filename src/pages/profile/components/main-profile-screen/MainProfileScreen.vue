@@ -6,7 +6,8 @@
             </div>
 
             <div class="content">
-                <ProfileContent @on-load-more-profile-posts="onLoadMoreProfilePosts" />
+                <ProfileContent @on-load-more-profile-posts="onLoadMoreProfilePostDebounced" />
+                <div class="reload" v-if="isFetchedAllPostList">Bạn đã đọc hết tin.</div>
             </div>
         </div>
     </div>
@@ -14,10 +15,12 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
+import { profileModule } from '../../store';
 import ProfileContent from './ProfileContent.vue';
 import ProfileOverview from './ProfileOverview.vue';
-import { profileModule } from '../../store';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 @Options({
     components: {
         ProfileOverview,
@@ -29,9 +32,22 @@ export default class MainProfileScreen extends GlobalMixin {
         return this.$route.params?.id as string;
     }
 
-    onLoadMoreProfilePosts() {
-        profileModule.getProfilePostList(this.userId);
+    get currentPage() {
+        return profileModule.profilePostListQuery.page as number;
     }
+
+    get isFetchedAllPostList() {
+        return profileModule.isFetchedAllPostList;
+    }
+
+    onLoadMoreProfilePostDebounced = debounce(() => {
+        if (this.isFetchedAllPostList) return;
+
+        profileModule.setProfilePostListQuery({
+            page: this.currentPage + 1,
+        });
+        profileModule.getProfilePostList({ id: this.userId, append: true });
+    }, 50);
 }
 </script>
 
@@ -53,6 +69,11 @@ export default class MainProfileScreen extends GlobalMixin {
 
         .content {
             flex: 3;
+        }
+
+        .reload {
+            text-align: center;
+            margin: 16px 0;
         }
     }
 }

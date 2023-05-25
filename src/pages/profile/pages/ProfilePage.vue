@@ -45,7 +45,8 @@ export default class ProfilePage extends GlobalMixin {
 
     async loadData() {
         profileModule.getProfileUser(this.userId);
-        profileModule.getProfilePostList(this.userId);
+        profileModule.resetProfilePostListQuery();
+        profileModule.getProfilePostList({ id: this.userId });
     }
 
     get profileScreenTab() {

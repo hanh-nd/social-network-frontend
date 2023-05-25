@@ -24,9 +24,12 @@
                 </BaseThreeDotMenu>
             </div>
             <div class="action" v-else>
-                <el-button @click="subscribeOrUnsubscribe" :type="member?.isSubscribing ? `default` : `primary`">{{
-                    member?.isSubscribing ? `Hủy theo dõi` : `Theo dõi`
-                }}</el-button>
+                <el-button
+                    @click="subscribeOrUnsubscribe"
+                    :type="member?.isSubscribing ? `default` : `primary`"
+                    v-if="!member?.isSelf"
+                    >{{ member?.isSubscribing ? `Hủy theo dõi` : `Theo dõi` }}</el-button
+                >
                 <div class="administrator" v-if="isLoginUserAdmin">
                     <BaseThreeDotMenu>
                         <el-dropdown-item v-if="!!admin" @click="removeAdministrator"

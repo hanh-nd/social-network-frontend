@@ -4,14 +4,17 @@ import {
     ICreateCommentBody,
     ICreateReactionBody,
     IEditCommentBody,
+    IGetCommentListQuery,
     IReportPostBody,
 } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import axiosService from '@/plugins/axios';
 
 class CommentApiService extends ApiService {
-    async getComment(postId: string): Promise<IBodyResponse<IComment[]>> {
-        return await this.client.get(`${this.baseUrl}/${postId}/comments`);
+    async getComment(postId: string, query?: IGetCommentListQuery): Promise<IBodyResponse<IComment[]>> {
+        return await this.client.get(`${this.baseUrl}/${postId}/comments`, {
+            params: query,
+        });
     }
 
     async createComment(postId: string, data: ICreateCommentBody): Promise<IBodyResponse<IComment>> {

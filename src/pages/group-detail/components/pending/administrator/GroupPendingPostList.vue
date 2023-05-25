@@ -1,5 +1,5 @@
 <template>
-    <div class="group-pending-post-list-wrapper">
+    <div class="group-pending-post-list-wrapper" v-infinite-scroll="onLoadMore">
         <PendingPostItem
             v-for="pendingGroupPost in groupPendingPosts"
             :key="pendingGroupPost._id"
@@ -7,6 +7,7 @@
             @on-accept="removePendingPost"
             @on-reject="removePendingPost"
         />
+        <div class="reload" v-if="isFetchedAllGroupPendingPostList">Bạn đã đọc hết tin.</div>
     </div>
 </template>
 
@@ -21,6 +22,7 @@ import PendingPostItem from './PendingPostItem.vue';
     components: {
         PendingPostItem,
     },
+    emits: [`on-load-more`],
 })
 export default class GroupPendingPostList extends GlobalMixin {
     get groupId() {
@@ -31,8 +33,16 @@ export default class GroupPendingPostList extends GlobalMixin {
         return groupDetailModule.groupPendingPosts;
     }
 
+    get isFetchedAllGroupPendingPostList() {
+        return groupDetailModule.isFetchedAllGroupPendingPostList;
+    }
+
     removePendingPost(requestId: string) {
         _.remove(groupDetailModule.groupPendingPosts, (request) => `${request._id}` == requestId);
+    }
+
+    onLoadMore() {
+        this.$emit(`on-load-more`);
     }
 }
 </script>
@@ -42,5 +52,10 @@ export default class GroupPendingPostList extends GlobalMixin {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    .reload {
+        text-align: center;
+        margin: 16px 0;
+    }
 }
 </style>

@@ -5,7 +5,7 @@
             <div class="empty" v-if="!joinRequestList?.length">
                 <el-empty description="Chưa có yêu cầu nào." />
             </div>
-            <div class="join-request-list" v-else>
+            <div class="join-request-list" v-else v-infinite-scroll="onLoadMoreJoinRequests">
                 <JoinRequestItem
                     v-for="joinRequest in joinRequestList"
                     :key="joinRequest._id"
@@ -45,11 +45,29 @@ export default class JoinGroupRequestPage extends GlobalMixin {
 
     async loadData() {
         groupDetailModule.getGroupDetail(this.groupId);
-        groupDetailModule.getJoinRequestList(this.groupId);
+        groupDetailModule.resetJoinRequestListQuery();
+        groupDetailModule.getJoinRequestList({ id: this.groupId });
     }
 
     removeJoinRequest(requestId: string) {
         _.remove(groupDetailModule.joinRequestList, (request) => `${request._id}` == requestId);
+    }
+
+    get currentPage() {
+        return groupDetailModule.joinRequestListQuery.page as number;
+    }
+
+    get isFetchedAllJoinedRequestList() {
+        return groupDetailModule.isFetchedAllJoinedRequestList;
+    }
+
+    onLoadMoreJoinRequests() {
+        if (this.isFetchedAllJoinedRequestList) return;
+
+        groupDetailModule.setJoinRequestListQuery({
+            page: this.currentPage + 1,
+        });
+        groupDetailModule.getJoinRequestList({ id: this.groupId, append: true });
     }
 }
 </script>

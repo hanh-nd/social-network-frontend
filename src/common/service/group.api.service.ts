@@ -16,7 +16,7 @@ import {
     IUser,
 } from '../interfaces';
 class GroupApiService extends ApiService {
-    async createGroup(body: ICreateGroupBody): Promise<IBodyResponse<boolean>> {
+    async createGroup(body: ICreateGroupBody): Promise<IBodyResponse<IGroup>> {
         return await this.client.post(`${this.baseUrl}/`, body);
     }
 

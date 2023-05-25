@@ -1,11 +1,11 @@
-import { IGetUserListQuery, IPost } from '@/common/interfaces';
+import { IGetPostListQuery, IGetUserListQuery, IPost } from '@/common/interfaces';
 import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
 import store from '@/plugins/vuex';
 import { cloneDeep } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
 import { IUser } from './../../common/interfaces';
-import { FeedScreenType, INIT_GET_USER_LIST_QUERY } from './constants';
+import { FeedScreenType, INIT_GET_POST_LIST_QUERY, INIT_GET_USER_LIST_QUERY } from './constants';
 
 @Module({
     name: 'home',
@@ -18,6 +18,8 @@ class HomeModule extends VuexModule {
     isShowCreatePostDialog = false;
     feedScreenType = FeedScreenType.MAIN;
     postList: IPost[] = [];
+    postListQuery: IGetPostListQuery = cloneDeep(INIT_GET_POST_LIST_QUERY);
+    isFetchedAllPostList = false;
     contactList: IUser[] = [];
     contactListQuery: IGetUserListQuery = cloneDeep(INIT_GET_USER_LIST_QUERY);
     isFetchedAllContactList = false;
@@ -43,18 +45,60 @@ class HomeModule extends VuexModule {
     }
 
     @Action
-    async getNewsFeed() {
-        const response = await postApiService.getNewsFeed();
+    async getNewsFeed({ append = false }: { append?: boolean }) {
+        const response = await postApiService.getNewsFeed(this.postListQuery);
         if (response.success) {
-            this.SET_POST_LIST(response.data);
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_POST_LIST(true);
+            }
+
+            if (append) {
+                this.APPEND_POST_LIST(data);
+            } else {
+                this.SET_POST_LIST(data);
+            }
         } else {
-            this.SET_POST_LIST([]);
+            if (append) {
+                this.APPEND_POST_LIST([]);
+            } else {
+                this.SET_POST_LIST([]);
+            }
+            this.SET_IS_FETCHED_ALL_POST_LIST(true);
         }
     }
 
     @Mutation
-    SET_POST_LIST(postList: IPost[]) {
+    APPEND_POST_LIST(postList: IPost[]) {
         this.postList.push(...postList);
+    }
+
+    @Mutation
+    SET_POST_LIST(postList: IPost[]) {
+        this.postList = postList;
+    }
+
+    @Action
+    resetPostListQuery() {
+        this.SET_POST_LIST_QUERY(cloneDeep(INIT_GET_POST_LIST_QUERY));
+    }
+
+    @Action
+    setPostListQuery(postListQuery: IGetPostListQuery) {
+        this.SET_POST_LIST_QUERY(postListQuery);
+    }
+
+    @Mutation
+    SET_POST_LIST_QUERY(postListQuery: IGetPostListQuery) {
+        this.postListQuery = {
+            ...this.postListQuery,
+            ...postListQuery,
+        };
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_POST_LIST(isFetchedAllPostList: boolean) {
+        this.isFetchedAllPostList = isFetchedAllPostList;
     }
 
     @Action
@@ -92,7 +136,7 @@ class HomeModule extends VuexModule {
 
     @Action
     resetContactListQuery() {
-        this.SET_CONTACT_LIST_QUERY(INIT_GET_USER_LIST_QUERY);
+        this.SET_CONTACT_LIST_QUERY(cloneDeep(INIT_GET_USER_LIST_QUERY));
     }
 
     @Action
