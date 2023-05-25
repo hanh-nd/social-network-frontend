@@ -10,7 +10,7 @@
                 {{ user?.fullName || 'undefined' }}
             </div>
             <div class="button">
-                <el-button @click="subscribeOrUnsubscribe">{{
+                <el-button @click="subscribeOrUnsubscribe" v-if="!user?.isSelf">{{
                     user?.isSubscribing ? `Hủy theo dõi` : `Theo dõi`
                 }}</el-button>
             </div>

@@ -3,6 +3,7 @@
         <div class="group-post-list">
             <CreatePostBar />
             <GroupPostList :groupPostList="groupPostList" @on-load-more="onLoadMorePost" />
+            <div class="reload" v-if="isFetchedAllGroupPostList">Bạn đã đọc hết tin.</div>
         </div>
         <div class="overview">
             <GroupOverview />
@@ -38,12 +39,26 @@ export default class GroupFeedScreen extends GlobalMixin {
         this.loadData();
     }
 
+    get currentPage() {
+        return groupDetailModule.groupPostListQuery.page as number;
+    }
+
+    get isFetchedAllGroupPostList() {
+        return groupDetailModule.isFetchedAllGroupPostList;
+    }
+
     async loadData() {
-        groupDetailModule.getGroupPosts(this.groupId);
+        groupDetailModule.resetGroupPostListQuery();
+        groupDetailModule.getGroupPosts({ id: this.groupId });
     }
 
     onLoadMorePost() {
-        groupDetailModule.getGroupPosts(this.groupId);
+        if (this.isFetchedAllGroupPostList) return;
+
+        groupDetailModule.setGroupPostListQuery({
+            page: this.currentPage + 1,
+        });
+        groupDetailModule.getGroupPosts({ id: this.groupId, append: true });
     }
 }
 </script>
@@ -59,6 +74,11 @@ export default class GroupFeedScreen extends GlobalMixin {
         flex-direction: column;
         flex: 3;
         gap: 8px;
+
+        .reload {
+            text-align: center;
+            margin: 16px 0;
+        }
     }
 
     .overview {

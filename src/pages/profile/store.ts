@@ -1,8 +1,9 @@
-import { IPost, IUser } from '@/common/interfaces';
+import { IGetPostListQuery, IPost, IUser } from '@/common/interfaces';
 import userApiService from '@/common/service/user.api.service';
 import store from '@/plugins/vuex';
+import { cloneDeep } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
-import { ProfileScreenTab } from './constants';
+import { INIT_GET_POST_LIST_QUERY, ProfileScreenTab } from './constants';
 
 @Module({
     name: 'profile',
@@ -14,6 +15,8 @@ import { ProfileScreenTab } from './constants';
 class ProfileModule extends VuexModule {
     profileUser: IUser | null = null;
     profilePostList: IPost[] = [];
+    profilePostListQuery: IGetPostListQuery = cloneDeep(INIT_GET_POST_LIST_QUERY);
+    isFetchedAllPostList = false;
     profileScreenTab = ProfileScreenTab.MAIN;
     subscriberList: IUser[] = [];
     subscribingList: IUser[] = [];
@@ -38,20 +41,61 @@ class ProfileModule extends VuexModule {
     }
 
     @Action
-    async getProfilePostList(userId: string) {
-        if (!userId) return;
+    async getProfilePostList({ id, append = false }: { id: string; append?: boolean }) {
+        if (!id) return;
 
-        const response = await userApiService.getUserPostList(userId);
+        const response = await userApiService.getUserPostList(id, this.profilePostListQuery);
         if (response?.success) {
-            this.SET_PROFILE_POST_LIST(response?.data || []);
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_POST_LIST(true);
+            }
+            if (append) {
+                this.APPEND_PROFILE_POST_LIST(data);
+            } else {
+                this.SET_PROFILE_POST_LIST(data);
+            }
         } else {
-            this.SET_PROFILE_POST_LIST([]);
+            this.SET_IS_FETCHED_ALL_POST_LIST(true);
+            if (append) {
+                this.APPEND_PROFILE_POST_LIST([]);
+            } else {
+                this.SET_PROFILE_POST_LIST([]);
+            }
         }
+    }
+
+    @Action
+    resetProfilePostListQuery() {
+        this.SET_PROFILE_POST_LIST_QUERY(cloneDeep(INIT_GET_POST_LIST_QUERY));
+    }
+
+    @Action
+    setProfilePostListQuery(postListQuery: IGetPostListQuery) {
+        this.SET_PROFILE_POST_LIST_QUERY(postListQuery);
+    }
+
+    @Mutation
+    SET_PROFILE_POST_LIST_QUERY(postListQuery: IGetPostListQuery) {
+        this.profilePostListQuery = {
+            ...this.profilePostListQuery,
+            ...postListQuery,
+        };
+    }
+
+    @Mutation
+    APPEND_PROFILE_POST_LIST(postList: IPost[]) {
+        this.profilePostList.push(...postList);
     }
 
     @Mutation
     SET_PROFILE_POST_LIST(postList: IPost[]) {
-        this.profilePostList.push(...postList);
+        this.profilePostList = postList;
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_POST_LIST(isFetchedAllPostList: boolean) {
+        this.isFetchedAllPostList = isFetchedAllPostList;
     }
 
     @Action

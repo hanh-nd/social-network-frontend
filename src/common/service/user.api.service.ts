@@ -1,4 +1,11 @@
-import { IBodyResponse, IGetUserListQuery, IPost, IUpdateProfileBody, IUser } from '@/common/interfaces';
+import {
+    IBodyResponse,
+    IGetPostListQuery,
+    IGetUserListQuery,
+    IPost,
+    IUpdateProfileBody,
+    IUser,
+} from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import axiosService from '@/plugins/axios';
 class UserApiService extends ApiService {
@@ -10,8 +17,10 @@ class UserApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/${userId}`);
     }
 
-    async getUserPostList(userId: string): Promise<IBodyResponse<IPost[]>> {
-        return await this.client.get(`${this.baseUrl}/${userId}/posts`);
+    async getUserPostList(userId: string, query?: IGetPostListQuery): Promise<IBodyResponse<IPost[]>> {
+        return await this.client.get(`${this.baseUrl}/${userId}/posts`, {
+            params: query,
+        });
     }
 
     async getSubscriberList(userId: string, query?: IGetUserListQuery): Promise<IBodyResponse<IUser[]>> {
