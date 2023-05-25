@@ -7,10 +7,10 @@
             </div>
             <div class="group-pending-post-list" v-else>
                 <div class="administrator" v-if="isAdministrator()">
-                    <GroupPendingPostList />
+                    <GroupPendingPostList @on-load-more="onLoadMorePendingPosts" />
                 </div>
                 <div class="member" v-else>
-                    <MemberPendingPostList />
+                    <MemberPendingPostList @on-load-more="onLoadMorePendingPosts" />
                 </div>
             </div>
         </div>
@@ -63,15 +63,37 @@ export default class GroupPendingPostsPage extends GlobalMixin {
 
     async loadData() {
         await groupDetailModule.getGroupDetail(this.groupId);
+        groupDetailModule.resetGroupPendingPostListQuery();
         if (this.isAdministrator()) {
-            groupDetailModule.getGroupPendingPosts(this.groupId);
+            groupDetailModule.getGroupPendingPosts({ id: this.groupId });
         } else {
-            groupDetailModule.getMemberPendingPosts(this.groupId);
+            groupDetailModule.getMemberPendingPosts({ id: this.groupId });
         }
     }
 
     removePendingPost(requestId: string) {
         _.remove(groupDetailModule.groupPendingPosts, (request) => `${request._id}` == requestId);
+    }
+
+    get currentPage() {
+        return groupDetailModule.groupPendingPostListQuery.page as number;
+    }
+
+    get isFetchedAllGroupPendingPostList() {
+        return groupDetailModule.isFetchedAllGroupPendingPostList;
+    }
+
+    onLoadMorePendingPosts() {
+        if (this.isFetchedAllGroupPendingPostList) return;
+
+        groupDetailModule.setGroupPendingPostListQuery({
+            page: this.currentPage + 1,
+        });
+        if (this.isAdministrator()) {
+            groupDetailModule.getGroupPendingPosts({ id: this.groupId, append: true });
+        } else {
+            groupDetailModule.getMemberPendingPosts({ id: this.groupId, append: true });
+        }
     }
 }
 </script>

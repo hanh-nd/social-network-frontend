@@ -56,6 +56,7 @@ import { DeviceType, Privacy, PrivacyName, ValidationForm } from '@/common/const
 import { ICreateNewPostBody, IFile, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
@@ -124,6 +125,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             const response = await postApiService.createPost(values);
             if (response.success) {
                 this.showSuccessNotificationFunction('Tạo bài viết mới thành công');
+                EventEmitter.emit(EventName.POST_CREATED, response?.data);
                 appModule.setIsShowCreatePostDialog(false);
                 clearFormData();
             } else {

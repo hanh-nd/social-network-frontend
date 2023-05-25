@@ -89,19 +89,20 @@
             </div>
 
             <div class="comment-list">
-                <BaseCommentList :commentList="commentList" @on-load-more="onLoadMoreComments" />
+                <BaseCommentList :commentList="commentList" @on-load-more="onLoadMoreCommentDebounced" />
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script lang="ts">
-import { ReactionType } from '@/common/constants';
-import { IComment } from '@/common/interfaces';
+import { INIT_GET_COMMENT_LIST_QUERY, ReactionType } from '@/common/constants';
+import { IComment, IGetCommentListQuery } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import { cloneDeep, debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 
 @Options({
@@ -110,6 +111,8 @@ import { Options } from 'vue-class-component';
 })
 export default class PostDetailDialog extends GlobalMixin {
     commentList: IComment[] = [];
+    commentListQuery: IGetCommentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
+    isFetchedAllCommentList = false;
 
     get post() {
         return appModule.postDetail;
@@ -139,15 +142,35 @@ export default class PostDetailDialog extends GlobalMixin {
 
     onClose() {
         appModule.setIsShowPostDetailDialog(false);
+        this.commentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
+        this.isFetchedAllCommentList = false;
         this.commentList = [];
     }
 
     async loadData() {
-        const response = await commentApiService.getComment(this.post._id);
+        this.commentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
+        this.getCommentList();
+    }
+
+    async getCommentList(append = false) {
+        const response = await commentApiService.getComment(this.post._id, this.commentListQuery);
         if (response.success) {
-            this.commentList.push(...(response?.data || []));
+            const data = response?.data || [];
+            if (!data.length) {
+                this.isFetchedAllCommentList = true;
+            }
+            if (append) {
+                this.commentList.push(...data);
+            } else {
+                this.commentList = data;
+            }
         } else {
-            this.commentList = [];
+            this.isFetchedAllCommentList = true;
+            if (append) {
+                this.commentList.push();
+            } else {
+                this.commentList = [];
+            }
         }
     }
 
@@ -161,12 +184,18 @@ export default class PostDetailDialog extends GlobalMixin {
 
     onCommented() {
         this.post.numberOfComments++;
-        this.loadData();
+        this.getCommentList();
     }
 
-    onLoadMoreComments() {
-        this.loadData();
-    }
+    onLoadMoreCommentDebounced = debounce(() => {
+        if (this.isFetchedAllCommentList) return;
+        console.log(`in here`);
+        this.commentListQuery = {
+            ...this.commentListQuery,
+            page: (this.commentListQuery.page || 1) + 1,
+        };
+        this.getCommentList(true);
+    }, 50);
 
     openSharePostDialog() {
         appModule.setPostDetail(this.post);

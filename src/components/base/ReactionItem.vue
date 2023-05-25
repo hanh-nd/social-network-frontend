@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="right-section">
-            <div class="button">
+            <div class="button" v-if="!reaction?.author?.isSelf">
                 <el-button
                     @click="onMessageOrSubscribe"
                     :type="reaction?.author?.isSubscribing ? `default` : `primary`"

@@ -1,8 +1,9 @@
-import { IGroup, IGroupPost } from '@/common/interfaces';
+import { IGetGroupListQuery, IGetGroupPostListQuery, IGroup, IGroupPost } from '@/common/interfaces';
 import groupApiService from '@/common/service/group.api.service';
 import store from '@/plugins/vuex';
+import { cloneDeep } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
-import { FeedScreenType } from './constants';
+import { FeedScreenType, INIT_GET_GROUP_LIST_QUERY, INIT_GET_GROUP_POST_LIST_QUERY } from './constants';
 
 @Module({
     name: 'group',
@@ -14,7 +15,11 @@ import { FeedScreenType } from './constants';
 class GroupModule extends VuexModule {
     feedScreenType = FeedScreenType.MAIN;
     groupPostList: IGroupPost[] = [];
+    groupPostListQuery: IGetGroupPostListQuery = cloneDeep(INIT_GET_GROUP_POST_LIST_QUERY);
+    isFetchedAllGroupPostList = false;
     joinedGroupList: IGroup[] = [];
+    joinedGroupListQuery: IGetGroupListQuery = cloneDeep(INIT_GET_GROUP_LIST_QUERY);
+    isFetchedAllJoinedGroupList = false;
     createdGroupList: IGroup[] = [];
     isShowCreateNewGroupDialog = false;
 
@@ -29,33 +34,126 @@ class GroupModule extends VuexModule {
     }
 
     @Action
-    async getGroupFeed() {
-        const response = await groupApiService.getGroupFeed();
+    async getGroupFeed({ append = false }: { append?: boolean }) {
+        const response = await groupApiService.getGroupFeed(this.groupPostListQuery);
         if (response.success) {
-            this.SET_GROUP_POST_LIST(response.data);
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_GROUP_POST_LIST(true);
+            }
+            if (append) {
+                this.APPEND_GROUP_POST_LIST(data);
+            } else {
+                this.SET_GROUP_POST_LIST(data);
+            }
         } else {
-            this.SET_GROUP_POST_LIST([]);
+            if (append) {
+                this.APPEND_GROUP_POST_LIST([]);
+            } else {
+                this.SET_GROUP_POST_LIST([]);
+            }
+
+            this.SET_IS_FETCHED_ALL_GROUP_POST_LIST(true);
         }
     }
 
     @Mutation
-    SET_GROUP_POST_LIST(groupPostList: IGroupPost[]) {
+    APPEND_GROUP_POST_LIST(groupPostList: IGroupPost[]) {
         this.groupPostList.push(...groupPostList);
     }
 
+    @Mutation
+    SET_GROUP_POST_LIST(groupPostList: IGroupPost[]) {
+        this.groupPostList = groupPostList;
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_GROUP_POST_LIST(isFetchedAllGroupPostList: boolean) {
+        this.isFetchedAllGroupPostList = isFetchedAllGroupPostList;
+    }
+
     @Action
-    async getJoinedGroupList() {
-        const response = await groupApiService.getUserJoinedGroups();
-        if (response?.success) {
-            this.SET_JOINED_GROUP_LIST(response?.data || []);
+    resetGroupPostListQuery() {
+        this.RESET_GROUP_POST_LIST_QUERY();
+    }
+
+    @Mutation
+    RESET_GROUP_POST_LIST_QUERY() {
+        this.groupPostListQuery = cloneDeep(INIT_GET_GROUP_POST_LIST_QUERY);
+    }
+
+    @Action
+    setGroupPostListQuery(groupPostListQuery: IGetGroupPostListQuery) {
+        this.SET_GROUP_POST_LIST_QUERY(groupPostListQuery);
+    }
+
+    @Mutation
+    SET_GROUP_POST_LIST_QUERY(groupPostListQuery: IGetGroupPostListQuery) {
+        this.groupPostListQuery = {
+            ...this.groupPostListQuery,
+            ...groupPostListQuery,
+        };
+    }
+
+    @Action
+    async getJoinedGroupList({ append = false }: { append?: boolean }) {
+        const response = await groupApiService.getUserJoinedGroups(this.joinedGroupListQuery);
+        if (response.success) {
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_JOINED_GROUP_LIST(true);
+            }
+            if (append) {
+                this.APPEND_JOINED_GROUP_LIST(data);
+            } else {
+                this.SET_JOINED_GROUP_LIST(data);
+            }
         } else {
-            this.SET_JOINED_GROUP_LIST([]);
+            if (append) {
+                this.APPEND_JOINED_GROUP_LIST([]);
+            } else {
+                this.SET_JOINED_GROUP_LIST([]);
+            }
+            this.SET_IS_FETCHED_ALL_JOINED_GROUP_LIST(true);
         }
+    }
+
+    @Mutation
+    APPEND_JOINED_GROUP_LIST(joinedGroupList: IGroup[]) {
+        this.joinedGroupList.push(...joinedGroupList);
     }
 
     @Mutation
     SET_JOINED_GROUP_LIST(joinedGroupList: IGroup[]) {
         this.joinedGroupList = joinedGroupList;
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_JOINED_GROUP_LIST(isFetchedAllJoinedGroupList: boolean) {
+        this.isFetchedAllJoinedGroupList = isFetchedAllJoinedGroupList;
+    }
+
+    @Action
+    resetJoinedGroupListQuery() {
+        this.RESET_JOINED_GROUP_LIST_QUERY();
+    }
+
+    @Mutation
+    RESET_JOINED_GROUP_LIST_QUERY() {
+        this.joinedGroupListQuery = cloneDeep(INIT_GET_GROUP_LIST_QUERY);
+    }
+
+    @Action
+    setJoinedGroupListQuery(joinedGroupListQuery: IGetGroupListQuery) {
+        this.SET_JOINED_GROUP_LIST_QUERY(joinedGroupListQuery);
+    }
+
+    @Mutation
+    SET_JOINED_GROUP_LIST_QUERY(joinedGroupListQuery: IGetGroupListQuery) {
+        this.joinedGroupListQuery = {
+            ...this.joinedGroupListQuery,
+            ...joinedGroupListQuery,
+        };
     }
 
     @Action

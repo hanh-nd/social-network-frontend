@@ -169,3 +169,8 @@ export enum SocketEvent {
     USER_CHAT = 'USER_CHAT',
     USER_RECALL = 'USER_RECALL',
 }
+
+export const INIT_GET_COMMENT_LIST_QUERY = {
+    page: 1,
+    limit: 10,
+};

@@ -2,6 +2,7 @@ import {
     IBodyResponse,
     ICreateNewPostBody,
     ICreateReactionBody,
+    IGetPostListQuery,
     IPost,
     IReaction,
     IReportPostBody,
@@ -15,8 +16,10 @@ class PostApiService extends ApiService {
         return await this.client.post(`${this.baseUrl}/`, data);
     }
 
-    async getNewsFeed(): Promise<IBodyResponse<IPost[]>> {
-        return await this.client.get(`${this.baseUrl}/news-feed`);
+    async getNewsFeed(query?: IGetPostListQuery): Promise<IBodyResponse<IPost[]>> {
+        return await this.client.get(`${this.baseUrl}/news-feed`, {
+            params: query,
+        });
     }
 
     async react(postId: string, body: ICreateReactionBody): Promise<IBodyResponse<boolean>> {

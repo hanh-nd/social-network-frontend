@@ -4,3 +4,8 @@ export enum ProfileScreenTab {
     SUBSCRIBERS = 'SUBSCRIBERS',
     SUBSCRIBING = 'SUBSCRIBING',
 }
+
+export const INIT_GET_POST_LIST_QUERY = {
+    page: 1,
+    limit: 10,
+};

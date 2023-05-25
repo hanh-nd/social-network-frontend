@@ -100,6 +100,7 @@ export interface IUser {
     updatedAt: Date;
     deletedAt: Date;
     isSubscribing?: boolean;
+    isSelf?: boolean;
 }
 
 export interface IAddress {
@@ -159,6 +160,8 @@ export interface IPost {
     reactionType?: ReactionType;
 }
 
+export type IGetPostListQuery = ICommonGetListQuery;
+
 export interface ICreateNewPostBody {
     privacy: number;
     content: string;
@@ -182,6 +185,8 @@ export interface IReportPostBody {
 export interface ICreateReactionBody {
     type: string;
 }
+
+export type IGetCommentListQuery = ICommonGetListQuery;
 
 export interface ICreateCommentBody {
     content: string;
@@ -228,6 +233,7 @@ export interface IReaction {
         username: string;
         fullName: string;
         isSubscribing?: boolean;
+        isSelf?: boolean;
     };
     target: {
         _id: string;

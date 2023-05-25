@@ -1,7 +1,7 @@
 <template>
     <div class="joined-group-list-screen-wrapper">
         <div class="title">Nhóm bạn tham gia</div>
-        <div class="group-list">
+        <div class="group-list" v-infinite-scroll="onLoadMore">
             <GroupGridCard v-for="group in joinedGroupList" :key="group._id" :group="group" />
         </div>
     </div>
@@ -21,6 +21,23 @@ import GroupGridCard from './GroupGridCard.vue';
 export default class JoinedGroupListScreen extends GlobalMixin {
     get joinedGroupList() {
         return groupModule.joinedGroupList;
+    }
+
+    get currentPage() {
+        return groupModule.joinedGroupListQuery.page as number;
+    }
+
+    get isFetchedAllJoinedGroupList() {
+        return groupModule.isFetchedAllJoinedGroupList;
+    }
+
+    onLoadMore() {
+        if (this.isFetchedAllJoinedGroupList) return;
+
+        groupModule.setJoinedGroupListQuery({
+            page: this.currentPage + 1,
+        });
+        groupModule.getJoinedGroupList({ append: true });
     }
 }
 </script>

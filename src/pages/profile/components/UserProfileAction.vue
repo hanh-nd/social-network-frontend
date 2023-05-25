@@ -1,6 +1,6 @@
 <template>
     <div class="user-profile-action-wrapper">
-        <el-button @click="subscribeOrUnsubscribe" :type="isSubscribing ? `default` : `primary`">{{
+        <el-button @click="subscribeOrUnsubscribe" :type="isSubscribing ? `default` : `primary`" v-if="!isSelf">{{
             isSubscribing ? `Hủy theo dõi` : `Theo dõi`
         }}</el-button>
         <el-button v-if="!isMobile">Nhắn tin</el-button>
@@ -15,9 +15,9 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import userApiService from '@/common/service/user.api.service';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../store';
-import { appModule } from '@/plugins/vuex/appModule';
 
 @Options({
     components: {},
@@ -25,6 +25,10 @@ import { appModule } from '@/plugins/vuex/appModule';
 export default class UserProfileAction extends GlobalMixin {
     get profileUser() {
         return profileModule.profileUser;
+    }
+
+    get isSelf() {
+        return this.profileUser?.isSelf || false;
     }
 
     get isSubscribing() {

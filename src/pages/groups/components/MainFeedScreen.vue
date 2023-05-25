@@ -22,16 +22,30 @@ export default class MainFeedScreen extends GlobalMixin {
         return groupModule.groupPostList;
     }
 
+    get isFetchedAllGroupPostList() {
+        return groupModule.isFetchedAllGroupPostList;
+    }
+
+    get currentPage() {
+        return groupModule.groupPostListQuery.page as number;
+    }
+
     created(): void {
         this.loadData();
     }
 
     async loadData() {
-        groupModule.getGroupFeed();
+        groupModule.resetGroupPostListQuery();
+        groupModule.getGroupFeed({ append: false });
     }
 
     onLoadMorePost() {
-        groupModule.getGroupFeed();
+        if (this.isFetchedAllGroupPostList) return;
+
+        groupModule.setGroupPostListQuery({
+            page: this.currentPage + 1,
+        });
+        groupModule.getGroupFeed({ append: true });
     }
 }
 </script>
