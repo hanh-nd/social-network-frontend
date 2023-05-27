@@ -1,7 +1,12 @@
 <template>
     <div class="group-detail-header-wrapper">
         <div class="cover">
-            <img v-if="group?.coverId" :src="getImageSourceById(group?.coverId)" alt="" />
+            <BaseHoverToShow class="upload-cover">
+                <template #hover v-if="isAdministrator()">
+                    <BaseUploadSingleButton :onUploaded="onUpdateCover">Cập nhật ảnh bìa</BaseUploadSingleButton>
+                </template>
+                <img v-if="group?.coverId" :src="getImageSourceById(group?.coverId)" alt="" />
+            </BaseHoverToShow>
         </div>
 
         <div class="overview">
@@ -36,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { IGroup } from '@/common/interfaces';
+import { IFile, IGroup } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import groupApiService from '@/common/service/group.api.service';
 import { EventEmitter, EventName } from '@/plugins/mitt';
@@ -60,6 +65,18 @@ export default class GroupDetailHeader extends GlobalMixin {
 
     get isMember() {
         return this.group?.memberIds?.includes(`${appModule?.loginUser?._id}`);
+    }
+
+    get administratorIds() {
+        return this.group?.administrators?.map((admin) => `${admin.user?._id}`) || [];
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    isAdministrator() {
+        return this.administratorIds.includes(`${this.loginUser?._id}`);
     }
 
     openMembersScreen() {
@@ -97,6 +114,16 @@ export default class GroupDetailHeader extends GlobalMixin {
             this.showErrorNotificationFunction(response?.message || `Yêu cầu tham gia nhóm thất bại.`);
         }
     }
+
+    async onUpdateCover(file: IFile, filePreview: File) {
+        const { id } = file;
+        const response = await groupApiService.updateGroup(this.group._id, {
+            coverId: id,
+        });
+        if (response?.success) {
+            groupDetailModule.getGroupDetail(this.group._id);
+        }
+    }
 }
 </script>
 
@@ -112,11 +139,21 @@ export default class GroupDetailHeader extends GlobalMixin {
         position: relative;
         border-radius: 8px 8px 0 0;
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px 8px 0 0;
+        :deep(.upload-cover) {
+            .hover-section {
+                display: flex;
+                align-items: flex-end;
+                padding: 16px;
+            }
+
+            .content {
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 8px 8px 0 0;
+                    object-fit: cover;
+                }
+            }
         }
     }
 

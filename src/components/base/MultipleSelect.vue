@@ -13,6 +13,8 @@
             :disabled="isDisabled"
             multiple
             :collapse-tags="collapseTags"
+            collapse-tags-tooltip
+            :max-collapse-tags="maxCollapseTags"
             popper-class="select-options"
             @keyup="press"
             @change="change"
@@ -57,6 +59,7 @@ export default class MultipleSelect extends GlobalMixin {
     @Prop({ default: false }) readonly isReadonly!: boolean;
     @Prop({ default: false }) readonly isDisabled!: boolean;
     @Prop({ default: true }) readonly collapseTags!: boolean;
+    @Prop({ default: 3 }) readonly maxCollapseTags!: number;
     @Prop({ default: false }) readonly filterable!: boolean;
     @Prop({ default: () => [] }) readonly options!: Record<string, unknown>[];
     @Prop({ default: true }) readonly clearable!: boolean;

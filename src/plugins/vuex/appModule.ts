@@ -1,7 +1,8 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { IComment, IPost, IUser } from '@/common/interfaces';
+import { IComment, IPost, ITag, IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
+import tagApiService from '@/common/service/tag.api.service';
 import store from '@/plugins/vuex';
 import { isEmpty } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
@@ -28,6 +29,7 @@ class AppModule extends VuexModule {
     isRefreshing = false;
     isShowSharePostDialog = false;
     searchKeyword = '';
+    tags: ITag[] = [];
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
@@ -181,6 +183,21 @@ class AppModule extends VuexModule {
     @Mutation
     SET_IS_SHOW_SHARE_LIST_DIALOG(isShowShareListDialog: boolean) {
         this.isShowShareListDialog = isShowShareListDialog;
+    }
+
+    @Action
+    async getTags() {
+        const response = await tagApiService.getTags();
+        if (response?.success) {
+            this.SET_TAGS(response?.data || []);
+        } else {
+            this.SET_TAGS([]);
+        }
+    }
+
+    @Mutation
+    SET_TAGS(tags: ITag[]) {
+        this.tags = tags;
     }
 }
 

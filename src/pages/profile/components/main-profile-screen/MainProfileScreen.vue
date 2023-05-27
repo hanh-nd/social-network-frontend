@@ -15,12 +15,10 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
-import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
 import ProfileContent from './ProfileContent.vue';
 import ProfileOverview from './ProfileOverview.vue';
-import { EventEmitter, EventName } from '@/plugins/mitt';
 @Options({
     components: {
         ProfileOverview,
@@ -40,14 +38,14 @@ export default class MainProfileScreen extends GlobalMixin {
         return profileModule.isFetchedAllPostList;
     }
 
-    onLoadMoreProfilePostDebounced = debounce(() => {
+    onLoadMoreProfilePostDebounced() {
         if (this.isFetchedAllPostList) return;
 
         profileModule.setProfilePostListQuery({
             page: this.currentPage + 1,
         });
         profileModule.getProfilePostList({ id: this.userId, append: true });
-    }, 50);
+    }
 }
 </script>
 

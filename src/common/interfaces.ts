@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { HttpStatus, OrderDirection, ReactionType, SubscribeRequestStatus } from './constants';
+import { Gender, HttpStatus, OrderDirection, ReactionType, Relationship, SubscribeRequestStatus } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
     isRequestError?: boolean;
@@ -103,11 +103,33 @@ export interface IUser {
     isSelf?: boolean;
 }
 
+export interface IUserDetail {
+    _id: string;
+    userId: string;
+    gender?: Gender;
+    birthday?: Date;
+    address?: IAddress;
+    relationship?: Relationship;
+    work?: IWork;
+    education?: IEducation;
+    tagIds?: string[];
+}
+
 export interface IAddress {
     province: string;
     ward: string;
     district: string;
     detail?: string;
+}
+
+export interface IWork {
+    name: string;
+    position?: string;
+}
+
+export interface IEducation {
+    name: string;
+    major?: string;
 }
 
 export interface IFile {
@@ -135,10 +157,15 @@ export interface IUpdateProfileBody {
     coverId?: string;
     phone?: string;
     fullName?: string;
+    gender?: Gender;
     birthday?: Date;
     address?: IAddress;
     describe?: string;
+    relationship?: Relationship;
+    work?: IWork;
+    education?: IEducation;
     private?: boolean;
+    tagIds?: string[];
 }
 
 export interface IPost {
@@ -322,4 +349,10 @@ export interface ICreateJoinRequestBody {
 
 export interface IUpdateJoinRequestBody {
     status: SubscribeRequestStatus;
+}
+
+export interface ITag {
+    _id: string;
+    name: string;
+    iconId: string;
 }
