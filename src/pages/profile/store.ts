@@ -1,4 +1,4 @@
-import { IGetPostListQuery, IPost, IUser } from '@/common/interfaces';
+import { IGetPostListQuery, IPost, IUser, IUserDetail } from '@/common/interfaces';
 import userApiService from '@/common/service/user.api.service';
 import store from '@/plugins/vuex';
 import { cloneDeep } from 'lodash';
@@ -14,6 +14,7 @@ import { INIT_GET_POST_LIST_QUERY, ProfileScreenTab } from './constants';
 })
 class ProfileModule extends VuexModule {
     profileUser: IUser | null = null;
+    profileDetail: IUserDetail = {} as IUserDetail;
     profilePostList: IPost[] = [];
     profilePostListQuery: IGetPostListQuery = cloneDeep(INIT_GET_POST_LIST_QUERY);
     isFetchedAllPostList = false;
@@ -27,7 +28,7 @@ class ProfileModule extends VuexModule {
             this.SET_PROFILE_USER(null);
         }
 
-        const response = await userApiService.getUserDetail(userId);
+        const response = await userApiService.getUserProfile(userId);
         if (response.success) {
             this.SET_PROFILE_USER(response?.data || null);
         } else {
@@ -140,6 +141,23 @@ class ProfileModule extends VuexModule {
     @Mutation
     SET_SUBSCRIBING_LIST(subscribingList: IUser[]) {
         this.subscribingList = subscribingList;
+    }
+
+    @Action
+    async getProfileDetail(userId?: string) {
+        if (!userId) return;
+
+        const response = await userApiService.getUserDetail(userId);
+        if (response?.success) {
+            this.SET_PROFILE_DETAIL(response?.data || {});
+        } else {
+            this.SET_PROFILE_DETAIL({} as IUserDetail);
+        }
+    }
+
+    @Mutation
+    SET_PROFILE_DETAIL(profileDetail: IUserDetail) {
+        this.profileDetail = profileDetail;
     }
 }
 

@@ -18,6 +18,17 @@
 
         <div class="overview">
             <div class="header">Giới thiệu</div>
+            <div class="content">
+                <div class="address" v-if="detail.address">
+                    Sống tại <span class="bold">{{ detail.address?.province }}</span>
+                </div>
+                <div class="work" v-if="detail.work">
+                    Làm việc tại <span class="bold">{{ detail.work?.name }}</span>
+                </div>
+                <div class="education" v-if="detail.education">
+                    Học tại <span class="bold">{{ detail.education?.name }}</span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -34,6 +45,10 @@ import { profileModule } from '../../store';
 export default class ProfileOverview extends GlobalMixin {
     get user() {
         return profileModule.profileUser || ({} as IUser);
+    }
+
+    get detail() {
+        return profileModule.profileDetail;
     }
 }
 </script>
@@ -64,7 +79,7 @@ export default class ProfileOverview extends GlobalMixin {
             .count {
                 color: $color-black;
                 font-weight: 700;
-                font-size: 18;
+                font-size: 18px;
             }
         }
     }
@@ -73,6 +88,17 @@ export default class ProfileOverview extends GlobalMixin {
         border-radius: 6px;
         background: $color-white;
         padding: 16px;
+
+        .header {
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .content {
+            .bold {
+                font-weight: 700;
+            }
+        }
     }
 }
 </style>

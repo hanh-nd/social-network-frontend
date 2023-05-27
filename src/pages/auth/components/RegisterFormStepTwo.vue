@@ -40,15 +40,15 @@
                 @on-enter="onSubmit"
             />
             <BaseInputText
-                v-model:value="formData.address!.ward"
+                v-model:value="formData.address!.district"
                 placeholder="Quận/Huyện"
-                :error="translateYupError(formData.errors.address?.ward as IYupError)"
+                :error="translateYupError(formData.errors.address?.district as IYupError)"
                 @on-enter="onSubmit"
             />
             <BaseInputText
-                v-model:value="formData.address!.district"
+                v-model:value="formData.address!.ward"
                 placeholder="Phường/Xã"
-                :error="translateYupError(formData.errors.address?.district as IYupError)"
+                :error="translateYupError(formData.errors.address?.ward as IYupError)"
                 @on-enter="onSubmit"
             />
             <BaseInputText

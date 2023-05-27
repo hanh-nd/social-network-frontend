@@ -6918,3 +6918,8 @@ yup@^1.0.2:
     tiny-case "^1.0.3"
     toposort "^2.0.2"
     type-fest "^2.19.0"
+
+zodiac-signs@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/zodiac-signs/-/zodiac-signs-1.2.1.tgz#2e8f6411c11519c94c4382f4b3cd1a2df9189e8e"
+  integrity sha512-pA5ru3VqAs0c7Gdkmy7RgDaYJfEHSBHyRuLlx2YKTOYA/SZ+zs/T+9of5zeXW3pH5jOlHUazoaypVx9auTuGSg==
