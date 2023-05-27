@@ -1,6 +1,9 @@
 <template>
     <input type="file" ref="file" @change="selectFile($event)" class="custom-file-input" hidden />
-    <el-button type="primary" @click="onClickButtonSelectFile">
+    <div @click="onClickButtonSelectFile" v-if="isDiv">
+        <slot></slot>
+    </div>
+    <el-button type="primary" @click="onClickButtonSelectFile" v-else>
         <slot></slot>
     </el-button>
 </template>
@@ -19,6 +22,8 @@ import { Prop } from 'vue-property-decorator';
 export default class UploadSingleButton extends GlobalMixin {
     @Prop() successMessage!: string;
     @Prop() errorMessage!: string;
+    @Prop() onUploaded!: CallableFunction;
+    @Prop({ default: false }) isDiv!: boolean;
 
     declare $refs: { file: HTMLFormElement };
 
@@ -51,6 +56,9 @@ export default class UploadSingleButton extends GlobalMixin {
                     this.showSuccessNotificationFunction('Tải lên thành công.');
                     const file = get(response, 'data[0]');
                     if (file) {
+                        if (this.onUploaded) {
+                            this.onUploaded(file, filePreview);
+                        }
                         this.$emit('on-file-uploaded', file, filePreview);
                     } else {
                         this.showErrorNotificationFunction('Có lỗi xảy ra, vui lòng thử lại sau.');

@@ -5,6 +5,7 @@ import {
     IPost,
     IUpdateProfileBody,
     IUser,
+    IUserDetail,
 } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import axiosService from '@/plugins/axios';
@@ -13,7 +14,7 @@ class UserApiService extends ApiService {
         return await this.client.patch(`${this.baseUrl}/update-profile`, body);
     }
 
-    async getUserDetail(userId: string): Promise<IBodyResponse<IUser>> {
+    async getUserProfile(userId: string): Promise<IBodyResponse<IUser>> {
         return await this.client.get(`${this.baseUrl}/${userId}`);
     }
 
@@ -41,6 +42,10 @@ class UserApiService extends ApiService {
 
     async blockUser(targetUserId: string): Promise<IBodyResponse<boolean>> {
         return await this.client.patch(`${this.baseUrl}/${targetUserId}/block`);
+    }
+
+    async getUserDetail(targetUserId: string): Promise<IBodyResponse<IUserDetail>> {
+        return await this.client.get(`${this.baseUrl}/${targetUserId}/details`);
     }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);

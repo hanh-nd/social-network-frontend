@@ -174,3 +174,27 @@ export const INIT_GET_COMMENT_LIST_QUERY = {
     page: 1,
     limit: 10,
 };
+
+export enum Gender {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    OTHER = 'OTHER',
+}
+
+export const GenderName = {
+    [Gender.MALE]: 'Nam',
+    [Gender.FEMALE]: 'Nữ',
+    [Gender.OTHER]: 'Khác',
+};
+
+export enum Relationship {
+    SINGLE = 'SINGLE',
+    IN_A_RELATIONSHIP = 'IN_A_RELATIONSHIP',
+    MARRIED = 'MARRIED',
+}
+
+export const RelationshipName = {
+    [Relationship.SINGLE]: 'Độc thân',
+    [Relationship.IN_A_RELATIONSHIP]: 'Đang trong một mối quan hệ',
+    [Relationship.MARRIED]: 'Đã kết hôn',
+};
