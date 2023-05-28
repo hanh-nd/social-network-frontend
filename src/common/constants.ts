@@ -140,25 +140,43 @@ export enum ReportAction {
     REJECTED = 'REJECTED',
 }
 
-export const ReportTargetType = {
-    POST: 'Post',
-    COMMENT: 'Comment',
-    MESSAGE: 'Message',
-    USER: 'User',
+export enum ReportTargetType {
+    POST = 'Post',
+    COMMENT = 'Comment',
+    MESSAGE = 'Message',
+    USER = 'User',
+}
+
+export enum NotificationTargetType {
+    POST = 'Post',
+    COMMENT = 'Comment',
+    MESSAGE = 'Message',
+    USER = 'User',
+}
+
+export const NotificationTargetTypeName = {
+    [NotificationTargetType.POST]: 'bài viết',
+    [NotificationTargetType.COMMENT]: 'bình luận',
+    [NotificationTargetType.MESSAGE]: 'tin nhắn',
+    [NotificationTargetType.USER]: 'bạn',
 };
 
-export const NotificationTargetType = {
-    POST: 'Post',
-    COMMENT: 'Comment',
-    MESSAGE: 'Message',
-    USER: 'User',
-};
+export enum NotificationAction {
+    REACT = 'REACT',
+    COMMENT = 'COMMENT',
+    SHARE = 'SHARE',
+    SUBSCRIBE_PROFILE = 'SUBSCRIBE_PROFILE',
+    SENT_SUBSCRIBE_REQUEST = 'SENT_SUBSCRIBE_REQUEST',
+    ACCEPT_SUBSCRIBE_REQUEST = 'ACCEPT_SUBSCRIBE_REQUEST',
+}
 
-export const NotificationAction = {
-    REACT: 'REACT',
-    COMMENT: 'COMMENT',
-    SHARE: 'SHARE',
-    ACCEPT_SUBSCRIBE_REQUEST: 'ACCEPT_SUBSCRIBE_REQUEST',
+export const NotificationActionName = {
+    [NotificationAction.REACT]: 'bày tỏ cảm xúc về một',
+    [NotificationAction.COMMENT]: 'bình luận về một',
+    [NotificationAction.SHARE]: 'chia sẻ',
+    [NotificationAction.SUBSCRIBE_PROFILE]: 'theo dõi',
+    [NotificationAction.SENT_SUBSCRIBE_REQUEST]: 'yêu cầu theo dõi',
+    [NotificationAction.ACCEPT_SUBSCRIBE_REQUEST]: 'đồng ý lời mời theo dõi của',
 };
 
 export enum SocketEvent {
@@ -168,6 +186,8 @@ export enum SocketEvent {
     USER_SUBSCRIBE_PRIVATE = 'USER_SUBSCRIBE_PRIVATE',
     USER_CHAT = 'USER_CHAT',
     USER_RECALL = 'USER_RECALL',
+
+    USER_NOTIFICATION = 'USER_NOTIFICATION',
 }
 
 export const INIT_GET_COMMENT_LIST_QUERY = {

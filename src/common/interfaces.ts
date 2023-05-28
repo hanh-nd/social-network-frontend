@@ -1,5 +1,15 @@
+import { IMessage } from '@/pages/chat/interfaces';
 import { AxiosResponse } from 'axios';
-import { Gender, HttpStatus, OrderDirection, ReactionType, Relationship, SubscribeRequestStatus } from './constants';
+import {
+    Gender,
+    HttpStatus,
+    NotificationAction,
+    NotificationTargetType,
+    OrderDirection,
+    ReactionType,
+    Relationship,
+    SubscribeRequestStatus,
+} from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
     isRequestError?: boolean;
@@ -359,3 +369,18 @@ export interface ITag {
     name: string;
     iconId: string;
 }
+
+export interface INotification {
+    _id: string;
+    author: IUser;
+    to: IUser;
+    target: NotificationTarget;
+    targetType: NotificationTargetType;
+    action: NotificationAction;
+    isRead: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export type NotificationTarget = IPost | IComment | IMessage | IUser;
