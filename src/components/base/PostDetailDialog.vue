@@ -189,7 +189,6 @@ export default class PostDetailDialog extends GlobalMixin {
 
     onLoadMoreCommentDebounced = debounce(() => {
         if (this.isFetchedAllCommentList) return;
-        console.log(`in here`);
         this.commentListQuery = {
             ...this.commentListQuery,
             page: (this.commentListQuery.page || 1) + 1,

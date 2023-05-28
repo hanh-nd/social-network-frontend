@@ -73,9 +73,7 @@ export default class ChatPage extends GlobalMixin {
     }
 
     registerUserChatEvent() {
-        console.log(`ce`);
         SocketProvider.socket.on(SocketEvent.USER_CHAT, ({ chatId, message }) => {
-            console.log(`in here`);
             chatModule.unshiftMessageList(message);
             EventEmitter.emit(EventName.USER_CHAT);
 

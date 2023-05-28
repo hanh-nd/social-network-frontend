@@ -1,5 +1,24 @@
 <template>
     <div class="account-menu-wrapper">
+        <el-popover
+            popper-class="notification-list-dialog"
+            placement="bottom"
+            :width="250"
+            trigger="click"
+            :teleported="false"
+        >
+            <div class="notification-list">
+                <NotificationList />
+                <div class="see-more">
+                    <el-button type="info" @click="goToNotificationPage">Xem tất cả</el-button>
+                </div>
+            </div>
+
+            <template #reference>
+                <el-icon :size="24" class="chat-btn me-2"><Bell /></el-icon>
+            </template>
+        </el-popover>
+
         <el-popover popper-class="chat-list-dialog" placement="bottom" :width="250" trigger="click" :teleported="false">
             <div class="chat-list">
                 <ChatListMenu />
@@ -9,7 +28,7 @@
             </div>
 
             <template #reference>
-                <el-icon :size="24" class="chat-btn"><ChatDotRound /></el-icon>
+                <el-icon :size="24" class="chat-btn me-2"><ChatDotRound /></el-icon>
             </template>
         </el-popover>
 
@@ -39,12 +58,15 @@
 
 <script lang="ts">
 import localStorageAuthService from '@/common/authStorage';
-import { HEIGHT_SHOW_STICKY_HEADER } from '@/common/constants';
-import { IUser } from '@/common/interfaces';
+import { HEIGHT_SHOW_STICKY_HEADER, SocketEvent } from '@/common/constants';
+import { generateNotificationMessageContent } from '@/common/helpers';
+import { INotification, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
 import ChatListMenu from '@/pages/chat/components/ChatListMenu.vue';
 import { chatModule } from '@/pages/chat/store';
+import NotificationList from '@/pages/notifications/components/NotificationList.vue';
+import { notificationModule } from '@/pages/notifications/store';
 import { SocketProvider } from '@/plugins/socket.io';
 import { appModule } from '@/plugins/vuex/appModule';
 import { ref } from 'vue';
@@ -57,6 +79,7 @@ interface IDropdown {
 
 @Options({
     components: {
+        NotificationList,
         ChatListMenu,
     },
 })
@@ -79,10 +102,13 @@ export default class AccountMenuUser extends GlobalMixin {
     }
 
     mounted(): void {
+        this.registerNotificationEvents();
+
         window.addEventListener('scroll', this.scrollHandler, {
             passive: true,
         });
         chatModule.getChatList();
+        notificationModule.getNotifications();
     }
     beforeDestroy(): void {
         window.removeEventListener('scroll', this.scrollHandler);
@@ -115,6 +141,22 @@ export default class AccountMenuUser extends GlobalMixin {
             },
         });
     }
+
+    goToNotificationPage() {
+        this.$router.push({
+            name: this.PageName.NOTIFICATION_PAGE,
+        });
+    }
+
+    registerNotificationEvents() {
+        SocketProvider.socket.on(SocketEvent.USER_NOTIFICATION, (notification: INotification) => {
+            this.showSuccessNotificationFunction(generateNotificationMessageContent(notification));
+        });
+    }
+
+    unmounted(): void {
+        SocketProvider.socket.off(SocketEvent.USER_NOTIFICATION);
+    }
 }
 </script>
 
@@ -127,6 +169,19 @@ export default class AccountMenuUser extends GlobalMixin {
 
     .chat-btn {
         cursor: pointer;
+    }
+
+    :deep(.notification-list-dialog) {
+        .notification-list {
+            max-height: 500px;
+
+            .see-more {
+                margin-top: 8px;
+                .el-button {
+                    width: 100%;
+                }
+            }
+        }
     }
 
     :deep(.chat-list-dialog) {
