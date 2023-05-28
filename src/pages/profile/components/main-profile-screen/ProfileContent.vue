@@ -3,7 +3,10 @@
         <div class="create-new-post" v-if="isLoginUser(user)">
             <BaseCreateNewPostBar />
         </div>
-        <div class="post-list">
+        <div class="" v-if="!isUser && isPrivate && !isSubscribing">
+            <el-empty description="Đây là tài khoản riêng tư. Hãy theo dõi người dùng này để xem thêm." />
+        </div>
+        <div class="post-list" v-else>
             <BasePostList :postList="postList" @on-load-more="onLoadMore" />
         </div>
     </div>
@@ -15,6 +18,7 @@ import { GlobalMixin } from '@/common/mixins';
 import { EventEmitter, EventName } from '@/plugins/mitt';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
+import { appModule } from '@/plugins/vuex/appModule';
 
 @Options({
     components: {},
@@ -26,6 +30,22 @@ export default class ProfileContent extends GlobalMixin {
 
     get postList() {
         return profileModule.profilePostList;
+    }
+
+    get isSubscribing() {
+        return this.user?.isSubscribing || false;
+    }
+
+    get isPrivate() {
+        return this.user?.private || true;
+    }
+
+    get isUser() {
+        return this.user._id == this.loginUser._id;
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
     }
 
     mounted(): void {

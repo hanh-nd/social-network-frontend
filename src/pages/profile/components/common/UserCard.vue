@@ -10,9 +10,7 @@
                 {{ user?.fullName || 'undefined' }}
             </div>
             <div class="button">
-                <el-button @click="subscribeOrUnsubscribe" v-if="!user?.isSelf">{{
-                    user?.isSubscribing ? `Hủy theo dõi` : `Theo dõi`
-                }}</el-button>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -38,15 +36,6 @@ export default class UserCard extends GlobalMixin {
                 id: this.user._id,
             },
         });
-    }
-
-    async subscribeOrUnsubscribe() {
-        const response = await userApiService.subscribeOrUnsubscribe(this.user._id);
-        if (response?.success) {
-            this.user.isSubscribing = !this.user.isSubscribing;
-        } else {
-            this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra.');
-        }
     }
 }
 </script>
