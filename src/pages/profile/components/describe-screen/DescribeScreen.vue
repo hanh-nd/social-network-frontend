@@ -3,7 +3,7 @@
         <div class="describe-screen-container">
             <div class="page-header">
                 <div class="page-title">Giới thiệu</div>
-                <div class="page-action">
+                <div class="page-action" v-if="isUser">
                     <el-button type="primary" @click="isEditing = !isEditing" v-if="!isEditing">Chỉnh sửa</el-button>
                     <el-button type="primary" @click="onSubmit" v-if="isEditing">Lưu</el-button>
                     <el-button @click="onCancel" v-if="isEditing">Hủy bỏ</el-button>
@@ -166,6 +166,25 @@
                     </div>
                 </div>
                 <BaseDivider />
+                <div class="section overview">
+                    <div class="header">Trạng thái tài khoản</div>
+                    <div class="content">
+                        <div class="content-row">
+                            <div class="title col-4">Trạng thái</div>
+                            <div class="value col-6" v-if="!isEditing">
+                                {{ profile?.private ? `Riêng tư` : `Công khai` }}
+                            </div>
+                            <div class="form-item col-6" v-else>
+                                <BaseSingleSelect
+                                    v-model:value="updateDetailForm.isPrivate"
+                                    :options="privacyOptions"
+                                    :error="translateYupError(updateDetailForm.errors.private as IYupError)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <BaseDivider />
                 <div class="section favorites">
                     <div class="header">Sở thích</div>
                     <div class="content-row">
@@ -264,8 +283,33 @@ export default class DescribeScreen extends GlobalMixin {
         });
     }
 
+    get privacyOptions() {
+        return [
+            {
+                id: true,
+                name: 'Riêng tư. Những người không theo dõi bạn sẽ không xem được tường nhà bạn.',
+            },
+            {
+                id: false,
+                name: 'Công khai. Những người không theo dõi bạn có thể xem được tường nhà bạn.',
+            },
+        ];
+    }
+
     get userId() {
         return this.$route.params.id as string;
+    }
+
+    get profile() {
+        return profileModule.profileUser;
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    get isUser() {
+        return this.loginUser._id == this.userId;
     }
 
     get detail() {
@@ -287,12 +331,18 @@ export default class DescribeScreen extends GlobalMixin {
     };
 
     mounted(): void {
-        this.updateDetailForm.setValues(this.detail);
+        this.updateDetailForm.setValues({
+            ...this.detail,
+            private: this.profile?.private,
+        });
     }
 
     @Watch('detail', { immediate: true, deep: true })
     updateForm() {
-        this.updateDetailForm.setValues(this.detail);
+        this.updateDetailForm.setValues({
+            ...this.detail,
+            private: this.profile?.private,
+        });
     }
 
     updateDetailForm = setup(() => {
@@ -304,6 +354,7 @@ export default class DescribeScreen extends GlobalMixin {
             work: {} as IWork,
             education: {} as IEducation,
             tagIds: [] as string[],
+            private: undefined as unknown as boolean,
         };
 
         const schema = yup.object({
@@ -314,6 +365,7 @@ export default class DescribeScreen extends GlobalMixin {
             work: yup.object(),
             education: yup.object(),
             tags: yup.array(),
+            private: yup.bool(),
         });
 
         const { resetForm, setValues, errors, handleSubmit } = useForm({
@@ -330,7 +382,7 @@ export default class DescribeScreen extends GlobalMixin {
         };
 
         const submit = handleSubmit(async (values) => {
-            const { gender, birthday, address, relationship, work, education, tagIds } = values;
+            const { gender, birthday, address, relationship, work, education, tagIds, private: isPrivate } = values;
             const response = await userApiService.updateProfile({
                 gender,
                 birthday,
@@ -339,10 +391,14 @@ export default class DescribeScreen extends GlobalMixin {
                 work,
                 education,
                 tagIds,
+                private: isPrivate,
             });
             if (response.success) {
                 this.isEditing = !this.isEditing;
                 Object.assign(this.detail, values);
+                if (this.profile) {
+                    this.profile.private = values.private;
+                }
                 this.showSuccessNotificationFunction('Cập nhật thành công.');
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Cập nhật thất bại');
@@ -356,6 +412,7 @@ export default class DescribeScreen extends GlobalMixin {
         const { value: work } = useField<IWork>('work');
         const { value: education } = useField<IEducation>('education');
         const { value: tagIds } = useField<string[]>('tagIds');
+        const { value: isPrivate } = useField<boolean[]>('private');
 
         return {
             gender,
@@ -365,6 +422,7 @@ export default class DescribeScreen extends GlobalMixin {
             work,
             education,
             tagIds,
+            isPrivate,
             errors,
             submit,
             clearFormData,

@@ -8,6 +8,11 @@ import {
     IUserDetail,
 } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
+import {
+    IGetSubscribeRequestListQuery,
+    ISubscribeRequest,
+    IUpdateSubscribeRequestBody,
+} from '@/pages/profile/interfaces';
 import axiosService from '@/plugins/axios';
 class UserApiService extends ApiService {
     async updateProfile(body: IUpdateProfileBody): Promise<IBodyResponse<boolean>> {
@@ -36,6 +41,10 @@ class UserApiService extends ApiService {
         });
     }
 
+    async getUserBlockedList(): Promise<IBodyResponse<IUser[]>> {
+        return await this.client.get(`${this.baseUrl}/blocked-list`);
+    }
+
     async subscribeOrUnsubscribe(userId: string): Promise<IBodyResponse<boolean>> {
         return await this.client.patch(`${this.baseUrl}/${userId}/subscribe`);
     }
@@ -46,6 +55,24 @@ class UserApiService extends ApiService {
 
     async getUserDetail(targetUserId: string): Promise<IBodyResponse<IUserDetail>> {
         return await this.client.get(`${this.baseUrl}/${targetUserId}/details`);
+    }
+
+    async getReceivedSubscribeRequest(
+        query?: IGetSubscribeRequestListQuery,
+    ): Promise<IBodyResponse<ISubscribeRequest[]>> {
+        return await this.client.get(`${this.baseUrl}/subscribe-requests`, {
+            params: query,
+        });
+    }
+
+    async getSentSubscribeRequest(query?: IGetSubscribeRequestListQuery): Promise<IBodyResponse<ISubscribeRequest[]>> {
+        return await this.client.get(`${this.baseUrl}/sent-subscribe-requests`, {
+            params: query,
+        });
+    }
+
+    async updateSubscribeRequest(id: string, body: IUpdateSubscribeRequestBody): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/subscribe-requests/${id}`, body);
     }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);

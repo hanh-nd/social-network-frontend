@@ -8,7 +8,11 @@
             <BaseDivider />
             <div class="subscribing-list">
                 <div class="subscribing-card" v-for="subscribing in subscribingList" :key="subscribing._id">
-                    <UserCard :user="subscribing" />
+                    <UserCard :user="subscribing">
+                        <el-button @click="subscribeOrUnsubscribe(subscribing)" v-if="!subscribing?.isSelf">{{
+                            subscribing?.isSubscribing ? `Hủy theo dõi` : `Theo dõi`
+                        }}</el-button>
+                    </UserCard>
                 </div>
             </div>
         </div>
@@ -20,6 +24,8 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
 import UserCard from '../common/UserCard.vue';
+import { IUser } from '@/common/interfaces';
+import userApiService from '@/common/service/user.api.service';
 
 @Options({
     components: {
@@ -41,6 +47,15 @@ export default class SubscribingScreen extends GlobalMixin {
 
     loadData() {
         profileModule.getSubscribingList(this.profileUser?._id);
+    }
+
+    async subscribeOrUnsubscribe(user: IUser) {
+        const response = await userApiService.subscribeOrUnsubscribe(user._id);
+        if (response?.success) {
+            user.isSubscribing = !user.isSubscribing;
+        } else {
+            this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra.');
+        }
     }
 }
 </script>

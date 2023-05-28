@@ -96,10 +96,13 @@ export interface IUser {
     lastOnlineAt?: Date;
     numberOfSubscribers: number;
     numberOfSubscribing: number;
+    numberOfBlocked?: number;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date;
     isSubscribing?: boolean;
+    isBlocked?: boolean;
+    isSentRequest?: boolean;
     isSelf?: boolean;
 }
 
