@@ -143,7 +143,6 @@ class ChatModule extends VuexModule {
         const response = await searchApiService.searchUsers({
             keyword,
         });
-        console.log(`in here`, response);
         if (response?.success) {
             this.SET_SEARCH_USERS(response?.data || []);
         } else {

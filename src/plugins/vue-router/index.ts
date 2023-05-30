@@ -16,6 +16,7 @@ import JoinGroupRequestPage from '../../pages/group-detail/pages/JoinGroupReques
 import GroupPage from '../../pages/groups/pages/GroupPage.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
+import NotificationPage from '../../pages/notifications/pages/NotificationPage.vue';
 import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -102,6 +103,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/chats/:id',
                 name: PageName.CHAT_PAGE,
                 component: ChatPage,
+            },
+            {
+                path: '/notifications',
+                name: PageName.NOTIFICATION_PAGE,
+                component: NotificationPage,
             },
         ],
     },
