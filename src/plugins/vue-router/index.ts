@@ -10,6 +10,7 @@ import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
+import AdminLayout from '../../layouts/AdminLayout.vue';
 import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
 import GroupPendingPostsPage from '../../pages/group-detail/pages/GroupPendingPostsPage.vue';
 import JoinGroupRequestPage from '../../pages/group-detail/pages/JoinGroupRequestPage.vue';
@@ -18,6 +19,7 @@ import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
 import NotificationPage from '../../pages/notifications/pages/NotificationPage.vue';
 import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
+import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -112,6 +114,20 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
+        path: '/admin',
+        component: AdminLayout,
+        children: [
+            {
+                path: '/admin/posts',
+                name: PageName.MANAGE_POST_PAGE,
+                component: ManagePostPage,
+                meta: {
+                    admin: true,
+                },
+            },
+        ],
+    },
+    {
         path: '/:catchAll(.*)*',
         redirect: {
             name: PageName.NOT_FOUND_PAGE,
@@ -148,7 +164,24 @@ router.beforeEach(async (to, from, next) => {
                 });
             }
         } else {
-            next();
+            if (to.matched.some((record) => record.meta.admin)) {
+                const adminRoleIds = localStorageAuthService.getAdminRoleIds()?.split(',') || [];
+                if (adminRoleIds.includes(loginUser.roleId)) {
+                    next();
+                } else {
+                    if (from.name === PageName.REGISTER_PAGE) {
+                        next({
+                            name: PageName.REGISTER_PAGE,
+                        });
+                    } else {
+                        next({
+                            name: PageName.LOGIN_PAGE,
+                        });
+                    }
+                }
+            } else {
+                next();
+            }
         }
     }
 });

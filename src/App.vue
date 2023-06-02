@@ -27,6 +27,7 @@ export default class App extends GlobalMixin {
         const loginUser = localStorageAuthService.getLoginUser();
         appModule.setLoginUser(loginUser);
         appModule.getTags();
+        appModule.getRoles();
         if (loginUser) {
             SocketProvider.connect(loginUser._id);
         }

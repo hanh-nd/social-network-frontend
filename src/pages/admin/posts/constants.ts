@@ -1,0 +1,6 @@
+export enum AdminScreen {
+    DASHBOARD = 'DASHBOARD',
+    MANAGE_POST = 'MANAGE_POST',
+    MANAGE_REPORT = 'MANAGE_REPORT',
+    MANAGE_USER = 'MANAGE_USER',
+}

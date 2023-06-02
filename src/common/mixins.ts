@@ -1,17 +1,10 @@
 import i18n from '@/plugins/vue-i18n';
+import { appModule } from '@/plugins/vuex/appModule';
 import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
 import localStorageAuthService from './authStorage';
-import {
-    DEFAULT_LANGUAGE,
-    DateFormat,
-    DeviceType,
-    PageName,
-    ReactionType,
-    SocketEvent,
-    ValidationForm,
-} from './constants';
+import { DEFAULT_LANGUAGE, DateFormat, DeviceType, PageName, ReactionType, ValidationForm } from './constants';
 import { IUser, IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {
@@ -20,6 +13,14 @@ export class GlobalMixin extends Vue {
     PageName = PageName;
     DeviceType = DeviceType;
     ValidationForm = ValidationForm;
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    get roles() {
+        return appModule.roles;
+    }
 
     //
     parseDateTime(dateTime: Date | string | undefined, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
@@ -131,6 +132,12 @@ export class GlobalMixin extends Vue {
         if (!user?._id) return false;
 
         return user?._id === localStorageAuthService.getLoginUser()._id;
+    }
+
+    get isSystemAdmin() {
+        if (!this.loginUser?.roleId) return false;
+
+        return this.roles.find((r) => r._id == this.loginUser.roleId);
     }
 
     getAvatarUrl(user?: Partial<IUser>) {

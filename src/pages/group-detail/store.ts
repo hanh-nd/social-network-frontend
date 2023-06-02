@@ -101,6 +101,7 @@ class GroupDetailModule extends VuexModule {
     @Action
     resetGroupPostListQuery() {
         this.RESET_GROUP_POST_LIST_QUERY();
+        this.SET_IS_FETCHED_ALL_GROUP_POST_LIST(false);
     }
 
     @Mutation
@@ -163,6 +164,7 @@ class GroupDetailModule extends VuexModule {
     @Action
     resetJoinRequestListQuery() {
         this.RESET_JOIN_REQUEST_LIST_QUERY();
+        this.SET_IS_FETCHED_ALL_JOIN_REQUEST_LIST(false);
     }
 
     @Mutation
@@ -235,6 +237,7 @@ class GroupDetailModule extends VuexModule {
     @Action
     resetGroupPendingPostListQuery() {
         this.RESET_GROUP_POST_LIST_QUERY();
+        this.SET_IS_FETCHED_ALL_GROUP_PENDING_POST_LIST(false);
     }
 
     @Mutation
