@@ -1,7 +1,8 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { IComment, IPost, ITag, IUser } from '@/common/interfaces';
+import { IComment, IPost, IRole, ITag, IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
+import roleApiService from '@/common/service/role.api.service';
 import tagApiService from '@/common/service/tag.api.service';
 import store from '@/plugins/vuex';
 import { isEmpty } from 'lodash';
@@ -30,6 +31,7 @@ class AppModule extends VuexModule {
     isShowSharePostDialog = false;
     searchKeyword = '';
     tags: ITag[] = [];
+    roles: IRole[] = [];
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
@@ -198,6 +200,26 @@ class AppModule extends VuexModule {
     @Mutation
     SET_TAGS(tags: ITag[]) {
         this.tags = tags;
+    }
+
+    @Action
+    async getRoles() {
+        const response = await roleApiService.getRoles();
+        if (response?.success) {
+            const data = response?.data || [];
+            const adminRoleId = data
+                .filter((role) => role.name === 'Admin' || role.name === 'Moderator')
+                ?.map((r) => r._id);
+            authStorageService.setAdminRoleIds(adminRoleId.join(','));
+            this.SET_ROLES(data);
+        } else {
+            this.SET_ROLES([]);
+        }
+    }
+
+    @Mutation
+    SET_ROLES(roles: IRole[]) {
+        this.roles = roles;
     }
 }
 

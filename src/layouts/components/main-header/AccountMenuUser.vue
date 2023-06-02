@@ -47,6 +47,13 @@
                     </router-link>
                     <hr />
                     <hr />
+                    <router-link class="router-link" :to="`/admin/posts`" v-if="isSystemAdmin">
+                        <el-dropdown-item class="dropdown-item">
+                            <p>Quản trị</p>
+                        </el-dropdown-item>
+                    </router-link>
+                    <hr />
+                    <hr />
                     <el-dropdown-item @click="logout" class="dropdown-item">
                         <p>Đăng xuất</p>
                     </el-dropdown-item>

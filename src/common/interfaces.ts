@@ -200,7 +200,9 @@ export interface IPost {
     reactionType?: ReactionType;
 }
 
-export type IGetPostListQuery = ICommonGetListQuery;
+export interface IGetPostListQuery extends ICommonGetListQuery {
+    range?: number;
+}
 
 export interface ICreateNewPostBody {
     privacy: number;
@@ -370,6 +372,12 @@ export interface ITag {
     iconId: string;
 }
 
+export interface IRole {
+    _id: string;
+    name: string;
+    permissions: string[];
+}
+
 export interface INotification {
     _id: string;
     author: IUser;
@@ -384,3 +392,8 @@ export interface INotification {
 }
 
 export type NotificationTarget = IPost | IComment | IMessage | IUser;
+
+export interface IStatistic {
+    _id: string;
+    count: number;
+}

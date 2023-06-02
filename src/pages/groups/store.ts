@@ -75,6 +75,7 @@ class GroupModule extends VuexModule {
     @Action
     resetGroupPostListQuery() {
         this.RESET_GROUP_POST_LIST_QUERY();
+        this.SET_IS_FETCHED_ALL_GROUP_POST_LIST(false);
     }
 
     @Mutation
@@ -136,6 +137,7 @@ class GroupModule extends VuexModule {
     @Action
     resetJoinedGroupListQuery() {
         this.RESET_JOINED_GROUP_LIST_QUERY();
+        this.SET_IS_FETCHED_ALL_JOINED_GROUP_LIST(false);
     }
 
     @Mutation
