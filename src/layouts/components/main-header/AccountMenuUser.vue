@@ -47,7 +47,7 @@
                     </router-link>
                     <hr />
                     <hr />
-                    <router-link class="router-link" :to="`/admin/posts`" v-if="isSystemAdmin">
+                    <router-link class="router-link" :to="`/admin/posts`" v-if="isModerator">
                         <el-dropdown-item class="dropdown-item">
                             <p>Quản trị</p>
                         </el-dropdown-item>

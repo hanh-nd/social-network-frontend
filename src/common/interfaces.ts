@@ -8,6 +8,8 @@ import {
     OrderDirection,
     ReactionType,
     Relationship,
+    ReportAction,
+    ReportTargetType,
     SubscribeRequestStatus,
 } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
@@ -96,6 +98,7 @@ export interface IUser {
     username: string;
     roleId: string;
     fullName: string;
+    phone?: string;
     avatarId?: string;
     coverId?: string;
     describe?: string;
@@ -200,9 +203,7 @@ export interface IPost {
     reactionType?: ReactionType;
 }
 
-export interface IGetPostListQuery extends ICommonGetListQuery {
-    range?: number;
-}
+export type IGetPostListQuery = ICommonGetListQuery;
 
 export interface ICreateNewPostBody {
     privacy: number;
@@ -250,7 +251,7 @@ export interface IComment {
     author: Partial<IUser>;
     post: Partial<IPost>;
     content: string;
-    numberOfReactions: number;
+    numberOfReacts: number;
     isReacted: boolean;
     reactionType?: ReactionType;
 }
@@ -392,8 +393,40 @@ export interface INotification {
 }
 
 export type NotificationTarget = IPost | IComment | IMessage | IUser;
+export type ReportTarget = IPost | IComment | IMessage | IUser;
 
 export interface IStatistic {
+    total: number;
+    totalActive: number;
+    totalDeactivated: number;
+    group: IGroupCount[];
+}
+export interface IGroupCount {
     _id: string;
     count: number;
+}
+
+export interface IReport {
+    _id: string;
+    author: IUser;
+    target: ReportTarget;
+    targetType: ReportTargetType;
+    action: ReportAction;
+    reportReason?: string;
+    note?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IGetReportListQuery extends ICommonGetListQuery {
+    targetType?: ReportTargetType;
+}
+
+export interface IUpdateReportBody {
+    note?: string;
+}
+
+export interface IGetStatisticQuery extends ICommonGetListQuery {
+    range?: number;
 }

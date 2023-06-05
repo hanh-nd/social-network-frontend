@@ -68,14 +68,17 @@
         <div class="post-info">
             <div class="left-section">
                 <div class="reaction-count" @click="openReactionListDialog">
+                    <Icon icon="solar:like-bold" height="16" />
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
             <div class="right-section">
                 <div class="comment-count">
+                    <Icon icon="iconamoon:comment-fill" height="16" />
                     {{ post?.numberOfComments }}
                 </div>
                 <div class="share-count" @click="openShareListDialog" v-if="!group.private">
+                    <Icon icon="majesticons:share" height="16" />
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -83,23 +86,7 @@
         <BaseDivider />
         <div class="action-group">
             <div class="btn react">
-                <el-popover
-                    popper-class="full-reaction-popover"
-                    placement="top-start"
-                    :width="200"
-                    trigger="hover"
-                    :teleported="false"
-                >
-                    <div class="full-reaction">
-                        <el-button @click="onLike()" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                        <el-button @click="onLike()" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                        <el-button @click="onLike()" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                    </div>
-
-                    <template #reference>
-                        <el-button @click="onLike()" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                    </template>
-                </el-popover>
+                <BaseFullReactionBar :target="post" :onLike="onLike" />
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -120,11 +107,14 @@ import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
 import { groupDetailModule } from '@/pages/group-detail/store';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
 import { Options } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
     emits: [],
 })
 export default class PostContent extends GlobalMixin {
@@ -233,6 +223,7 @@ export default class PostContent extends GlobalMixin {
     async onLike(type = ReactionType.LIKE) {
         this.post.isReacted = !this.post.isReacted;
         this.post.numberOfReacts += this.post.isReacted ? 1 : -1;
+        this.post.reactionType = type;
         await postApiService.react(this.post._id, {
             type,
         });

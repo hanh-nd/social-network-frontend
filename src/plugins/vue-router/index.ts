@@ -9,9 +9,14 @@ import SearchPage from '@/pages/search/pages/SearchPage.vue';
 import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import PublicLayout from '../../layouts/PublicLayout.vue';
 import AdminLayout from '../../layouts/AdminLayout.vue';
+import PublicLayout from '../../layouts/PublicLayout.vue';
+import AdminDashboardPage from '../../pages/admin/dashboard/pages/AdminDashboardPage.vue';
+import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
+import ManageReportPage from '../../pages/admin/reports/pages/ManageReportPage.vue';
+import ManageUserPage from '../../pages/admin/users/pages/ManageUserPage.vue';
 import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
+
 import GroupPendingPostsPage from '../../pages/group-detail/pages/GroupPendingPostsPage.vue';
 import JoinGroupRequestPage from '../../pages/group-detail/pages/JoinGroupRequestPage.vue';
 import GroupPage from '../../pages/groups/pages/GroupPage.vue';
@@ -19,7 +24,6 @@ import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
 import NotificationPage from '../../pages/notifications/pages/NotificationPage.vue';
 import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
-import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -121,6 +125,30 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/admin/posts',
                 name: PageName.MANAGE_POST_PAGE,
                 component: ManagePostPage,
+                meta: {
+                    admin: true,
+                },
+            },
+            {
+                path: '/admin/reports',
+                name: PageName.MANAGE_REPORT_PAGE,
+                component: ManageReportPage,
+                meta: {
+                    admin: true,
+                },
+            },
+            {
+                path: '/admin/users',
+                name: PageName.MANAGE_USER_PAGE,
+                component: ManageUserPage,
+                meta: {
+                    admin: true,
+                },
+            },
+            {
+                path: '/admin/dashboard',
+                name: PageName.DASHBOARD,
+                component: AdminDashboardPage,
                 meta: {
                     admin: true,
                 },
