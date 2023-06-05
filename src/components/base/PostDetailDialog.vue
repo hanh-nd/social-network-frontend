@@ -46,14 +46,17 @@
             <div class="post-info">
                 <div class="left-section">
                     <div class="reaction-count">
+                        <Icon icon="solar:like-bold" height="16" />
                         {{ post?.numberOfReacts }}
                     </div>
                 </div>
                 <div class="right-section">
                     <div class="comment-count">
+                        <Icon icon="iconamoon:comment-fill" height="16" />
                         {{ post?.numberOfComments }}
                     </div>
                     <div class="share-count">
+                        <Icon icon="majesticons:share" height="16" />
                         {{ post?.numberOfShares }}
                     </div>
                 </div>
@@ -61,23 +64,7 @@
             <BaseDivider />
             <div class="action-group">
                 <div class="btn react">
-                    <el-popover
-                        popper-class="full-reaction-popover"
-                        placement="top-start"
-                        :width="200"
-                        trigger="hover"
-                        :teleported="false"
-                    >
-                        <div class="full-reaction">
-                            <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                            <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                            <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                        </div>
-
-                        <template #reference>
-                            <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                        </template>
-                    </el-popover>
+                    <BaseFullReactionBar :target="post" :onLike="onLike" />
                 </div>
                 <div class="btn share">
                     <el-button @click="openSharePostDialog">Chia sẻ</el-button>
@@ -102,11 +89,12 @@ import { GlobalMixin } from '@/common/mixins';
 import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
 import { cloneDeep, debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 
 @Options({
-    components: {},
+    components: { Icon },
     emits: [],
 })
 export default class PostDetailDialog extends GlobalMixin {

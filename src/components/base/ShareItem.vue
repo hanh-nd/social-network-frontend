@@ -7,14 +7,17 @@
         <div class="post-info">
             <div class="left-section">
                 <div class="reaction-count">
+                    <Icon icon="solar:like-bold" height="16" />
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
             <div class="right-section">
                 <div class="comment-count">
+                    <Icon icon="iconamoon:comment-fill" height="16" />
                     {{ post?.numberOfComments }}
                 </div>
                 <div class="share-count">
+                    <Icon icon="majesticons:share" height="16" />
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -22,23 +25,7 @@
         <BaseDivider />
         <div class="bottom-section">
             <div class="btn react">
-                <el-popover
-                    popper-class="full-reaction-popover"
-                    placement="top-start"
-                    :width="200"
-                    trigger="hover"
-                    :teleported="false"
-                >
-                    <div class="full-reaction">
-                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                    </div>
-
-                    <template #reference>
-                        <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
-                    </template>
-                </el-popover>
+                <BaseFullReactionBar :target="post" :onLike="onLike" />
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -58,8 +45,13 @@ import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import { Icon } from '@iconify/vue';
 
-@Options({})
+@Options({
+    components: {
+        Icon,
+    },
+})
 export default class ShareItem extends GlobalMixin {
     @Prop() post!: IPost;
 

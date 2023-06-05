@@ -5,14 +5,17 @@
         <div class="post-info">
             <div class="left-section">
                 <div class="reaction-count" @click="openReactionListDialog">
+                    <Icon icon="solar:like-bold" height="16" />
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
             <div class="right-section">
                 <div class="comment-count">
+                    <Icon icon="iconamoon:comment-fill" height="16" />
                     {{ post?.numberOfComments }}
                 </div>
                 <div class="share-count" @click="openShareListDialog">
+                    <Icon icon="majesticons:share" height="16" />
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -20,47 +23,7 @@
         <BaseDivider />
         <div class="action-group">
             <div class="btn react">
-                <el-popover
-                    popper-class="full-reaction-popover"
-                    placement="top-start"
-                    :width="200"
-                    trigger="hover"
-                    :teleported="false"
-                >
-                    <div class="full-reaction">
-                        <el-button
-                            @click="onLike(ReactionType.LIKE)"
-                            :type="post.reactionType === ReactionType.LIKE ? `primary` : undefined"
-                            >Thích</el-button
-                        >
-                        <el-button
-                            @click="onLike(ReactionType.LOVE)"
-                            :type="post.reactionType === ReactionType.LOVE ? `primary` : undefined"
-                            >Yêu thích</el-button
-                        >
-                        <el-button
-                            @click="onLike(ReactionType.EMPATHIZE)"
-                            :type="post.reactionType === ReactionType.EMPATHIZE ? `primary` : undefined"
-                            >Đồng cảm</el-button
-                        >
-                        <el-button
-                            @click="onLike(ReactionType.CELEBRATE)"
-                            :type="post.reactionType === ReactionType.CELEBRATE ? `primary` : undefined"
-                            >Chúc mừng</el-button
-                        >
-                        <el-button
-                            @click="onLike(ReactionType.ANGRY)"
-                            :type="post.reactionType === ReactionType.ANGRY ? `primary` : undefined"
-                            >Giận dữ</el-button
-                        >
-                    </div>
-
-                    <template #reference>
-                        <el-button @click="onLike()" :type="post.isReacted ? `primary` : undefined">{{
-                            post.isReacted ? getReactionTypeString(post.reactionType) : `Thích`
-                        }}</el-button>
-                    </template>
-                </el-popover>
+                <BaseFullReactionBar :target="post" :onLike="onLike" />
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -79,12 +42,15 @@ import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
 import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
 })
 export default class Post extends GlobalMixin {
     ReactionType = ReactionType;
@@ -146,6 +112,10 @@ export default class Post extends GlobalMixin {
         .left-section {
             .reaction-count {
                 cursor: pointer;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
             }
         }
 
@@ -170,6 +140,7 @@ export default class Post extends GlobalMixin {
             .full-reaction {
                 display: flex;
                 flex-direction: row;
+                justify-content: space-around;
             }
         }
 
