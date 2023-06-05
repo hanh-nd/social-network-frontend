@@ -97,8 +97,6 @@ export default class FullReactionBar extends GlobalMixin {
     }
 
     async onLikeWrapper(type = ReactionType.LIKE) {
-        console.log('isReacted', this.isReacted);
-        console.log('this.reactionType', this.reactionType);
         if (this.isReacted && this.reactionType !== type) {
             // Unlike
             await this.onLike();
