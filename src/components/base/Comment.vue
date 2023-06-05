@@ -27,33 +27,14 @@
                     </div>
                 </div>
                 <div class="action-group">
-                    <el-popover
-                        popper-class="full-reaction-popover"
-                        placement="top-start"
-                        :width="200"
-                        trigger="hover"
-                        :teleported="false"
-                    >
-                        <div class="full-reaction">
-                            <div class="react" @click="reactComment()">
-                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
-                            </div>
-                            <div class="react" @click="reactComment()">
-                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
-                            </div>
-                            <div class="react" @click="reactComment()">
-                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
-                            </div>
-                        </div>
+                    <BaseFullReactionBar :target="comment" :onLike="reactComment" />
 
-                        <template #reference>
-                            <div class="react" @click="reactComment()">
-                                <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
-                            </div>
-                        </template>
-                    </el-popover>
-
+                    <div class="reaction-count">
+                        <Icon icon="solar:like-bold" height="16" />
+                        {{ comment?.numberOfReacts }}
+                    </div>
                     <div class="created-at">
+                        <Icon icon="mingcute:time-fill" height="16" />
                         {{ parseDateTimeRelative(comment?.createdAt) }}
                     </div>
                 </div>
@@ -96,9 +77,12 @@ import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
+import { Icon } from '@iconify/vue';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
     emits: [],
 })
 export default class Comment extends GlobalMixin {
@@ -122,6 +106,8 @@ export default class Comment extends GlobalMixin {
         });
         if (response?.success) {
             this.comment.isReacted = !this.comment.isReacted;
+            this.comment.numberOfReacts += this.comment.isReacted ? 1 : -1;
+            this.comment.reactionType = type;
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi tương tác bình luận này.`);
         }

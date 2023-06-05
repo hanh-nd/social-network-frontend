@@ -1,4 +1,4 @@
-import { IBodyResponse, IGetPostListQuery, IPost, IStatistic } from '@/common/interfaces';
+import { IBodyResponse, IGetPostListQuery, IGetStatisticQuery, IPost, IStatistic } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import axiosService from '@/plugins/axios';
 class AdminPostApiService extends ApiService {
@@ -9,14 +9,14 @@ class AdminPostApiService extends ApiService {
     }
 
     async getPostDetail(id: string): Promise<IBodyResponse<IPost>> {
-        return await this.client.get(`${this.baseUrl}/id`);
+        return await this.client.get(`${this.baseUrl}/${id}`);
     }
 
     async bulkDeletePost(body: { ids: string[] }): Promise<IBodyResponse<boolean>> {
         return await this.client.post(`${this.baseUrl}/bulk-delete`, body);
     }
 
-    async getPostStatistic(query?: IGetPostListQuery): Promise<IBodyResponse<IStatistic[]>> {
+    async getPostStatistic(query?: IGetStatisticQuery): Promise<IBodyResponse<IStatistic>> {
         return await this.client.get(`${this.baseUrl}/statistic`, {
             params: query,
         });

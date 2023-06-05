@@ -134,10 +134,16 @@ export class GlobalMixin extends Vue {
         return user?._id === localStorageAuthService.getLoginUser()._id;
     }
 
+    get isModerator() {
+        if (!this.loginUser?.roleId) return false;
+
+        return this.roles.filter((role) => role.name !== 'User').find((r) => r._id == this.loginUser.roleId);
+    }
+
     get isSystemAdmin() {
         if (!this.loginUser?.roleId) return false;
 
-        return this.roles.find((r) => r._id == this.loginUser.roleId);
+        return this.roles.filter((role) => role.name === 'Admin').find((r) => r._id == this.loginUser.roleId);
     }
 
     getAvatarUrl(user?: Partial<IUser>) {

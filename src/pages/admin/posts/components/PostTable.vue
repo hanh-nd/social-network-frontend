@@ -17,22 +17,22 @@
         >
             <el-table-column type="selection" width="55" />
 
-            <el-table-column prop="_id" label="Mã bài viết" />
-            <el-table-column prop="author.fullName" label="Tác giả" />
-            <el-table-column prop="content" label="Nội dung" />
-            <el-table-column label="Thời gian tạo">
+            <el-table-column prop="_id" label="Mã bài viết" width="150" />
+            <el-table-column prop="author.fullName" label="Tác giả" width="150" />
+            <el-table-column prop="content" label="Nội dung" width="300" />
+            <el-table-column label="Thời gian tạo" width="150">
                 <template #default="scope">
                     {{ parseDateTime(scope.row.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm) }}
                 </template>
             </el-table-column>
-            <el-table-column label="Trạng thái">
+            <el-table-column label="Trạng thái" min-width="150">
                 <template #default="scope">
                     <el-tag :type="scope.row.deletedAt ? 'danger' : 'default'">{{
                         scope.row.deletedAt ? 'Đã xóa' : 'Hoạt động'
                     }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" label="Operations" width="120">
+            <el-table-column fixed="right" label="Thao tác" width="120">
                 <template #default="scope">
                     <el-icon :size="20" style="cursor: pointer" @click.prevent="deletePost(scope.row)"
                         ><Delete
@@ -127,6 +127,7 @@ export default class PostTable extends GlobalMixin {
     .cell-item {
         .cell {
             max-height: 60px;
+            word-break: break-word;
         }
     }
 }

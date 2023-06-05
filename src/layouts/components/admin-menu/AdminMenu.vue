@@ -6,7 +6,10 @@
             @select="onSelectPage"
             :default-active="PageName.MANAGE_POST_PAGE"
         >
+            <el-menu-item :index="PageName.DASHBOARD" v-if="isSystemAdmin"> Dashboard </el-menu-item>
             <el-menu-item :index="PageName.MANAGE_POST_PAGE"> Quản lý bài viết </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_REPORT_PAGE"> Quản lý báo cáo </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_USER_PAGE"> Quản lý người dùng </el-menu-item>
         </el-menu>
     </div>
 </template>

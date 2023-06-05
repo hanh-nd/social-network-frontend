@@ -10,6 +10,7 @@ import store from './plugins/vuex';
 // import './registerServiceWorker';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import VueClickAway from 'vue3-click-away';
+import './plugins/chartjs';
 
 const app = createApp(App)
     .use(store)
