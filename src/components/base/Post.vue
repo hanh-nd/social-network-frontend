@@ -1,10 +1,10 @@
 <template>
-    <div class="post-wrapper">
+    <div class="post-wrapper" v-if="isShowPost">
         <BasePostContent :post="post" />
         <BaseDivider />
         <div class="post-info">
             <div class="left-section">
-                <div class="reaction-count">
+                <div class="reaction-count" @click="openReactionListDialog">
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
@@ -12,7 +12,7 @@
                 <div class="comment-count">
                     {{ post?.numberOfComments }}
                 </div>
-                <div class="share-count">
+                <div class="share-count" @click="openShareListDialog">
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -23,18 +23,11 @@
                 <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
             </div>
             <div class="btn comment">
-                <el-button>Bình luận</el-button>
+                <el-button @click="openPostDetailDialog">Bình luận</el-button>
             </div>
             <div class="btn share">
-                <el-button>Chia sẻ</el-button>
+                <el-button @click="openSharePostDialog">Chia sẻ</el-button>
             </div>
-        </div>
-        <BaseDivider />
-        <div class="comment-list">
-            <BaseCommentList :commentList="commentList" />
-        </div>
-        <div class="create-comment">
-            <BaseCreateCommentBar :postId="post._id" @on-commented="onCommented" />
         </div>
     </div>
 </template>
@@ -42,10 +35,11 @@
 <script lang="ts">
 import { ReactionType } from '@/common/constants';
 import { getAvatarUrl } from '@/common/helpers';
-import { IComment, IPost } from '@/common/interfaces';
+import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
-import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
+import { appModule } from '@/plugins/vuex/appModule';
+import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -55,23 +49,12 @@ import { Prop } from 'vue-property-decorator';
 export default class Post extends GlobalMixin {
     @Prop() post!: IPost;
 
-    commentList: IComment[] = [];
-
     get authorAvatar() {
         return getAvatarUrl(this.post.author);
     }
 
-    created(): void {
-        this.loadData();
-    }
-
-    async loadData() {
-        const response = await commentApiService.getComment(this.post._id);
-        if (response.success) {
-            this.commentList = response?.data || [];
-        } else {
-            this.commentList = [];
-        }
+    get isShowPost() {
+        return _.isNil(this.post.deletedAt);
     }
 
     async onLike() {
@@ -82,9 +65,24 @@ export default class Post extends GlobalMixin {
         });
     }
 
-    onCommented() {
-        this.post.numberOfComments++;
-        this.loadData();
+    openPostDetailDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowPostDetailDialog(true);
+    }
+
+    openSharePostDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowSharePostDialog(true);
+    }
+
+    openReactionListDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowReactionListDialog(true);
+    }
+
+    openShareListDialog() {
+        appModule.setPostDetail(this.post);
+        appModule.setIsShowShareListDialog(true);
     }
 }
 </script>
@@ -96,17 +94,26 @@ export default class Post extends GlobalMixin {
     background: $color-white;
     border-radius: 6px;
     padding: 16px;
-    margin: 16px 0;
 
     .post-info {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
 
+        .left-section {
+            .reaction-count {
+                cursor: pointer;
+            }
+        }
+
         .right-section {
             display: flex;
             flex-direction: row;
             gap: 16px;
+
+            .share-count {
+                cursor: pointer;
+            }
         }
     }
 

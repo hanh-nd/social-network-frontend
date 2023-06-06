@@ -4,6 +4,13 @@ export enum PageName {
     REGISTER_PAGE = 'RegisterPage',
     NOT_FOUND_PAGE = 'NotFoundPage',
     WELCOME_PAGE = 'WelcomePage',
+    PROFILE_PAGE = 'ProfilePage',
+    SEARCH_PAGE = 'SEARCH_PAGE',
+    POST_DETAIL_PAGE = 'POST_DETAIL_PAGE',
+    NOTIFICATION_PAGE = 'NOTIFICATION_PAGE',
+    CHAT_PAGE = 'CHAT_PAGE',
+    GROUP_PAGE = 'GROUP_PAGE',
+    GROUP_DETAIL_PAGE = 'GROUP_DETAIL_PAGE',
 }
 
 export const PROVINCE_LIMIT = 100;

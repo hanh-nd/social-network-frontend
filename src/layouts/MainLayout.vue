@@ -7,6 +7,15 @@
             </router-view>
         </div>
         <!-- <MainFooter /> -->
+        <!-- Common Dialog-->
+        <BaseCreateNewPostDialog />
+        <BasePostDetailDialog />
+        <BaseSharePostDialog />
+        <BaseEditPostDialog />
+        <BaseReportPostDialog />
+        <BaseReportCommentDialog />
+        <BaseReactionListDialog />
+        <BaseShareListDialog />
     </div>
 </template>
 

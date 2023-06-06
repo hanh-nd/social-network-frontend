@@ -3,12 +3,17 @@ import { PageName } from '@/common/constants';
 import MainLayout from '@/layouts/MainLayout.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
+import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
+import SearchPage from '@/pages/search/pages/SearchPage.vue';
 import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
 import { isEmpty } from 'lodash';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import PublicLayout from '../../layouts/PublicLayout.vue';
+import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
+import GroupPage from '../../pages/groups/pages/GroupPage.vue';
 import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
+import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -51,9 +56,34 @@ const routes: Array<RouteRecordRaw> = [
                 component: HomePage,
             },
             {
+                path: '/profile/:id',
+                name: PageName.PROFILE_PAGE,
+                component: ProfilePage,
+            },
+            {
                 path: '/welcome',
                 name: PageName.WELCOME_PAGE,
                 component: WelcomePage,
+            },
+            {
+                path: '/search',
+                name: PageName.SEARCH_PAGE,
+                component: SearchPage,
+            },
+            {
+                path: '/posts/:id',
+                name: PageName.POST_DETAIL_PAGE,
+                component: PostDetailPage,
+            },
+            {
+                path: '/groups',
+                name: PageName.GROUP_PAGE,
+                component: GroupPage,
+            },
+            {
+                path: '/group-details',
+                name: PageName.GROUP_DETAIL_PAGE,
+                component: GroupDetailPage,
             },
         ],
     },

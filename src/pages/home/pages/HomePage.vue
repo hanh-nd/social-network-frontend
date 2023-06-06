@@ -11,9 +11,6 @@
                 <RightContact />
             </div>
         </div>
-
-        <!--Dialog-->
-        <CreateNewPostDialog />
     </div>
 </template>
 
@@ -21,7 +18,6 @@
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
-import CreateNewPostDialog from '../components/CreateNewPostDialog.vue';
 import FeedMenu from '../components/FeedMenu.vue';
 import FeedScreen from '../components/FeedScreen.vue';
 import RightContact from '../components/RightContact.vue';
@@ -31,7 +27,6 @@ import RightContact from '../components/RightContact.vue';
         FeedMenu,
         FeedScreen,
         RightContact,
-        CreateNewPostDialog,
     },
 })
 export default class HomePage extends GlobalMixin {
@@ -60,6 +55,8 @@ export default class HomePage extends GlobalMixin {
         height: 100%;
 
         .feed-menu {
+            position: sticky;
+            top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
         }
@@ -70,6 +67,8 @@ export default class HomePage extends GlobalMixin {
         }
 
         .right-contact {
+            position: sticky;
+            top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
         }

@@ -12,7 +12,7 @@
                 <BaseRoundAvatar :user="loginUser" :size="42" />
             </div>
             <div class="information">
-                <div class="user-name">{{ loginUser.fullName || loginUser.email }}</div>
+                <div class="user-name">{{ loginUser?.fullName || loginUser?.email }}</div>
                 <div class="privacy">
                     <BaseSingleSelect
                         v-model:value="createPostForm.privacy"
@@ -53,15 +53,13 @@
 
 <script lang="ts">
 import { DeviceType, Privacy, PrivacyName, ValidationForm } from '@/common/constants';
-import { IFile, IYupError } from '@/common/interfaces';
+import { ICreateNewPostBody, IFile, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
-import { ICreateNewPostBody } from '../interfaces';
-import { homeModule } from '../store';
 
 @Options({
     components: {},
@@ -82,7 +80,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
     }
 
     get isShowCreatePostDialog() {
-        return homeModule.isShowCreatePostDialog;
+        return appModule.isShowCreatePostDialog;
     }
 
     get loginUser() {
@@ -90,7 +88,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
     }
 
     onClose() {
-        homeModule.setIsShowCreatePostDialog(false);
+        appModule.setIsShowCreatePostDialog(false);
     }
 
     createPostForm = setup(() => {
@@ -99,6 +97,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             content: '',
             pictureIds: [],
             videoIds: [],
+            postSharedId: undefined,
         };
 
         const schema = yup.object({
@@ -108,7 +107,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             videoIds: yup.array().of(yup.string()),
         });
 
-        const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm({
+        const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateNewPostBody>({
             validationSchema: schema,
             initialValues: initValues,
         });
@@ -125,7 +124,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             const response = await postApiService.createPost(values);
             if (response.success) {
                 this.showSuccessNotificationFunction('Tạo bài viết mới thành công');
-                homeModule.setIsShowCreatePostDialog(false);
+                appModule.setIsShowCreatePostDialog(false);
                 clearFormData();
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Tạo bài viết mới thất bại');

@@ -12,4 +12,5 @@ export const fields = {
     'address.detail': 'Đia chỉ chi tiết',
     content: 'Nội dung',
     privacy: 'Quyền riêng tư',
+    name: 'Tên',
 };

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { HttpStatus, OrderDirection } from './constants';
+import { HttpStatus, OrderDirection, ReactionType, SubscribeRequestStatus } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
     isRequestError?: boolean;
@@ -88,6 +88,7 @@ export interface IUser {
     fullName: string;
     avatarId?: string;
     coverId?: string;
+    describe?: string;
     email: string;
     active: boolean;
     private: boolean;
@@ -98,6 +99,7 @@ export interface IUser {
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date;
+    isSubscribing?: boolean;
 }
 
 export interface IAddress {
@@ -144,6 +146,7 @@ export interface IPost {
     author: Partial<IUser>;
     content: string;
     privacy: number;
+    postShared: Partial<IPost>;
     pictureIds: string[];
     videoIds: string[];
     numberOfComments: number;
@@ -152,11 +155,36 @@ export interface IPost {
     isReacted: boolean;
 }
 
+export interface ICreateNewPostBody {
+    privacy: number;
+    content: string;
+    pictureIds: string[];
+    videoIds: string[];
+    postSharedId?: string;
+}
+
+export interface IUpdatePostBody {
+    privacy?: number;
+    content?: string;
+    pictureIds?: string[];
+    videoIds?: string[];
+}
+
+export interface IReportPostBody {
+    reportReason: string;
+}
+
 export interface ICreateReactionBody {
     type: string;
 }
 
 export interface ICreateCommentBody {
+    content: string;
+    pictureId?: string;
+    videoId?: string;
+}
+
+export interface IEditCommentBody {
     content: string;
     pictureId?: string;
     videoId?: string;
@@ -171,4 +199,114 @@ export interface IComment {
     post: Partial<IPost>;
     content: string;
     numberOfReactions: number;
+    isReacted: boolean;
+}
+
+export interface ISearchResults {
+    posts: IPost[];
+    users: IUser[];
+}
+
+export interface ISearchQuery extends ICommonGetListQuery {
+    size?: number;
+}
+
+export interface IReaction {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+    author: {
+        _id: string;
+        username: string;
+        fullName: string;
+        isSubscribing?: boolean;
+    };
+    target: {
+        _id: string;
+    };
+    targetType: string;
+    type: ReactionType;
+}
+
+export interface IGroup {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+    name: string;
+    administrators: {
+        user: IUser;
+        isOwner: boolean;
+    }[];
+    private: boolean;
+    reviewPost: boolean;
+    summary: string;
+    coverId: string;
+    memberIds: string[];
+    pinnedPostIds: IGroupPost[];
+    blockIds: IUser[];
+}
+
+export interface IGroupPost {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+    author: string;
+    post: IPost;
+    group: IGroup;
+    status: SubscribeRequestStatus;
+}
+
+export interface IJoinRequest {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+    sender: IUser;
+    group: string;
+    status: SubscribeRequestStatus;
+}
+
+export interface ICreateGroupBody {
+    name: string;
+    private?: boolean;
+    reviewPost?: boolean;
+    summary?: string;
+    coverId?: string;
+}
+
+export interface IUpdateGroupBody {
+    name?: string;
+    private?: boolean;
+    reviewPost?: boolean;
+    summary?: string;
+    coverId?: string;
+}
+
+export type IGetGroupListQuery = ICommonGetListQuery;
+
+export type IGetJoinRequestListQuery = ICommonGetListQuery;
+
+export type ICreatePostInGroupBody = ICreateGroupPostBody;
+
+export interface IGetGroupPostListQuery extends ICommonGetListQuery {
+    status?: SubscribeRequestStatus;
+}
+
+export interface ICreateGroupPostBody extends ICreateNewPostBody {
+    status: SubscribeRequestStatus;
+}
+
+export interface IUpdateGroupPostBody {
+    status: SubscribeRequestStatus;
+}
+
+export interface ICreateJoinRequestBody {
+    status: SubscribeRequestStatus;
+}
+
+export interface IUpdateJoinRequestBody {
+    status: SubscribeRequestStatus;
 }

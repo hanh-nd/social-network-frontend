@@ -2,8 +2,9 @@ import i18n from '@/plugins/vue-i18n';
 import { ElNotification } from 'element-plus';
 import moment from 'moment';
 import { Vue } from 'vue-class-component';
+import localStorageAuthService from './authStorage';
 import { DEFAULT_LANGUAGE, DateFormat, DeviceType, PageName, ValidationForm } from './constants';
-import { IYupError } from './interfaces';
+import { IUser, IYupError } from './interfaces';
 
 export class GlobalMixin extends Vue {
     // constants
@@ -116,5 +117,17 @@ export class GlobalMixin extends Vue {
 
     getImageSourceById(id: string) {
         return `${process.env.VUE_APP_API_URL}/files/${id}`;
+    }
+
+    isLoginUser(user: Partial<IUser> | null) {
+        if (!user?._id) return false;
+
+        return user?._id === localStorageAuthService.getLoginUser()._id;
+    }
+
+    getAvatarUrl(user?: Partial<IUser>) {
+        return user?.avatarId
+            ? `${process.env.VUE_APP_API_URL}/files/${user.avatarId}`
+            : require('@/assets/images/common/default-avatar.svg');
     }
 }
