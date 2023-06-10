@@ -23,6 +23,7 @@ export default class NotificationPage extends GlobalMixin {
     }
 
     loadData() {
+        notificationModule.resetNotificationListQuery();
         notificationModule.getNotifications();
     }
 }

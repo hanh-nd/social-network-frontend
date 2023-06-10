@@ -157,6 +157,7 @@ export enum NotificationTargetType {
     COMMENT = 'Comment',
     MESSAGE = 'Message',
     USER = 'User',
+    SYSTEM_MESSAGE = 'SystemMessage',
 }
 
 export const NotificationTargetTypeName = {
@@ -223,3 +224,8 @@ export const RelationshipName = {
     [Relationship.IN_A_RELATIONSHIP]: 'Đang trong một mối quan hệ',
     [Relationship.MARRIED]: 'Đã kết hôn',
 };
+
+export enum SystemMessageType {
+    INFO = 'info',
+    WARNING = 'warning',
+}
