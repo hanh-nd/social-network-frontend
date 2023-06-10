@@ -1,6 +1,6 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { IComment, IPost, IRole, ITag, IUser } from '@/common/interfaces';
+import { IComment, IPost, IRole, ISystemMessage, ITag, IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
 import roleApiService from '@/common/service/role.api.service';
 import tagApiService from '@/common/service/tag.api.service';
@@ -23,6 +23,7 @@ class AppModule extends VuexModule {
     isShowReportCommentDialog = false;
     isShowReactionListDialog = false;
     isShowShareListDialog = false;
+    isShowSystemMessageDialog = false;
     postDetail: IPost = {} as IPost;
     commentDetail: IComment = {} as IComment;
     loginUser: IUser = {} as IUser;
@@ -32,6 +33,8 @@ class AppModule extends VuexModule {
     searchKeyword = '';
     tags: ITag[] = [];
     roles: IRole[] = [];
+    systemMessage: ISystemMessage = {} as ISystemMessage;
+    systemMessageParameters: object = {};
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
@@ -220,6 +223,36 @@ class AppModule extends VuexModule {
     @Mutation
     SET_ROLES(roles: IRole[]) {
         this.roles = roles;
+    }
+
+    @Action
+    setIsShowSystemMessageDialog(isShowSystemMessageDialog: boolean) {
+        this.SET_IS_SHOW_SYSTEM_MESSAGE_DIALOG(isShowSystemMessageDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_SYSTEM_MESSAGE_DIALOG(isShowSystemMessageDialog: boolean) {
+        this.isShowSystemMessageDialog = isShowSystemMessageDialog;
+    }
+
+    @Action
+    setSystemMessage(systemMessage: ISystemMessage) {
+        this.SET_SYSTEM_MESSAGE(systemMessage);
+    }
+
+    @Mutation
+    SET_SYSTEM_MESSAGE(systemMessage: ISystemMessage) {
+        this.systemMessage = systemMessage;
+    }
+
+    @Action
+    setSystemMessageParameters(systemMessageParameters: object) {
+        this.SET_SYSTEM_MESSAGE_PARAMETERS(systemMessageParameters);
+    }
+
+    @Mutation
+    SET_SYSTEM_MESSAGE_PARAMETERS(systemMessageParameters: object) {
+        this.systemMessageParameters = systemMessageParameters;
     }
 }
 

@@ -11,6 +11,7 @@ import {
     ReportAction,
     ReportTargetType,
     SubscribeRequestStatus,
+    SystemMessageType,
 } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
@@ -387,12 +388,15 @@ export interface INotification {
     targetType: NotificationTargetType;
     action: NotificationAction;
     isRead: boolean;
+    content: string;
+    additionalData?: object;
+    urgent: boolean;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
 }
 
-export type NotificationTarget = IPost | IComment | IMessage | IUser;
+export type NotificationTarget = IPost | IComment | IMessage | IUser | ISystemMessage;
 export type ReportTarget = IPost | IComment | IMessage | IUser;
 
 export interface IStatistic {
@@ -429,4 +433,12 @@ export interface IUpdateReportBody {
 
 export interface IGetStatisticQuery extends ICommonGetListQuery {
     range?: number;
+}
+
+export interface ISystemMessage {
+    _id: string;
+    code: string;
+    template: string;
+    fullTemplate: string;
+    type: SystemMessageType;
 }

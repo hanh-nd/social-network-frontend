@@ -74,8 +74,11 @@ export function getAvatarUrl(user?: Partial<IUser>) {
 }
 
 export function generateNotificationMessageContent(notification: INotification) {
-    const { author, to, targetType, target, action } = notification;
+    const { author, to, targetType, target, action, content: notificationContent } = notification;
+    if (notificationContent) {
+        return notificationContent;
+    }
 
-    const content = [author.fullName, 'vừa', NotificationActionName[action], NotificationTargetTypeName[targetType]];
+    const content = [author?.fullName, 'vừa', NotificationActionName[action], NotificationTargetTypeName[targetType]];
     return content.join(' ');
 }

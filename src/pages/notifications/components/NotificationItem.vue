@@ -1,5 +1,5 @@
 <template>
-    <div class="notification-item-wrapper">
+    <div class="notification-item-wrapper" @click="onClickNotification">
         <div class="left-section">
             <BaseRoundAvatar :user="author" :size="32" />
         </div>
@@ -20,9 +20,11 @@
 </template>
 
 <script lang="ts">
+import { NotificationTargetType } from '@/common/constants';
 import { generateNotificationMessageContent } from '@/common/helpers';
-import { INotification } from '@/common/interfaces';
+import { IComment, INotification, ISystemMessage } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -38,6 +40,44 @@ export default class NotificationItem extends GlobalMixin {
 
     get author() {
         return this.notification.author;
+    }
+
+    onClickNotification() {
+        switch (this.notification.targetType) {
+            case NotificationTargetType.POST:
+                return this.goToPostDetail();
+            case NotificationTargetType.COMMENT:
+                return this.goToPostCommentDetail();
+            case NotificationTargetType.SYSTEM_MESSAGE:
+                return this.openSystemMessageDialog();
+        }
+    }
+
+    goToPostDetail() {
+        const id = this.notification.target._id;
+        this.$router.push({
+            name: this.PageName.POST_DETAIL_PAGE,
+            params: {
+                id: id,
+            },
+        });
+    }
+
+    goToPostCommentDetail() {
+        const comment = this.notification.target || ({} as IComment);
+        const id = (comment._id || comment) as string;
+        this.$router.push({
+            name: this.PageName.POST_DETAIL_PAGE,
+            params: {
+                id: id,
+            },
+        });
+    }
+
+    openSystemMessageDialog() {
+        appModule.setSystemMessageParameters(this.notification.additionalData || {});
+        appModule.setSystemMessage(this.notification.target as ISystemMessage);
+        appModule.setIsShowSystemMessageDialog(true);
     }
 }
 </script>
