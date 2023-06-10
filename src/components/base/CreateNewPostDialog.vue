@@ -13,12 +13,22 @@
             </div>
             <div class="information">
                 <div class="user-name">{{ loginUser?.fullName || loginUser?.email }}</div>
-                <div class="privacy">
-                    <BaseSingleSelect
-                        v-model:value="createPostForm.privacy"
-                        :options="privacyOptions"
-                        :error="translateYupError(createPostForm.errors.privacy as IYupError)"
-                    />
+
+                <div class="bottom">
+                    <div class="privacy">
+                        <BaseSingleSelect
+                            v-model:value="createPostForm.privacy"
+                            :options="privacyOptions"
+                            :error="translateYupError(createPostForm.errors.privacy as IYupError)"
+                        />
+                    </div>
+                    <div class="anonymous">
+                        <BaseSingleSelect
+                            v-model:value="createPostForm.isAnonymous"
+                            :options="anonymousOptions"
+                            :error="translateYupError(createPostForm.errors.isAnonymous as IYupError)"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,6 +86,19 @@ export default class CreateNewPostDialog extends GlobalMixin {
         });
     }
 
+    get anonymousOptions() {
+        return [
+            {
+                name: 'Công khai danh tính',
+                id: false,
+            },
+            {
+                name: 'Ẩn danh',
+                id: true,
+            },
+        ];
+    }
+
     get deviceType() {
         return appModule.deviceType;
     }
@@ -95,6 +118,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
     createPostForm = setup(() => {
         const initValues: ICreateNewPostBody = {
             privacy: Privacy.PUBLIC,
+            isAnonymous: false,
             content: '',
             pictureIds: [],
             videoIds: [],
@@ -106,6 +130,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             content: yup.string().max(ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH).required(),
             pictureIds: yup.array().of(yup.string()),
             videoIds: yup.array().of(yup.string()),
+            isAnonymous: yup.bool(),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateNewPostBody>({
@@ -137,12 +162,14 @@ export default class CreateNewPostDialog extends GlobalMixin {
         const { value: content } = useField<string>('content');
         const { value: pictureIds } = useField<string[]>('pictureIds');
         const { value: videoIds } = useField<string[]>('videoIds');
+        const { value: isAnonymous } = useField<boolean>('isAnonymous');
 
         return {
             privacy,
             content,
             pictureIds,
             videoIds,
+            isAnonymous,
             errors,
             submit,
             clearFormData,
@@ -171,9 +198,19 @@ export default class CreateNewPostDialog extends GlobalMixin {
         gap: 8px;
 
         .information {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
             .user-name {
                 font-weight: 700;
                 font-size: 16px;
+            }
+
+            .bottom {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
             }
 
             :deep(.form-container) {

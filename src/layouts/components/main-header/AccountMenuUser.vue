@@ -161,8 +161,8 @@ export default class AccountMenuUser extends GlobalMixin {
 
             if (notification.urgent) {
                 if (notification.targetType === NotificationTargetType.SYSTEM_MESSAGE) {
-                    appModule.setSystemMessage(notification.target as ISystemMessage);
                     appModule.setSystemMessageParameters(notification.additionalData || {});
+                    appModule.setSystemMessage(notification.target as ISystemMessage);
                     appModule.setIsShowSystemMessageDialog(true);
                 }
             }

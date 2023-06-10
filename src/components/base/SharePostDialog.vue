@@ -85,6 +85,9 @@ export default class PostDetailDialog extends GlobalMixin {
 
     goToProfilePage() {
         this.onClose();
+
+        if (!this.post?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {

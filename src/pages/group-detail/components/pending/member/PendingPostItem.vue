@@ -94,6 +94,8 @@ export default class PendingPostItem extends GlobalMixin {
     }
 
     goToUserDetailPage() {
+        if (!this.sender?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {
