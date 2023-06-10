@@ -151,6 +151,8 @@ export default class PostContent extends GlobalMixin {
     }
 
     goToProfilePage() {
+        if (!this.post?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {

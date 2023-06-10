@@ -15,7 +15,7 @@ import { Prop } from 'vue-property-decorator';
 @Options({
     components: {},
 })
-export default class CreateNewPost extends GlobalMixin {
+export default class RoundAvatar extends GlobalMixin {
     @Prop() user!: IUser | undefined;
     @Prop({ default: 32 }) size!: number;
     @Prop({ default: '' }) linkTo!: string;
@@ -42,6 +42,8 @@ export default class CreateNewPost extends GlobalMixin {
     }
 
     goToProfilePage() {
+        if (!this.user?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {

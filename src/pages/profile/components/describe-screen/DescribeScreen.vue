@@ -191,7 +191,6 @@
                         <div class="title col-4">Sở thích</div>
                         <div class="value col-6" v-if="!isEditing">
                             <div class="tag-item" v-for="tag in userTags" :key="tag._id">
-                                <img :src="getImageSourceById(tag.iconId)" width="24" height="24" />
                                 {{ tag.name }}
                             </div>
                         </div>
@@ -213,12 +212,6 @@
                                             :style="optionStyle"
                                         >
                                             <div class="d-flex flex-row align-items-center">
-                                                <img
-                                                    :src="getImageSourceById(option.iconId)"
-                                                    class="me-2"
-                                                    width="24"
-                                                    height="24"
-                                                />
                                                 {{ option.name }}
                                             </div>
                                         </el-option>
