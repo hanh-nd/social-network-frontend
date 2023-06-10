@@ -21,7 +21,6 @@ import { DeviceType, SystemMessageType } from '@/common/constants';
 import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
 
 @Options({
     components: {},
@@ -51,7 +50,7 @@ export default class SystemMessageDialog extends GlobalMixin {
     }
 
     get content() {
-        let _content = this.template;
+        let _content = this.template || '';
         for (const key in this.parameters) {
             const val = this.parameters[key];
 

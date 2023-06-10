@@ -74,10 +74,10 @@ import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
+import { Icon } from '@iconify/vue';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import { Icon } from '@iconify/vue';
 
 @Options({
     components: {
@@ -90,6 +90,8 @@ export default class Comment extends GlobalMixin {
     isEditing = false;
 
     goToProfilePage() {
+        if (!this.comment?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {

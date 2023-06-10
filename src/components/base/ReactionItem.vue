@@ -36,6 +36,8 @@ export default class ReactionItem extends GlobalMixin {
     }
 
     goToUserProfile() {
+        if (!this.reaction?.author?._id) return;
+
         appModule.setIsShowReactionListDialog(false);
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,

@@ -60,6 +60,8 @@ export default class ShareItem extends GlobalMixin {
     }
 
     goToUserProfile() {
+        if (!this.post?.author?._id) return;
+
         appModule.setIsShowReactionListDialog(false);
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
