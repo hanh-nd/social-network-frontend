@@ -36,7 +36,7 @@
                     :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
                 />
             </div>
-            <BaseImageGrid :items="createPostForm.pictureIds" :cells="3" />
+            <BaseImageGrid :items="medias" :cells="3" />
             <BaseDivider />
             <div class="image-chooser">
                 <BaseUploadSingleButton @on-file-uploaded="onSelectPictures">Chọn ảnh</BaseUploadSingleButton>
@@ -67,6 +67,8 @@ import { groupDetailModule } from '../../store';
     emits: ['on-close-dialog', 'on-click-cancel-button', 'on-click-confirm-button'],
 })
 export default class CreatePostDialog extends GlobalMixin {
+    medias: IFile[] = [];
+
     get isAnonymousOptions() {
         return [
             {
@@ -166,6 +168,7 @@ export default class CreatePostDialog extends GlobalMixin {
     async onSelectPictures(file: IFile, filePreview: File) {
         const pictureIds = this.createPostForm.pictureIds;
         pictureIds.push(file.id);
+        this.medias.push(file);
         this.createPostForm.setFieldValue('pictureIds', pictureIds);
     }
 }

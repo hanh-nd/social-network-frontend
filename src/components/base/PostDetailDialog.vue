@@ -33,10 +33,10 @@
                 <div class="content">
                     {{ post?.content }}
                 </div>
-                <div class="images">
-                    <el-carousel width="100%">
-                        <el-carousel-item v-for="image in post.pictureIds" :key="image">
-                            <img :src="getImageSourceById(image)" alt="" />
+                <div class="images" v-if="post.medias.length">
+                    <el-carousel class="carousel" :autoplay="false" width="100%">
+                        <el-carousel-item v-for="media in post.medias" :key="media._id">
+                            <BaseMedia :media="media" />
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -197,7 +197,7 @@ export default class PostDetailDialog extends GlobalMixin {
 <style lang="scss" scoped>
 :deep(.post-detail-dialog) {
     margin-top: 40px;
-    height: 90%;
+    max-height: 90%;
     overflow: auto;
     .el-dialog__body {
         display: flex;
@@ -227,12 +227,7 @@ export default class PostDetailDialog extends GlobalMixin {
     }
 
     .main-content {
-        .images {
-            img {
-                width: 100%;
-                object-fit: cover;
-            }
-        }
+        min-height: 100px;
     }
 
     .post-info {

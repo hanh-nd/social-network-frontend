@@ -74,6 +74,10 @@ class UserApiService extends ApiService {
     async updateSubscribeRequest(id: string, body: IUpdateSubscribeRequestBody): Promise<IBodyResponse<boolean>> {
         return await this.client.patch(`${this.baseUrl}/subscribe-requests/${id}`, body);
     }
+
+    async getUserSuggestions(): Promise<IBodyResponse<IUser[]>> {
+        return await this.client.get(`${this.baseUrl}/suggestions`);
+    }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);
 

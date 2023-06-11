@@ -27,7 +27,7 @@
 
             <div class="post-data">
                 <div class="images" @click="openPostDetailDialog">
-                    <BaseImageGrid :items="post?.pictureIds" />
+                    <BaseImageGrid :items="post?.medias" />
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@ import { Prop } from 'vue-property-decorator';
     components: {},
     emits: [],
 })
-export default class PostContent extends GlobalMixin {
+export default class PostSharedContent extends GlobalMixin {
     @Prop() post!: IPost;
 
     goToProfilePage() {

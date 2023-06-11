@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+import { IFile } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
@@ -21,7 +22,7 @@ import { Prop } from 'vue-property-decorator';
     components: {},
 })
 export default class ImageGrid extends GlobalMixin {
-    @Prop({ default: [] }) items!: string[];
+    @Prop({ default: [] }) items!: IFile[];
     @Prop({ default: 'h-250 h-md-400 h-lg-600' }) css!: string;
     @Prop({ default: 5 }) cells!: number;
     @Prop({ default: 200 }) height!: number;
@@ -33,12 +34,22 @@ export default class ImageGrid extends GlobalMixin {
     }
 
     get images() {
-        return this.items.map((id) => this.getImageSourceById(id));
+        return this.items.map((media: IFile) => {
+            if (media.contentType.match(/^image/)) {
+                return this.getImageSourceById(media._id);
+            }
+
+            return require('@/assets/images/common/video_placeholder.png');
+        });
     }
 
     bg(url: string) {
         const convertUrl = url;
-        return convertUrl && convertUrl.length > 0 ? `background-image: url('${convertUrl}')` : '';
+        return convertUrl && convertUrl.length > 0
+            ? {
+                  backgroundImage: 'url(' + url + ')',
+              }
+            : {};
     }
 }
 </script>
