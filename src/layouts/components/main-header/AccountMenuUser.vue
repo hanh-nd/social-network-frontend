@@ -7,7 +7,7 @@
             trigger="click"
             :teleported="false"
         >
-            <div class="notification-list">
+            <div class="notification-list-menu">
                 <NotificationList />
                 <div class="see-more">
                     <el-button type="info" @click="goToNotificationPage">Xem tất cả</el-button>
@@ -187,14 +187,17 @@ export default class AccountMenuUser extends GlobalMixin {
     }
 
     :deep(.notification-list-dialog) {
-        .notification-list {
-            max-height: 500px;
-
+        .notification-list-menu {
             .see-more {
                 margin-top: 8px;
                 .el-button {
                     width: 100%;
                 }
+            }
+
+            .notification-list-wrapper {
+                max-height: 500px;
+                overflow: hidden;
             }
         }
     }

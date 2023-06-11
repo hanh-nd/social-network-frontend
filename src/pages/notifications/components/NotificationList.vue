@@ -1,9 +1,13 @@
 <template>
-    <div class="notification-list-wrapper">
+    <div class="notification-list-wrapper" v-infinite-scroll="onLoadMoreDebounced">
         <div class="header">
             <div class="title">Thông báo</div>
             <div class="action">
-                <BaseThreeDotMenu></BaseThreeDotMenu>
+                <BaseThreeDotMenu>
+                    <el-dropdown-item @click="markAllAsRead"
+                        ><el-icon :size="16"><Edit /></el-icon>Đánh dấu tất cả là đã đọc</el-dropdown-item
+                    >
+                </BaseThreeDotMenu>
             </div>
         </div>
         <BaseDivider />
@@ -14,13 +18,8 @@
             </el-radio-group>
         </div>
         <BaseDivider />
-        <div class="notification-list" v-if="notificationList.length">
-            <div
-                class="notification-item"
-                v-for="notification in notificationList"
-                :key="notification._id"
-                v-infinite-scroll="onLoadMore"
-            >
+        <div class="notification-list h-100" v-if="notificationList.length">
+            <div class="notification-item" v-for="notification in notificationList" :key="notification._id">
                 <NotificationItem :notification="notification" />
             </div>
         </div>
@@ -32,7 +31,10 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import notificationApiService from '@/common/service/notification.api.service';
+import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
 import { notificationModule } from '../store';
 import NotificationItem from './NotificationItem.vue';
 
@@ -42,6 +44,8 @@ import NotificationItem from './NotificationItem.vue';
     },
 })
 export default class NotificationList extends GlobalMixin {
+    @Prop({ default: false }) shouldLoadMore!: boolean;
+
     GroupType = {
         ALL: 'ALL',
         NOT_READ: 'NOT_READ',
@@ -63,7 +67,13 @@ export default class NotificationList extends GlobalMixin {
         return notificationModule.notificationListQuery.page as number;
     }
 
+    onLoadMoreDebounced = debounce(this.onLoadMore, 200, {
+        leading: true,
+    });
+
     async onLoadMore() {
+        if (!this.shouldLoadMore) return;
+
         if (this.isFetchedAllNotification) return;
 
         notificationModule.setNotificationListQuery({
@@ -71,6 +81,15 @@ export default class NotificationList extends GlobalMixin {
         });
 
         notificationModule.getNotifications({ append: true });
+    }
+
+    async markAllAsRead() {
+        const response = await notificationApiService.markAllAsRead();
+        if (response?.success) {
+            this.notificationList.forEach((notification) => (notification.isRead = true));
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi đánh dấu trạng thái thông báo`);
+        }
     }
 }
 </script>
@@ -91,6 +110,10 @@ export default class NotificationList extends GlobalMixin {
             font-size: 24px;
             font-weight: 700;
         }
+    }
+
+    .notification-list {
+        overflow: auto;
     }
 
     .group-action {

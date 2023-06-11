@@ -26,6 +26,10 @@ class AppApiService extends ApiService {
     async getUserProfile(): Promise<IBodyResponse<IUser>> {
         return await this.client.get(`/users/me`);
     }
+
+    async ping(): Promise<IBodyResponse<void>> {
+        return await this.client.get(`/ping`);
+    }
 }
 const appApiService = new AppApiService({ baseUrl: '/' }, axiosService);
 

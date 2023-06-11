@@ -11,6 +11,7 @@ import { Options } from 'vue-class-component';
 import { RouteRecordName } from 'vue-router';
 import localStorageAuthService from './common/authStorage';
 import { GlobalMixin } from './common/mixins';
+import appApiService from './common/service/app.api.service';
 import { SocketProvider } from './plugins/socket.io';
 import { appModule } from './plugins/vuex/appModule';
 
@@ -21,6 +22,7 @@ import { appModule } from './plugins/vuex/appModule';
 })
 export default class App extends GlobalMixin {
     locale = vi;
+    intervalId = 0;
 
     created(): void {
         SocketProvider.init();
@@ -55,6 +57,10 @@ export default class App extends GlobalMixin {
     }
 
     mounted() {
+        this.intervalId = setInterval(() => {
+            appApiService.ping();
+        }, 60000);
+
         window.addEventListener('resize', this.setScreenWidth);
         document.addEventListener('focusin', this.removeReadonlyElSelect);
         document.addEventListener('click', this.removeReadonlyElSelect);
@@ -62,6 +68,8 @@ export default class App extends GlobalMixin {
     }
 
     beforeUnmount() {
+        clearInterval(this.intervalId);
+
         window.removeEventListener('resize', this.setScreenWidth);
         document.removeEventListener('focusin', this.removeReadonlyElSelect);
         document.removeEventListener('click', this.removeReadonlyElSelect);

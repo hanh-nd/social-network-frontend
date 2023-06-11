@@ -75,6 +75,7 @@ import userApiService from '@/common/service/user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { Icon } from '@iconify/vue';
+import { isNil } from 'lodash';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
@@ -88,6 +89,10 @@ import { Prop, Watch } from 'vue-property-decorator';
 export default class Comment extends GlobalMixin {
     @Prop() comment!: IComment;
     isEditing = false;
+
+    get isShow() {
+        return isNil(this.comment.deletedAt);
+    }
 
     goToProfilePage() {
         if (!this.comment?.author?._id) return;

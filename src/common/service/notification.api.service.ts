@@ -14,6 +14,14 @@ class NotificationApiService extends ApiService {
         return await this.client.patch(`${this.baseUrl}/${id}/read`);
     }
 
+    async undoMarkAsRead(id: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/${id}/unread`);
+    }
+
+    async markAllAsRead(): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/markAllAsRead`);
+    }
+
     async delete(id: string): Promise<IBodyResponse<boolean>> {
         return await this.client.delete(`${this.baseUrl}/${id}`);
     }

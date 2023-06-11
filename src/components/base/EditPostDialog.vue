@@ -37,7 +37,7 @@
                     :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
                 />
             </div>
-            <BaseImageGrid :items="editPostForm.pictureIds" :cells="3" />
+            <BaseImageGrid :items="medias" :cells="3" />
             <BaseDivider />
             <div class="image-chooser">
                 <BaseUploadSingleButton @on-file-uploaded="onSelectPictures">Chọn ảnh</BaseUploadSingleButton>
@@ -67,6 +67,8 @@ import { Options, setup } from 'vue-class-component';
     emits: ['on-close-dialog', 'on-click-cancel-button', 'on-click-confirm-button'],
 })
 export default class EditPostDialog extends GlobalMixin {
+    medias: IFile[] = [];
+
     get privacyOptions() {
         return Object.values(Privacy).map((value) => {
             return {
@@ -97,6 +99,7 @@ export default class EditPostDialog extends GlobalMixin {
     }
 
     onOpen() {
+        this.medias = this.postDetail.medias;
         this.editPostForm.setValues({
             privacy: this.postDetail.privacy,
             content: this.postDetail.content,
@@ -170,6 +173,7 @@ export default class EditPostDialog extends GlobalMixin {
     async onSelectPictures(file: IFile, filePreview: File) {
         const pictureIds = this.editPostForm.pictureIds;
         pictureIds.push(file.id);
+        this.medias.push(file);
         this.editPostForm.setFieldValue('pictureIds', pictureIds);
     }
 }

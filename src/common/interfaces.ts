@@ -150,6 +150,7 @@ export interface IEducation {
 }
 
 export interface IFile {
+    _id: string;
     originalname: string;
     mimetype: string;
     id: string;
@@ -196,6 +197,7 @@ export interface IPost {
     isAnonymous?: boolean;
     postShared: Partial<IPost>;
     pictureIds: string[];
+    medias: IFile[];
     videoIds: string[];
     numberOfComments: number;
     numberOfReacts: number;
