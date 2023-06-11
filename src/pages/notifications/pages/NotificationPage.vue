@@ -1,7 +1,7 @@
 <template>
     <div class="notification-page-wrapper">
         <div class="notification-page-container mx-auto">
-            <NotificationList />
+            <NotificationList :shouldLoadMore="true" />
         </div>
     </div>
 </template>
@@ -37,6 +37,7 @@ export default class NotificationPage extends GlobalMixin {
     padding: $content-padding 0;
 
     .notification-page-container {
+        height: 100%;
         width: 100%;
         max-width: 575px;
         padding: $content-padding;

@@ -9,7 +9,7 @@
                 <BasePostSharedContent :post="post.postShared" />
             </div>
             <div class="images" @click="openPostDetailDialog">
-                <BaseImageGrid :items="post?.pictureIds" />
+                <BaseImageGrid :items="post?.medias" />
             </div>
         </div>
     </div>
