@@ -13,3 +13,7 @@ export type IGetSubscribeRequestListQuery = ICommonGetListQuery;
 export interface IUpdateSubscribeRequestBody {
     status: SubscribeRequestStatus;
 }
+
+export interface IGetQuestionListQuery extends ICommonGetListQuery {
+    pending?: number;
+}

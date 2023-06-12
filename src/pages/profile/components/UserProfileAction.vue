@@ -8,10 +8,12 @@
             <el-dropdown-item v-if="!(isPrivate && !isSubscribing) && isMobile" @click="goToChatPage"
                 >Nhắn tin</el-dropdown-item
             >
+            <el-dropdown-item @click="createAskUserQuestion">Đặt câu hỏi</el-dropdown-item>
             <el-dropdown-item>Báo cáo</el-dropdown-item>
             <el-dropdown-item @click="block">Chặn</el-dropdown-item>
         </BaseThreeDotMenu>
     </div>
+    <CreateQuestionDialog />
 </template>
 
 <script lang="ts">
@@ -23,9 +25,12 @@ import { chatModule } from '@/pages/chat/store';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../store';
+import CreateQuestionDialog from './questions/CreateQuestionDialog.vue';
 
 @Options({
-    components: {},
+    components: {
+        CreateQuestionDialog,
+    },
 })
 export default class UserProfileAction extends GlobalMixin {
     get profileUser() {
@@ -97,6 +102,10 @@ export default class UserProfileAction extends GlobalMixin {
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra, vui lòng thử lại.`);
         }
+    }
+
+    async createAskUserQuestion() {
+        profileModule.setIsShowCreateQuestionDialog(true);
     }
 }
 </script>
