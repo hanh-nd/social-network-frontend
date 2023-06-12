@@ -12,6 +12,7 @@
                 <SubscribingScreen v-else-if="profileScreenTab === ProfileScreenTab.SUBSCRIBING" />
                 <BlocksScreen v-else-if="profileScreenTab === ProfileScreenTab.BLOCKS" />
                 <RequestScreen v-else-if="profileScreenTab === ProfileScreenTab.REQUEST" />
+                <QuestionScreen v-else-if="profileScreenTab === ProfileScreenTab.QUESTIONS" />
             </div>
         </div>
     </div>
@@ -29,6 +30,8 @@ import SubscribingScreen from '../components/subscribing/SubscribingScreen.vue';
 import { ProfileScreenTab } from '../constants';
 import { profileModule } from '../store';
 import RequestScreen from '../components/requests/RequestScreen.vue';
+import QuestionScreen from '../components/questions/QuestionScreen.vue';
+
 @Options({
     components: {
         ProfileHeader,
@@ -38,6 +41,7 @@ import RequestScreen from '../components/requests/RequestScreen.vue';
         DescribeScreen,
         BlocksScreen,
         RequestScreen,
+        QuestionScreen,
     },
 })
 export default class ProfilePage extends GlobalMixin {

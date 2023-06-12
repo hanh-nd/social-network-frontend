@@ -1,10 +1,16 @@
-import { IGetPostListQuery, IPost, IUser, IUserDetail } from '@/common/interfaces';
+import { IGetPostListQuery, IPost, IQuestion, IUser, IUserDetail } from '@/common/interfaces';
+import questionApiService from '@/common/service/question.api.service';
 import userApiService from '@/common/service/user.api.service';
 import store from '@/plugins/vuex';
 import { cloneDeep } from 'lodash';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
-import { INIT_GET_POST_LIST_QUERY, INIT_GET_SUBSCRIBE_REQUEST_LIST_QUERY, ProfileScreenTab } from './constants';
-import { IGetSubscribeRequestListQuery, ISubscribeRequest } from './interfaces';
+import {
+    INIT_GET_POST_LIST_QUERY,
+    INIT_GET_QUESTION_LIST_QUERY,
+    INIT_GET_SUBSCRIBE_REQUEST_LIST_QUERY,
+    ProfileScreenTab,
+} from './constants';
+import { IGetQuestionListQuery, IGetSubscribeRequestListQuery, ISubscribeRequest } from './interfaces';
 
 @Module({
     name: 'profile',
@@ -26,6 +32,11 @@ class ProfileModule extends VuexModule {
     subscribeRequestList: ISubscribeRequest[] = [];
     subscribeRequestListQuery: IGetSubscribeRequestListQuery = cloneDeep(INIT_GET_SUBSCRIBE_REQUEST_LIST_QUERY);
     isFetchedAllSubscribeRequestList = false;
+    isShowCreateQuestionDialog = false;
+    isShowAnswerQuestionDialog = false;
+    questionList: IQuestion[] = [];
+    questionListQuery: IGetQuestionListQuery = cloneDeep(INIT_GET_QUESTION_LIST_QUERY);
+    isFetchedAllQuestionList = false;
 
     @Action
     async getProfileUser(userId: string) {
@@ -259,6 +270,89 @@ class ProfileModule extends VuexModule {
             ...this.subscribeRequestListQuery,
             ...subscribeRequestListQuery,
         };
+    }
+
+    @Action
+    setIsShowCreateQuestionDialog(isShowCreateQuestionDialog: boolean) {
+        this.SET_IS_SHOW_CREATE_QUESTION_DIALOG(isShowCreateQuestionDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_CREATE_QUESTION_DIALOG(isShowCreateQuestionDialog: boolean) {
+        this.isShowCreateQuestionDialog = isShowCreateQuestionDialog;
+    }
+
+    @Action
+    setIsShowAnswerQuestionDialog(isShowAnswerQuestionDialog: boolean) {
+        this.SET_IS_SHOW_ANSWER_QUESTION_DIALOG(isShowAnswerQuestionDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_ANSWER_QUESTION_DIALOG(isShowAnswerQuestionDialog: boolean) {
+        this.isShowAnswerQuestionDialog = isShowAnswerQuestionDialog;
+    }
+
+    @Action
+    async getQuestionList({ append }: { append: boolean } = { append: false }) {
+        const response = await questionApiService.getQuestionList(this.questionListQuery);
+        if (response?.success) {
+            const data = response?.data;
+            if (!data || !data.length) {
+                this.SET_IS_FETCHED_ALL_QUESTION_LIST(true);
+            }
+
+            if (append) {
+                this.APPEND_QUESTION_LIST(data);
+            } else {
+                this.SET_QUESTION_LIST(data);
+            }
+        } else {
+            this.SET_IS_FETCHED_ALL_QUESTION_LIST(true);
+
+            if (append) {
+                this.APPEND_QUESTION_LIST([]);
+            } else {
+                this.SET_QUESTION_LIST([]);
+            }
+        }
+    }
+
+    @Mutation
+    APPEND_QUESTION_LIST(questionList: IQuestion[]) {
+        this.questionList.push(...questionList);
+    }
+
+    @Mutation
+    SET_QUESTION_LIST(questionList: IQuestion[]) {
+        this.questionList = questionList;
+    }
+
+    @Action
+    resetQuestionListQuery() {
+        this.SET_QUESTION_LIST_QUERY(cloneDeep(INIT_GET_QUESTION_LIST_QUERY));
+    }
+
+    @Action
+    setQuestionListQuery(questionListQuery: IGetQuestionListQuery) {
+        this.SET_QUESTION_LIST_QUERY(questionListQuery);
+    }
+
+    @Mutation
+    SET_QUESTION_LIST_QUERY(questionListQuery: IGetQuestionListQuery) {
+        this.questionListQuery = {
+            ...this.questionListQuery,
+            ...questionListQuery,
+        };
+    }
+
+    @Action
+    setIsFetchedAllQuestionList(isFetchedAllQuestionList: boolean) {
+        this.SET_IS_FETCHED_ALL_QUESTION_LIST(isFetchedAllQuestionList);
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_QUESTION_LIST(isFetchedAllQuestionList: boolean) {
+        this.isFetchedAllQuestionList = isFetchedAllQuestionList;
     }
 }
 
