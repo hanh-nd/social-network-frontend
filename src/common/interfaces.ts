@@ -444,3 +444,28 @@ export interface ISystemMessage {
     fullTemplate: string;
     type: SystemMessageType;
 }
+
+export interface IQuestion {
+    _id: string;
+    sender: IUser;
+    receiver: IUser;
+    question: string;
+    answer?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IGetQuestionListQuery extends ICommonGetListQuery {
+    pending?: number;
+}
+
+export interface ICreateQuestionBody {
+    receiver: string;
+    isAnonymous: boolean;
+    question: string;
+}
+
+export interface IUpdateQuestionBody {
+    answer: string;
+}
