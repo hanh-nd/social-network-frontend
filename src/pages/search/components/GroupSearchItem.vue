@@ -86,6 +86,9 @@ export default class GroupSearchItem extends GlobalMixin {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 16px;
+    background: $color-white;
+    border-radius: 8px;
 
     .left-section {
         display: flex;

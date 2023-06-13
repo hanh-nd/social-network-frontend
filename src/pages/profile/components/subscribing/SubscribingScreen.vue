@@ -6,7 +6,7 @@
                 <div class="sub">{{ profileUser?.numberOfSubscribing || 0 }} người</div>
             </div>
             <BaseDivider />
-            <div class="subscribing-list">
+            <div class="subscribing-list" v-if="subscribingList.length">
                 <div class="subscribing-card" v-for="subscribing in subscribingList" :key="subscribing._id">
                     <UserCard :user="subscribing">
                         <el-button @click="subscribeOrUnsubscribe(subscribing)" v-if="!subscribing?.isSelf">{{
@@ -14,6 +14,9 @@
                         }}</el-button>
                     </UserCard>
                 </div>
+            </div>
+            <div class="empty" v-else>
+                <el-empty description="Bạn chưa theo dõi ai. Hãy mở rộng kết nối thêm đi nè." />
             </div>
         </div>
     </div>

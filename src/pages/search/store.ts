@@ -1,8 +1,8 @@
+import { ISearchQuery, ISearchResults } from '@/common/interfaces';
+import searchApiService from '@/common/service/search.api.service';
 import store from '@/plugins/vuex';
 import { Action, Module, Mutation, VuexModule, getModule } from 'vuex-module-decorators';
 import { SearchBy } from './constants';
-import { ISearchQuery, ISearchResults } from '@/common/interfaces';
-import searchApiService from '@/common/service/search.api.service';
 
 @Module({
     name: 'search',
@@ -48,6 +48,54 @@ class SearchModule extends VuexModule {
                     groups: [],
                 },
             );
+        }
+    }
+
+    @Action
+    async searchUsers(query: ISearchQuery) {
+        const response = await searchApiService.searchUsers(query);
+        if (response?.success) {
+            this.SET_SEARCH_RESULTS({
+                ...this.searchResults,
+                users: response?.data || [],
+            });
+        } else {
+            this.SET_SEARCH_RESULTS({
+                ...this.searchResults,
+                users: [],
+            });
+        }
+    }
+
+    @Action
+    async searchPosts(query: ISearchQuery) {
+        const response = await searchApiService.searchPosts(query);
+        if (response?.success) {
+            this.SET_SEARCH_RESULTS({
+                ...this.searchResults,
+                posts: response?.data || [],
+            });
+        } else {
+            this.SET_SEARCH_RESULTS({
+                ...this.searchResults,
+                posts: [],
+            });
+        }
+    }
+
+    @Action
+    async searchGroups(query: ISearchQuery) {
+        const response = await searchApiService.searchGroups(query);
+        if (response?.success) {
+            this.SET_SEARCH_RESULTS({
+                ...this.searchResults,
+                groups: response?.data || [],
+            });
+        } else {
+            this.SET_SEARCH_RESULTS({
+                ...this.searchResults,
+                groups: [],
+            });
         }
     }
 

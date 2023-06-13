@@ -6,7 +6,7 @@
                 <div class="sub">{{ profileUser?.numberOfBlocked || 0 }} người</div>
             </div>
             <BaseDivider />
-            <div class="subscribing-list">
+            <div class="subscribing-list" v-if="blockedList.length">
                 <div class="subscribing-card" v-for="blocked in blockedList" :key="blocked._id">
                     <UserCard :user="blocked">
                         <el-button @click="blockOrUnblock(blocked)" v-if="!blocked?.isSelf">{{
@@ -14,6 +14,9 @@
                         }}</el-button>
                     </UserCard>
                 </div>
+            </div>
+            <div class="empty" v-else>
+                <el-empty description="Bạn chưa chặn người nào cả." />
             </div>
         </div>
     </div>
