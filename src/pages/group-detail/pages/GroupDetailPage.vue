@@ -1,15 +1,21 @@
 <template>
     <div class="group-detail-page-container">
         <div class="group-detail-page-wrapper mx-auto">
-            <div class="header w-100">
-                <GroupDetailHeader />
+            <div class="group-menu">
+                <GroupMenu />
             </div>
 
-            <div class="body w-100">
-                <GroupFeedScreen v-if="groupDetailScreen === GroupDetailScreenTab.MAIN" />
-                <PinnedPostScreen v-if="groupDetailScreen === GroupDetailScreenTab.PINNED" />
-                <OverviewScreen v-if="groupDetailScreen === GroupDetailScreenTab.OVERVIEW" />
-                <MembersScreen v-if="groupDetailScreen === GroupDetailScreenTab.MEMBERS" />
+            <div class="feed-screen">
+                <div class="header w-100">
+                    <GroupDetailHeader />
+                </div>
+
+                <div class="body w-100">
+                    <GroupFeedScreen v-if="groupDetailScreen === GroupDetailScreenTab.MAIN" />
+                    <PinnedPostScreen v-if="groupDetailScreen === GroupDetailScreenTab.PINNED" />
+                    <OverviewScreen v-if="groupDetailScreen === GroupDetailScreenTab.OVERVIEW" />
+                    <MembersScreen v-if="groupDetailScreen === GroupDetailScreenTab.MEMBERS" />
+                </div>
             </div>
         </div>
     </div>
@@ -22,6 +28,7 @@
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import GroupDetailHeader from '../components/GroupDetailHeader.vue';
+import GroupMenu from '../components/common/GroupMenu.vue';
 import CreatePostDialog from '../components/group-feed/CreatePostDialog.vue';
 import GroupFeedScreen from '../components/group-feed/GroupFeedScreen.vue';
 import MembersScreen from '../components/members/MembersScreen.vue';
@@ -38,6 +45,7 @@ import { groupDetailModule } from '../store';
         OverviewScreen,
         MembersScreen,
         CreatePostDialog,
+        GroupMenu,
     },
 })
 export default class GroupDetailPage extends GlobalMixin {
@@ -71,11 +79,36 @@ export default class GroupDetailPage extends GlobalMixin {
 
 .group-detail-page-wrapper {
     width: 100%;
-    max-width: $content-max-width + $content-padding * 2;
-    padding: 0 $content-padding;
-
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    height: 100%;
     gap: 8px;
+
+    .feed-screen {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        max-width: map-get($grid-breakpoints, lg);
+        margin: auto;
+        gap: 8px;
+    }
+
+    .group-menu {
+        position: sticky;
+        top: 58px;
+        height: calc(100vh - 60px);
+        padding-top: 8px;
+        width: 300px;
+    }
+}
+
+@media only screen and (max-width: map-get($grid-breakpoints, md)) {
+    .group-detail-page-wrapper {
+        flex-direction: column;
+
+        .group-menu {
+            display: none;
+        }
+    }
 }
 </style>

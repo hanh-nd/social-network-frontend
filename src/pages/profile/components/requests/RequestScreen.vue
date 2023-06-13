@@ -12,15 +12,13 @@
                 </div>
                 <BaseDivider />
             </div>
-            <div class="request-list">
-                <div
-                    class="subscribing-card"
-                    v-for="request in subscribeRequestList"
-                    :key="request._id"
-                    v-infinite-scroll="onLoadMore"
-                >
+            <div class="request-list" v-infinite-scroll="onLoadMore" v-if="subscribeRequestList.length">
+                <div class="subscribing-card" v-for="request in subscribeRequestList" :key="request._id">
                     <RequestItem :request="request" :isReceived="requestType === RequestType.INCOMING" />
                 </div>
+            </div>
+            <div class="empty" v-else>
+                <el-empty description="Chưa có yêu cầu theo dõi nào." />
             </div>
         </div>
     </div>

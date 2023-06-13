@@ -6,7 +6,7 @@
                 <div class="sub">{{ profileUser?.numberOfSubscribers || 0 }} người</div>
             </div>
             <BaseDivider />
-            <div class="subscriber-list" v-infinite-scroll="onLoadMoreSubscribers">
+            <div class="subscriber-list" v-if="subscriberList.length">
                 <div class="subscriber-card" v-for="subscriber in subscriberList" :key="subscriber._id">
                     <UserCard :user="subscriber">
                         <el-button @click="subscribeOrUnsubscribe(subscriber)" v-if="!subscriber?.isSelf">{{
@@ -14,6 +14,9 @@
                         }}</el-button>
                     </UserCard>
                 </div>
+            </div>
+            <div class="empty" v-else>
+                <el-empty description="Danh sách hiện đang trống." />
             </div>
         </div>
     </div>
@@ -46,10 +49,6 @@ export default class SubscriberScreen extends GlobalMixin {
     }
 
     loadData() {
-        profileModule.getSubscriberList(this.profileUser?._id);
-    }
-
-    onLoadMoreSubscribers() {
         profileModule.getSubscriberList(this.profileUser?._id);
     }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="user-card-wrapper h-100">
-        <div class="top-section h-100" @click="goToProfilePage">
+        <div class="top-section w-100 h-100" @click="goToProfilePage">
             <div class="avatar h-100">
                 <img :src="getAvatarUrl(user)" alt="" />
             </div>
@@ -22,7 +22,6 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
-import userApiService from '@/common/service/user.api.service';
 @Options({
     components: {},
 })

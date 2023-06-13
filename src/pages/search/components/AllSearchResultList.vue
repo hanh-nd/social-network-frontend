@@ -85,6 +85,11 @@ export default class AllSearchResultList extends GlobalMixin {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
+
+                :deep(.post),
+                .user-search-item {
+                    border-bottom: 1px solid $color-green-4;
+                }
             }
         }
     }

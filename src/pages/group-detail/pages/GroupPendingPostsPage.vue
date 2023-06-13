@@ -1,16 +1,21 @@
 <template>
     <div class="group-pending-post-container">
         <div class="group-pending-post-wrapper mx-auto">
-            <div class="title">Yêu cầu phê duyệt bài viết</div>
-            <div class="empty" v-if="!groupPendingPosts?.length">
-                <el-empty description="Chưa có yêu cầu nào." />
+            <div class="group-menu">
+                <GroupMenu />
             </div>
-            <div class="group-pending-post-list" v-else>
-                <div class="administrator" v-if="isAdministrator()">
-                    <GroupPendingPostList @on-load-more="onLoadMorePendingPosts" />
+            <div class="screen">
+                <div class="title">Yêu cầu phê duyệt bài viết</div>
+                <div class="empty" v-if="!groupPendingPosts?.length">
+                    <el-empty description="Chưa có yêu cầu nào." />
                 </div>
-                <div class="member" v-else>
-                    <MemberPendingPostList @on-load-more="onLoadMorePendingPosts" />
+                <div class="group-pending-post-list" v-else>
+                    <div class="administrator" v-if="isAdministrator()">
+                        <GroupPendingPostList @on-load-more="onLoadMorePendingPosts" />
+                    </div>
+                    <div class="member" v-else>
+                        <MemberPendingPostList @on-load-more="onLoadMorePendingPosts" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -22,6 +27,7 @@ import { GlobalMixin } from '@/common/mixins';
 import { appModule } from '@/plugins/vuex/appModule';
 import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
+import GroupMenu from '../components/common/GroupMenu.vue';
 import GroupPendingPostList from '../components/pending/administrator/GroupPendingPostList.vue';
 import MemberPendingPostList from '../components/pending/member/MemberPendingPostList.vue';
 import { groupDetailModule } from '../store';
@@ -30,6 +36,7 @@ import { groupDetailModule } from '../store';
     components: {
         GroupPendingPostList,
         MemberPendingPostList,
+        GroupMenu,
     },
 })
 export default class GroupPendingPostsPage extends GlobalMixin {
@@ -107,17 +114,41 @@ export default class GroupPendingPostsPage extends GlobalMixin {
 
 .group-pending-post-wrapper {
     width: 100%;
-    margin: auto;
-    max-width: map-get($grid-breakpoints, sm);
-
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    height: 100%;
     gap: 8px;
+
+    .screen {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        max-width: map-get($grid-breakpoints, lg);
+        gap: 8px;
+    }
+
+    .group-menu {
+        position: sticky;
+        top: 58px;
+        height: calc(100vh - 60px);
+        padding-top: 8px;
+        width: 300px;
+    }
 
     .title {
         margin-top: 8px;
         font-weight: 500;
         font-size: 24px;
+    }
+}
+
+@media only screen and (max-width: map-get($grid-breakpoints, md)) {
+    .group-pending-post-wrapper {
+        flex-direction: column;
+
+        .group-menu {
+            display: none;
+        }
     }
 }
 </style>

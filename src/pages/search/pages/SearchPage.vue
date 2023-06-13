@@ -15,8 +15,10 @@
 import { GlobalMixin } from '@/common/mixins';
 import { get } from 'lodash';
 import { Options } from 'vue-class-component';
+import { Watch } from 'vue-property-decorator';
 import SearchByMenu from '../components/SearchByMenu.vue';
 import SearchResultList from '../components/SearchResultList.vue';
+import { SearchBy } from '../constants';
 import { searchModule } from '../store';
 @Options({
     components: {
@@ -42,6 +44,36 @@ export default class SearchPage extends GlobalMixin {
             keyword: this.keyword,
             size: 10,
         });
+    }
+
+    get searchBy() {
+        return searchModule.searchBy;
+    }
+
+    @Watch('searchBy', { immediate: true })
+    onSearchByChange() {
+        switch (this.searchBy) {
+            case SearchBy.ALL:
+                return searchModule.search({
+                    keyword: this.keyword,
+                    size: 10,
+                });
+            case SearchBy.PROFILE:
+                return searchModule.searchUsers({
+                    keyword: this.keyword,
+                    size: 50,
+                });
+            case SearchBy.POST:
+                return searchModule.searchPosts({
+                    keyword: this.keyword,
+                    size: 50,
+                });
+            case SearchBy.GROUP:
+                return searchModule.searchGroups({
+                    keyword: this.keyword,
+                    size: 50,
+                });
+        }
     }
 }
 </script>
