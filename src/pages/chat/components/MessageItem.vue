@@ -10,7 +10,7 @@
             :placement="isAuthor ? 'right' : 'left'"
         >
             <div class="message-item" :style="itemStyle">
-                <div class="menu" v-if="isOpenMenu || isShowMenu">
+                <div class="menu" v-if="isAuthor && (isOpenMenu || isShowMenu)">
                     <BaseThreeDotMenu @click="setIsOpenMenu(true)" v-click-away="onClickAway">
                         <el-dropdown-item @click="deleteMessage">Xóa tin nhắn</el-dropdown-item>
                         <el-dropdown-item @click="recallMessage">Thu hồi tin nhắn</el-dropdown-item>

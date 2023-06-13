@@ -236,7 +236,7 @@ class GroupDetailModule extends VuexModule {
 
     @Action
     resetGroupPendingPostListQuery() {
-        this.RESET_GROUP_POST_LIST_QUERY();
+        this.RESET_GROUP_PENDING_POST_LIST_QUERY();
         this.SET_IS_FETCHED_ALL_GROUP_PENDING_POST_LIST(false);
     }
 
@@ -247,7 +247,7 @@ class GroupDetailModule extends VuexModule {
 
     @Action
     setGroupPendingPostListQuery(groupPendingPostListQuery: IGetGroupPostListQuery) {
-        this.SET_GROUP_POST_LIST_QUERY(groupPendingPostListQuery);
+        this.SET_GROUP_PENDING_POST_LIST_QUERY(groupPendingPostListQuery);
     }
 
     @Mutation
