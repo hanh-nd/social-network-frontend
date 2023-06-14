@@ -13,9 +13,11 @@
 </template>
 
 <script lang="ts">
+import { SocketEvent } from '@/common/constants';
 import { IPost, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { EventEmitter, EventName } from '@/plugins/mitt';
+import { SocketProvider } from '@/plugins/socket.io';
 import { isNil } from 'lodash';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
@@ -42,14 +44,25 @@ export default class ProfileContent extends GlobalMixin {
 
     mounted(): void {
         EventEmitter.on(EventName.POST_CREATED, this.postCreatedHandler);
+        SocketProvider.socket.on(SocketEvent.POST_UPDATE, ({ postId, ...rest }) => {
+            this.postUpdateHandler(postId, rest);
+        });
     }
 
     unmounted(): void {
         EventEmitter.off(EventName.POST_CREATED, this.postCreatedHandler);
+        SocketProvider.socket.off(SocketEvent.POST_UPDATE);
     }
 
     postCreatedHandler(post: IPost) {
         this.postList.unshift(post);
+    }
+
+    postUpdateHandler(postId: string, rest: Partial<IPost>) {
+        const post = this.postList.find((p) => p._id === postId);
+        if (!post) return;
+
+        Object.assign(post, rest);
     }
 
     onLoadMore() {
