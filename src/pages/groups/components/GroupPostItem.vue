@@ -9,7 +9,7 @@
                     <div class="top-section">
                         <div class="author-name">{{ post?.author?.fullName }}</div>
                         >
-                        <div class="group-name">
+                        <div class="group-name" @click="goToGroupDetailPage">
                             {{ group?.name }}
                         </div>
                     </div>
@@ -244,6 +244,15 @@ export default class PostContent extends GlobalMixin {
     openShareListDialog() {
         appModule.setPostDetail(this.post);
         appModule.setIsShowShareListDialog(true);
+    }
+
+    goToGroupDetailPage() {
+        this.$router.push({
+            name: this.PageName.GROUP_DETAIL_PAGE,
+            params: {
+                id: this.group._id,
+            },
+        });
     }
 }
 </script>
