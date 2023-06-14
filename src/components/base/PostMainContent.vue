@@ -1,7 +1,7 @@
 <template>
     <div class="main-content-wrapper">
         <div class="content">
-            {{ post?.content }}
+            <BaseCensorableContent :target="post" />
         </div>
 
         <div class="post-data">

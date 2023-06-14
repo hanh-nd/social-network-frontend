@@ -1,0 +1,52 @@
+<template>
+    <div class="hidable-content-wrapper">
+        <div class="content-wrapper" v-if="isShow || !isToxic">
+            <div class="content">
+                {{ target?.content }}
+            </div>
+            <div class="hide" v-if="isToxic" @click="show">Ẩn</div>
+        </div>
+        <div class="censored" v-else>
+            Nội dung đã được ẩn đi do chứa từ ngữ không phù hợp. <span class="show" @click="show">Hiện</span>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+import { IComment, IPost } from '@/common/interfaces';
+import { GlobalMixin } from '@/common/mixins';
+import { Options } from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+
+@Options({})
+export default class CensorableContent extends GlobalMixin {
+    @Prop() target!: IPost | IComment;
+    isShow = false;
+
+    get isToxic() {
+        return this.target?.isToxic || false;
+    }
+
+    show() {
+        this.isShow = !this.isShow;
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.hidable-content-wrapper {
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .show,
+    .hide {
+        font-weight: 500;
+        text-decoration: underline;
+        color: $color-green;
+        cursor: pointer;
+    }
+}
+</style>

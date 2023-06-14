@@ -1,5 +1,5 @@
 <template>
-    <div class="main-feed-screen-wrapper">
+    <div class="explore-feed-screen-wrapper">
         <div class="news-feed">
             <BasePostList :postList="postList" @on-load-more="onLoadMorePostDebounced" />
         </div>
@@ -15,6 +15,8 @@
 import { GlobalMixin } from '@/common/mixins';
 import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
+import { Watch } from 'vue-property-decorator';
+import { FeedScreenType } from '../constants';
 import { homeModule } from '../store';
 
 @Options({
@@ -25,13 +27,20 @@ export default class ExploreFeedScreen extends GlobalMixin {
         return homeModule.postList;
     }
 
-    created(): void {
+    get screenType() {
+        return homeModule.feedScreenType;
+    }
+
+    @Watch('screenType', { immediate: true })
+    onScreenTypeChange() {
+        if (this.screenType !== FeedScreenType.EXPLORE) return;
+
         this.loadData();
     }
 
     async loadData() {
         homeModule.resetPostListQuery();
-        homeModule.getNewsFeed({});
+        homeModule.getInterestedFeed({});
     }
 
     get currentPage() {
@@ -47,7 +56,7 @@ export default class ExploreFeedScreen extends GlobalMixin {
         homeModule.setPostListQuery({
             page: this.currentPage + 1,
         });
-        homeModule.getNewsFeed({ append: true });
+        homeModule.getInterestedFeed({ append: true });
     }, 100);
 
     reload() {
@@ -58,17 +67,12 @@ export default class ExploreFeedScreen extends GlobalMixin {
 </script>
 
 <style lang="scss" scoped>
-.main-feed-screen-wrapper {
+.explore-feed-screen-wrapper {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin: auto;
     max-width: map-get($grid-breakpoints, sm);
-
-    .create-new-post-bar {
-        background: $color-white;
-        border-radius: 6px;
-    }
 
     .reload {
         display: flex;

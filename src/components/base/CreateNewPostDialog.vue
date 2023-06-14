@@ -182,6 +182,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
 
     async onSubmit() {
         await this.createPostForm.submit();
+        this.medias = [];
     }
 
     async onSelectPictures(file: IFile, filePreview: File) {
