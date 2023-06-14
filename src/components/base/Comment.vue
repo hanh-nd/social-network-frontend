@@ -22,7 +22,7 @@
                             <el-button @click="onSubmit">Gửi</el-button>
                         </div>
                         <div class="comment" v-else>
-                            {{ comment.content }}
+                            <BaseCensorableContent :target="comment" />
                         </div>
                     </div>
                 </div>

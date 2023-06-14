@@ -194,6 +194,8 @@ export enum SocketEvent {
     USER_RECALL = 'USER_RECALL',
 
     USER_NOTIFICATION = 'USER_NOTIFICATION',
+
+    POST_UPDATE = 'POST_UPDATE',
 }
 
 export const INIT_GET_COMMENT_LIST_QUERY = {

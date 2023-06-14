@@ -1,9 +1,5 @@
 <template>
-    <div class="main-feed-screen-wrapper">
-        <div class="create-new-post-bar">
-            <BaseCreateNewPostBar />
-        </div>
-
+    <div class="explore-feed-screen-wrapper">
         <div class="news-feed">
             <BasePostList :postList="postList" @on-load-more="onLoadMorePostDebounced" />
         </div>
@@ -16,11 +12,7 @@
 </template>
 
 <script lang="ts">
-import { SocketEvent } from '@/common/constants';
-import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
-import { EventEmitter, EventName } from '@/plugins/mitt';
-import { SocketProvider } from '@/plugins/socket.io';
 import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
@@ -30,18 +22,9 @@ import { homeModule } from '../store';
 @Options({
     components: {},
 })
-export default class MainFeedScreen extends GlobalMixin {
+export default class ExploreFeedScreen extends GlobalMixin {
     get postList() {
         return homeModule.postList;
-    }
-
-    created(): void {
-        this.loadData();
-    }
-
-    async loadData() {
-        homeModule.resetPostListQuery();
-        homeModule.getNewsFeed({});
     }
 
     get screenType() {
@@ -55,28 +38,9 @@ export default class MainFeedScreen extends GlobalMixin {
         this.loadData();
     }
 
-    mounted(): void {
-        EventEmitter.on(EventName.POST_CREATED, this.postCreatedHandler);
-        SocketProvider.socket.on(SocketEvent.POST_UPDATE, ({ postId, ...rest }) => {
-            this.postUpdateHandler(postId, rest);
-        });
-    }
-
-    unmounted(): void {
-        EventEmitter.off(EventName.POST_CREATED, this.postCreatedHandler);
-        SocketProvider.socket.off(SocketEvent.POST_UPDATE);
-    }
-
-    postCreatedHandler(post: IPost) {
-        this.postList.unshift(post);
-    }
-
-    postUpdateHandler(postId: string, rest: Partial<IPost>) {
-        const post = this.postList.find((p) => p._id === postId);
-        if (!post) return;
-
-        console.log('rest', rest);
-        Object.assign(post, rest);
+    async loadData() {
+        homeModule.resetPostListQuery();
+        homeModule.getInterestedFeed({});
     }
 
     get currentPage() {
@@ -92,7 +56,7 @@ export default class MainFeedScreen extends GlobalMixin {
         homeModule.setPostListQuery({
             page: this.currentPage + 1,
         });
-        homeModule.getNewsFeed({ append: true });
+        homeModule.getInterestedFeed({ append: true });
     }, 100);
 
     reload() {
@@ -103,17 +67,12 @@ export default class MainFeedScreen extends GlobalMixin {
 </script>
 
 <style lang="scss" scoped>
-.main-feed-screen-wrapper {
+.explore-feed-screen-wrapper {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin: auto;
     max-width: map-get($grid-breakpoints, sm);
-
-    .create-new-post-bar {
-        background: $color-white;
-        border-radius: 6px;
-    }
 
     .reload {
         display: flex;

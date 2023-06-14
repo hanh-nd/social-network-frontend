@@ -68,6 +68,30 @@ class HomeModule extends VuexModule {
         }
     }
 
+    @Action
+    async getInterestedFeed({ append = false }: { append?: boolean }) {
+        const response = await postApiService.getInterestedFeed(this.postListQuery);
+        if (response.success) {
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_POST_LIST(true);
+            }
+
+            if (append) {
+                this.APPEND_POST_LIST(data);
+            } else {
+                this.SET_POST_LIST(data);
+            }
+        } else {
+            if (append) {
+                this.APPEND_POST_LIST([]);
+            } else {
+                this.SET_POST_LIST([]);
+            }
+            this.SET_IS_FETCHED_ALL_POST_LIST(true);
+        }
+    }
+
     @Mutation
     APPEND_POST_LIST(postList: IPost[]) {
         this.postList.push(...postList);

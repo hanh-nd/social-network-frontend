@@ -5,7 +5,7 @@
         </div>
 
         <div class="explore-screen" v-if="currentFeedScreenType === FeedScreenType.EXPLORE">
-            <MainFeedScreen />
+            <ExploreFeedScreen />
         </div>
     </div>
 </template>
@@ -15,11 +15,13 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { FeedScreenType } from '../constants';
 import { homeModule } from '../store';
+import ExploreFeedScreen from './ExploreFeedScreen.vue';
 import MainFeedScreen from './MainFeedScreen.vue';
 
 @Options({
     components: {
         MainFeedScreen,
+        ExploreFeedScreen,
     },
 })
 export default class FeedScreen extends GlobalMixin {
