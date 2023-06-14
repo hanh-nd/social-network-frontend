@@ -6,8 +6,11 @@
                     <BaseRoundAvatar :user="post?.author" :size="42" />
                 </div>
                 <div class="information">
-                    <div class="name" @click="goToProfilePage">
-                        {{ post?.author?.fullName }}
+                    <div class="top">
+                        <span class="name" @click="goToProfilePage"> {{ post?.author?.fullName }} </span>
+                        <span class="name" v-if="post.postedInGroup" @click="goToGroupDetailPage">
+                            > {{ post.postedInGroup?.name }}</span
+                        >
                     </div>
                     <div class="created-at" @click="goToPostDetailPage">
                         <el-tooltip
@@ -122,6 +125,17 @@ export default class PostContent extends GlobalMixin {
             name: this.PageName.POST_DETAIL_PAGE,
             params: {
                 id: this.post._id,
+            },
+        });
+    }
+
+    goToGroupDetailPage() {
+        if (!this.post.postedInGroup?._id) return;
+
+        this.$router.push({
+            name: this.PageName.GROUP_DETAIL_PAGE,
+            params: {
+                id: this.post.postedInGroup._id,
             },
         });
     }
