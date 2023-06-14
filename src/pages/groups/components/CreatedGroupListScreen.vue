@@ -1,8 +1,11 @@
 <template>
     <div class="created-group-list-screen-wrapper">
         <div class="title">Nhóm bạn quản lý</div>
-        <div class="group-list">
+        <div class="group-list" v-if="createdGroupList.length" v-infinite-scroll="onLoadMore">
             <GroupGridCard v-for="group in createdGroupList" :key="group._id" :group="group" />
+        </div>
+        <div class="empty" v-else>
+            <el-empty description="Bạn chưa quản lý một nhóm nào." />
         </div>
     </div>
 </template>
@@ -20,6 +23,10 @@ import GroupGridCard from './GroupGridCard.vue';
 export default class CreatedGroupListScreen extends GlobalMixin {
     get createdGroupList() {
         return groupModule.createdGroupList;
+    }
+
+    onLoadMore() {
+        console.log(`hihihi`);
     }
 }
 </script>

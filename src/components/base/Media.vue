@@ -1,6 +1,6 @@
 <template>
     <div class="media-wrapper">
-        <div class="image" v-if="isImage">
+        <div class="image" v-if="isImage" loading="lazy">
             <img :src="url" />
         </div>
 
