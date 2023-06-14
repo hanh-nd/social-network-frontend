@@ -27,6 +27,9 @@
             <el-menu-item :index="ProfileScreenTab.QUESTIONS" v-if="isUser"
                 ><div :id="ProfileScreenTab.QUESTIONS">Câu hỏi dành cho tôi</div></el-menu-item
             >
+            <el-menu-item :index="ProfileScreenTab.STATISTICS" v-if="isUser"
+                ><div :id="ProfileScreenTab.STATISTICS">Thống kê</div></el-menu-item
+            >
         </el-menu>
     </div>
 </template>
