@@ -196,6 +196,7 @@ export interface IPost {
     privacy: number;
     isAnonymous?: boolean;
     postShared: Partial<IPost>;
+    postedInGroup: Partial<IGroup>;
     pictureIds: string[];
     medias: IFile[];
     videoIds: string[];

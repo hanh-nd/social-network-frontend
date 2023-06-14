@@ -17,3 +17,13 @@ export interface IUpdateSubscribeRequestBody {
 export interface IGetQuestionListQuery extends ICommonGetListQuery {
     pending?: number;
 }
+
+export interface IUserStatistic {
+    date: string;
+    spentHour: number;
+    point: number;
+}
+
+export interface IGetUserStatisticQuery {
+    range?: number;
+}

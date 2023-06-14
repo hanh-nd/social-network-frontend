@@ -13,6 +13,7 @@
                 <BlocksScreen v-else-if="profileScreenTab === ProfileScreenTab.BLOCKS" />
                 <RequestScreen v-else-if="profileScreenTab === ProfileScreenTab.REQUEST" />
                 <QuestionScreen v-else-if="profileScreenTab === ProfileScreenTab.QUESTIONS" />
+                <StatisticScreen v-else-if="profileScreenTab === ProfileScreenTab.STATISTICS" />
             </div>
         </div>
     </div>
@@ -31,6 +32,7 @@ import { ProfileScreenTab } from '../constants';
 import { profileModule } from '../store';
 import RequestScreen from '../components/requests/RequestScreen.vue';
 import QuestionScreen from '../components/questions/QuestionScreen.vue';
+import StatisticScreen from '../components/statistics/StatisticScreen.vue';
 
 @Options({
     components: {
@@ -42,6 +44,7 @@ import QuestionScreen from '../components/questions/QuestionScreen.vue';
         BlocksScreen,
         RequestScreen,
         QuestionScreen,
+        StatisticScreen,
     },
 })
 export default class ProfilePage extends GlobalMixin {
