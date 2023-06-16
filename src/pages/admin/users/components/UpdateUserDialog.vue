@@ -42,33 +42,6 @@
                     :error="translateYupError(updateUserForm.errors.describe as IYupError)"
                 />
             </div>
-            <div class="form-item">
-                <div style="font-weight: 700">Địa chỉ</div>
-                <BaseInputText
-                    v-model:value="updateUserForm.address!.province"
-                    placeholder="Tỉnh/Thành phố"
-                    :error="translateYupError(updateUserForm.errors['address.province'] as IYupError)"
-                    @on-enter="onSubmit"
-                />
-                <BaseInputText
-                    v-model:value="updateUserForm.address!.district"
-                    placeholder="Quận/Huyện"
-                    :error="translateYupError(updateUserForm.errors['address.district'] as IYupError)"
-                    @on-enter="onSubmit"
-                />
-                <BaseInputText
-                    v-model:value="updateUserForm.address!.ward"
-                    placeholder="Phường/Xã"
-                    :error="translateYupError(updateUserForm.errors['address.ward'] as IYupError)"
-                    @on-enter="onSubmit"
-                />
-                <BaseInputText
-                    v-model:value="updateUserForm.address!.detail"
-                    placeholder="Địa chỉ chi tiết"
-                    :error="translateYupError(updateUserForm.errors['address.detail'] as IYupError)"
-                    @on-enter="onSubmit"
-                />
-            </div>
         </div>
         <template #footer>
             <span class="footer">
@@ -79,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { IAddress, IUpdateProfileBody, IUser, IYupError } from '@/common/interfaces';
+import { IUpdateProfileBody, IUser, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import adminUserApiService from '@/common/service/admin.user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
@@ -114,7 +87,6 @@ export default class UpdateUserDialog extends GlobalMixin {
         const initValues: IUpdateProfileBody = {
             fullName: '',
             phone: '',
-            address: {} as IAddress,
             describe: '',
             birthday: undefined,
         };
@@ -122,7 +94,6 @@ export default class UpdateUserDialog extends GlobalMixin {
         const schema = yup.object({
             fullName: yup.string(),
             phone: yup.string(),
-            address: yup.object(),
             describe: yup.string(),
             birthday: yup.date().optional(),
         });
@@ -142,7 +113,13 @@ export default class UpdateUserDialog extends GlobalMixin {
 
         const submit = (user: IUser) =>
             handleSubmit(async (values) => {
-                const response = await adminUserApiService.updateUser(user._id, values);
+                const { fullName, phone, describe, birthday } = values;
+                const response = await adminUserApiService.updateUser(user._id, {
+                    fullName,
+                    phone,
+                    describe,
+                    birthday,
+                });
                 if (response.success) {
                     adminUserModule.setIsShowUpdateUserDialog(false);
                     Object.assign(user, values);
@@ -155,14 +132,12 @@ export default class UpdateUserDialog extends GlobalMixin {
 
         const { value: fullName } = useField<string>('fullName');
         const { value: phone } = useField<string>('phone');
-        const { value: address } = useField<IAddress>('address');
         const { value: describe } = useField<string>('describe');
         const { value: birthday } = useField('birthday');
 
         return {
             fullName,
             phone,
-            address,
             describe,
             birthday,
             errors,

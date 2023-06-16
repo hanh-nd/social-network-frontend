@@ -7,7 +7,7 @@
         :width="deviceType === DeviceType.MOBILE ? '80%' : '30%'"
         center
     >
-        <div v-html="content"></div>
+        <div class="content-wrapper" v-html="content"></div>
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="onCloseDialog" round class="cancel-btn">Đồng ý</el-button>
@@ -66,6 +66,12 @@ export default class SystemMessageDialog extends GlobalMixin {
 }
 </script>
 <style lang="scss" scoped>
+.content-wrapper {
+    .bold {
+        font-weight: 500;
+    }
+}
+
 .cancel-btn {
     border: none !important;
     background: transparent !important;
