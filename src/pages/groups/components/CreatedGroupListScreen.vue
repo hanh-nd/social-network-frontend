@@ -25,8 +25,21 @@ export default class CreatedGroupListScreen extends GlobalMixin {
         return groupModule.createdGroupList;
     }
 
+    get currentPage() {
+        return groupModule.createdGroupListQuery.page as number;
+    }
+
+    get isFetchedAllCreatedGroupList() {
+        return groupModule.isFetchedAllCreatedGroupList;
+    }
+
     onLoadMore() {
-        console.log(`hihihi`);
+        if (this.isFetchedAllCreatedGroupList) return;
+
+        groupModule.setCreatedGroupListQuery({
+            page: this.currentPage + 1,
+        });
+        groupModule.getCreatedGroupList({ append: true });
     }
 }
 </script>

@@ -3,4 +3,5 @@ export enum AdminScreen {
     MANAGE_POST = 'MANAGE_POST',
     MANAGE_REPORT = 'MANAGE_REPORT',
     MANAGE_USER = 'MANAGE_USER',
+    SETTINGS = 'SETTINGS',
 }

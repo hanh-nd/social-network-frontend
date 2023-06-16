@@ -14,9 +14,9 @@ import PublicLayout from '../../layouts/PublicLayout.vue';
 import AdminDashboardPage from '../../pages/admin/dashboard/pages/AdminDashboardPage.vue';
 import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
 import ManageReportPage from '../../pages/admin/reports/pages/ManageReportPage.vue';
+import AdminSettingsPage from '../../pages/admin/settings/pages/SettingsPage.vue';
 import ManageUserPage from '../../pages/admin/users/pages/ManageUserPage.vue';
 import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
-
 import GroupPendingPostsPage from '../../pages/group-detail/pages/GroupPendingPostsPage.vue';
 import JoinGroupRequestPage from '../../pages/group-detail/pages/JoinGroupRequestPage.vue';
 import GroupPage from '../../pages/groups/pages/GroupPage.vue';
@@ -149,6 +149,14 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/admin/dashboard',
                 name: PageName.DASHBOARD,
                 component: AdminDashboardPage,
+                meta: {
+                    admin: true,
+                },
+            },
+            {
+                path: '/admin/settings',
+                name: PageName.SETTINGS_PAGE,
+                component: AdminSettingsPage,
                 meta: {
                     admin: true,
                 },
