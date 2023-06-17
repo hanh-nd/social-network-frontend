@@ -39,6 +39,7 @@ import { appModule } from '@/plugins/vuex/appModule';
 import { isNil } from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import { notificationModule } from '../store';
 
 @Options({
     components: {},
@@ -83,6 +84,7 @@ export default class NotificationItem extends GlobalMixin {
         const response = await notificationApiService.markAsRead(this.notification._id);
         if (response?.success) {
             this.notification.isRead = true;
+            notificationModule.incUnreadNotificationCount(-1);
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi đánh dấu trạng thái thông báo`);
         }
@@ -119,6 +121,7 @@ export default class NotificationItem extends GlobalMixin {
         const response = await notificationApiService.undoMarkAsRead(this.notification._id);
         if (response?.success) {
             this.notification.isRead = false;
+            notificationModule.incUnreadNotificationCount(1);
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi đánh dấu trạng thái thông báo`);
         }

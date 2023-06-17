@@ -25,6 +25,10 @@ class NotificationApiService extends ApiService {
     async delete(id: string): Promise<IBodyResponse<boolean>> {
         return await this.client.delete(`${this.baseUrl}/${id}`);
     }
+
+    async getUnreadNotificationCount(): Promise<IBodyResponse<number>> {
+        return await this.client.get(`${this.baseUrl}/count`);
+    }
 }
 const notificationApiService = new NotificationApiService({ baseUrl: '/notifications' }, axiosService);
 

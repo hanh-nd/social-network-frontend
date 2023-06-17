@@ -173,9 +173,9 @@ export default class PostDetailDialog extends GlobalMixin {
         });
     }
 
-    onCommented() {
+    onCommented(comment: IComment) {
         this.post.numberOfComments++;
-        this.getCommentList();
+        this.commentList.unshift(comment);
     }
 
     onLoadMoreCommentDebounced = debounce(() => {

@@ -87,6 +87,7 @@ export default class NotificationList extends GlobalMixin {
         const response = await notificationApiService.markAllAsRead();
         if (response?.success) {
             this.notificationList.forEach((notification) => (notification.isRead = true));
+            notificationModule.setUnreadNotificationCount(0);
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi đánh dấu trạng thái thông báo`);
         }

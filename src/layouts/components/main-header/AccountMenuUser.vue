@@ -15,7 +15,11 @@
             </div>
 
             <template #reference>
-                <el-icon :size="24" class="chat-btn me-2"><Bell /></el-icon>
+                <el-icon :size="24" class="chat-btn me-2">
+                    <el-badge :value="unreadNotificationCount" :hidden="!unreadNotificationCount">
+                        <Bell />
+                    </el-badge>
+                </el-icon>
             </template>
         </el-popover>
 
@@ -108,6 +112,10 @@ export default class AccountMenuUser extends GlobalMixin {
         return appModule.loginUser;
     }
 
+    get unreadNotificationCount() {
+        return notificationModule.unreadNotificationCount;
+    }
+
     mounted(): void {
         this.registerNotificationEvents();
 
@@ -116,6 +124,7 @@ export default class AccountMenuUser extends GlobalMixin {
         });
         chatModule.getChatList();
         notificationModule.getNotifications();
+        notificationModule.getUnreadNotificationCount();
     }
     beforeDestroy(): void {
         window.removeEventListener('scroll', this.scrollHandler);
@@ -158,6 +167,7 @@ export default class AccountMenuUser extends GlobalMixin {
     registerNotificationEvents() {
         SocketProvider.socket.on(SocketEvent.USER_NOTIFICATION, (notification: INotification) => {
             this.showSuccessNotificationFunction(generateNotificationMessageContent(notification));
+            notificationModule.incUnreadNotificationCount(1);
 
             if (notification.urgent) {
                 if (notification.targetType === NotificationTargetType.SYSTEM_MESSAGE) {

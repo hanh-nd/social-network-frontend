@@ -18,6 +18,7 @@ class AdminUserModule extends VuexModule {
     isFetchedAllUserList = false;
     isShowUpdateUserDialog = false;
     selectedUser: IUser = {} as IUser;
+    isShowUpdateUserRoleDialog = false;
 
     @Action
     async getUserList() {
@@ -92,6 +93,16 @@ class AdminUserModule extends VuexModule {
     @Mutation
     SET_SELECTED_USER(user: IUser) {
         this.selectedUser = user;
+    }
+
+    @Action
+    setIsShowUpdateUserRoleDialog(isShowUpdateUserRoleDialog: boolean) {
+        this.SET_IS_SHOW_UPDATE_USER_ROLE_DIALOG(isShowUpdateUserRoleDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_UPDATE_USER_ROLE_DIALOG(isShowUpdateUserRoleDialog: boolean) {
+        this.isShowUpdateUserRoleDialog = isShowUpdateUserRoleDialog;
     }
 }
 export const adminUserModule = getModule(AdminUserModule);
