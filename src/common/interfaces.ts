@@ -473,3 +473,7 @@ export interface ICreateQuestionBody {
 export interface IUpdateQuestionBody {
     answer: string;
 }
+
+export interface IUpdateUserRoleBody {
+    roleId: string;
+}

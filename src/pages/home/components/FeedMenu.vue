@@ -9,11 +9,11 @@
                     </div>
                 </div>
             </el-menu-item>
-            <el-menu-item :index="FeedScreenType.MAIN">
+            <el-menu-item :index="FeedScreenType.MAIN" :id="FeedScreenType.MAIN">
                 <el-icon><Menu /></el-icon>
                 <template #title>Trang chủ</template>
             </el-menu-item>
-            <el-menu-item :index="FeedScreenType.EXPLORE">
+            <el-menu-item :index="FeedScreenType.EXPLORE" :id="FeedScreenType.EXPLORE">
                 <el-icon><Notification /></el-icon>
                 <template #title>Dành cho bạn</template>
             </el-menu-item>
@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { FeedScreenType } from '../constants';
@@ -64,6 +65,18 @@ export default class FeedMenu extends GlobalMixin {
         this.$router.push({
             name: this.PageName.GROUP_PAGE,
         });
+    }
+
+    mounted(): void {
+        EventEmitter.on(EventName.CHANGE_HOME_FEED_SCREEN_TAB, (type: FeedScreenType) => {
+            document.getElementById(type)?.click();
+            if (!Object.values(FeedScreenType).includes(type)) return;
+            homeModule.setFeedScreenType(type);
+        });
+    }
+
+    unmounted(): void {
+        EventEmitter.off(EventName.CHANGE_HOME_FEED_SCREEN_TAB);
     }
 }
 </script>

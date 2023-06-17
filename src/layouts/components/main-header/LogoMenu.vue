@@ -1,7 +1,7 @@
 <template>
     <div class="logo-menu-wrapper">
         <div class="logo">
-            <router-link to="/">
+            <router-link to="/" @click="onClick">
                 <img src="@/assets/images/common/logo.svg" alt="" />
             </router-link>
         </div>
@@ -25,7 +25,9 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { FeedScreenType } from '@/pages/home/constants';
 import { searchModule } from '@/pages/search/store';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { appModule } from '@/plugins/vuex/appModule';
 import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
@@ -76,6 +78,12 @@ export default class LogoMenu extends GlobalMixin {
             params: {
                 id: id,
             },
+        });
+    }
+
+    onClick() {
+        setTimeout(() => {
+            EventEmitter.emit(EventName.CHANGE_HOME_FEED_SCREEN_TAB, FeedScreenType.MAIN);
         });
     }
 }

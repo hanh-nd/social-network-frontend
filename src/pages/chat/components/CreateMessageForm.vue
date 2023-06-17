@@ -7,7 +7,11 @@
                 :autosize="true"
                 placeholder="Nhập nội dung tin nhắn"
                 @on-enter="onSubmit"
-            />
+            >
+                <template #iconRight>
+                    <BaseEmojiPicker @on-pick-emoji="onPickEmoji" />
+                </template>
+            </BaseInputText>
         </div>
 
         <el-button
@@ -53,7 +57,7 @@ export default class CreateMessageForm extends GlobalMixin {
             mediaId: yup.string().optional(),
         });
 
-        const { resetForm, errors, handleSubmit } = useForm({
+        const { resetForm, errors, handleSubmit, setFieldValue } = useForm({
             validationSchema: schema,
             initialValues: initValues,
         });
@@ -87,11 +91,16 @@ export default class CreateMessageForm extends GlobalMixin {
             errors,
             submit,
             clearFormData,
+            setFieldValue,
         };
     });
 
     async onSubmit() {
         this.messageForm.submit(this.chatId);
+    }
+
+    onPickEmoji(emoji: string) {
+        this.messageForm.setFieldValue('content', this.messageForm.content + emoji);
     }
 }
 </script>

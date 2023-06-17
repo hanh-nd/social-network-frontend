@@ -34,6 +34,9 @@
                         ><SwitchFilled
                     /></el-icon>
                     <el-icon :size="20" style="cursor: pointer" @click.prevent="getDetail(scope.row)"><Edit /></el-icon>
+                    <el-icon :size="20" style="cursor: pointer" @click.prevent="updateUserRole(scope.row)"
+                        ><Setting
+                    /></el-icon>
                 </template>
             </el-table-column>
         </el-table>
@@ -96,6 +99,11 @@ export default class UserTable extends GlobalMixin {
     getDetail(user: IUser) {
         adminUserModule.setSelectedUser(user);
         adminUserModule.setIsShowUpdateUserDialog(true);
+    }
+
+    updateUserRole(user: IUser) {
+        adminUserModule.setSelectedUser(user);
+        adminUserModule.setIsShowUpdateUserRoleDialog(true);
     }
 }
 </script>

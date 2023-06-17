@@ -1,12 +1,17 @@
 <template>
     <div class="explore-feed-screen-wrapper">
-        <div class="news-feed">
-            <BasePostList :postList="postList" @on-load-more="onLoadMorePostDebounced" />
-        </div>
+        <div class="feed" v-if="postList.length">
+            <div class="news-feed">
+                <BasePostList :postList="postList" @on-load-more="onLoadMorePostDebounced" />
+            </div>
 
-        <div class="reload">
-            Bạn đã xem hết tin.
-            <div class="reload-button" @click="reload">Tải lại trang</div>
+            <div class="reload">
+                Bạn đã xem hết tin.
+                <div class="reload-button" @click="reload">Tải lại trang</div>
+            </div>
+        </div>
+        <div class="empty" v-else>
+            <el-empty description="Chưa có bài viết nào. Hãy cập nhật sở thích của mình đi nhé bạn hiền." />
         </div>
     </div>
 </template>
@@ -68,11 +73,14 @@ export default class ExploreFeedScreen extends GlobalMixin {
 
 <style lang="scss" scoped>
 .explore-feed-screen-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
     margin: auto;
     max-width: map-get($grid-breakpoints, sm);
+
+    .feed {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
     .reload {
         display: flex;

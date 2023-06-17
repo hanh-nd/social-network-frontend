@@ -34,7 +34,11 @@
                         minRows: 3,
                     }"
                     :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
-                />
+                >
+                    <template #iconRight>
+                        <BaseEmojiPicker @on-pick-emoji="onPickEmoji" />
+                    </template>
+                </BaseInputText>
             </div>
             <BaseImageGrid :items="medias" :cells="3" />
             <BaseDivider />
@@ -170,6 +174,10 @@ export default class CreatePostDialog extends GlobalMixin {
         pictureIds.push(file.id);
         this.medias.push(file);
         this.createPostForm.setFieldValue('pictureIds', pictureIds);
+    }
+
+    onPickEmoji(emoji: string) {
+        this.createPostForm.setFieldValue('content', this.createPostForm.content + emoji);
     }
 }
 </script>

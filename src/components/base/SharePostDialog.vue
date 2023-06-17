@@ -18,7 +18,11 @@
                     }"
                     placeholder="Bạn muốn chia sẻ điều gì?"
                     :error="translateYupError(sharePostForm.errors.content as IYupError)"
-                />
+                >
+                    <template #iconRight>
+                        <BaseEmojiPicker @on-pick-emoji="onPickEmoji" />
+                    </template>
+                </BaseInputText>
             </div>
             <div class="content">
                 <BasePostContent :post="post" />
@@ -161,6 +165,10 @@ export default class PostDetailDialog extends GlobalMixin {
 
     async onCancel() {
         this.onClose();
+    }
+
+    onPickEmoji(emoji: string) {
+        this.sharePostForm.setFieldValue('content', this.sharePostForm.content + emoji);
     }
 }
 </script>

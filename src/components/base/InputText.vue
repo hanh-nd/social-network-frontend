@@ -21,7 +21,7 @@
                 :type="type"
                 :autosize="autosize"
                 :resize="resize"
-                :class="{ 'input-wrapper-icon-left': hasIconLeft }"
+                :class="{ 'input-wrapper-icon-left': hasIconLeft, 'input-wrapper-icon-right': hasIconRight }"
                 :readonly="isReadonly"
                 :disabled="isDisabled"
                 :error="true"
@@ -35,6 +35,10 @@
             />
             <div v-if="!isHorizontal && error" class="validation-error text-start">
                 {{ error }}
+            </div>
+
+            <div class="icon-right" v-if="hasIconRight">
+                <slot name="iconRight"></slot>
             </div>
         </div>
     </div>
@@ -83,6 +87,10 @@ export default class InputText extends GlobalMixin {
 
     get hasIconLeft() {
         return !!this.$slots.iconLeft;
+    }
+
+    get hasIconRight() {
+        return !!this.$slots.iconRight;
     }
 
     onFocus() {
@@ -185,6 +193,23 @@ label {
 .input-wrapper-icon-left {
     :deep(.el-input__wrapper) {
         padding-left: 42px;
+    }
+}
+
+.icon-right {
+    position: absolute;
+    top: 0;
+    right: 18px;
+    margin: auto;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    height: 31px;
+}
+
+.input-wrapper-icon-right {
+    :deep(.el-input__wrapper) {
+        padding-right: 42px;
     }
 }
 </style>
