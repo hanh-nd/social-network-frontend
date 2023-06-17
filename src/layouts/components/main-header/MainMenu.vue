@@ -1,8 +1,7 @@
 <template>
     <div class="main-menu-header">
         <div class="menu-list">
-            <router-link to="/"> Trang chủ </router-link>
-            <router-link to="/"> Truyền cảm hứng </router-link>
+            <!-- <router-link to="/"> Trang chủ </router-link> -->
         </div>
     </div>
 </template>

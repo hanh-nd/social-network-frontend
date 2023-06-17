@@ -39,6 +39,12 @@ export default class CensorableContent extends GlobalMixin {
         display: flex;
         flex-direction: column;
         gap: 8px;
+
+        .content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+        }
     }
 
     .show,

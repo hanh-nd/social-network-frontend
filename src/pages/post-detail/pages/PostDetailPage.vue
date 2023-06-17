@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts">
+import { IComment } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { postDetailModule } from '../store';
@@ -42,9 +43,9 @@ export default class PostDetailPage extends GlobalMixin {
         postDetailModule.getCommentList(this.id);
     }
 
-    onCommented() {
+    onCommented(comment: IComment) {
         this.postDetail.numberOfComments = (this.postDetail?.numberOfComments || 0) + 1;
-        this.loadData();
+        this.commentList.unshift(comment);
     }
 
     onLoadMoreComments() {

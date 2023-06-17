@@ -12,7 +12,11 @@
                 placeholder="Nhập bình luận"
                 :error="translateYupError(commentForm.errors.content as IYupError)"
                 @on-enter="onSubmit"
-            />
+            >
+                <template #iconRight>
+                    <BaseEmojiPicker @on-pick-emoji="onPickEmoji" />
+                </template>
+            </BaseInputText>
         </div>
 
         <el-button
@@ -64,7 +68,7 @@ export default class LoginForm extends GlobalMixin {
             pictureId: yup.string().optional(),
         });
 
-        const { resetForm, errors, handleSubmit } = useForm({
+        const { resetForm, errors, handleSubmit, setFieldValue } = useForm({
             validationSchema: schema,
             initialValues: initValues,
         });
@@ -87,7 +91,7 @@ export default class LoginForm extends GlobalMixin {
 
                 if (response?.success) {
                     clearFormData();
-                    this.$emit(`on-commented`);
+                    this.$emit(`on-commented`, response?.data);
                 } else {
                     this.showErrorNotificationFunction(response?.message || 'Không tạo được bình luận.');
                 }
@@ -104,11 +108,16 @@ export default class LoginForm extends GlobalMixin {
             errors,
             submit,
             clearFormData,
+            setFieldValue,
         };
     });
 
     async onSubmit() {
         await this.commentForm.submit(this.postId);
+    }
+
+    onPickEmoji(emoji: string) {
+        this.commentForm.setFieldValue('content', this.commentForm.content + emoji);
     }
 }
 </script>
