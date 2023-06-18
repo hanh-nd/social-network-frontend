@@ -6,7 +6,7 @@
             </div>
             <div class="information">
                 <div class="name" @click="goToProfilePage">
-                    {{ post?.author?.fullName || 'hihi' }}
+                    {{ post?.author?.fullName }}
                 </div>
                 <div class="created-at">
                     <el-tooltip
@@ -27,7 +27,7 @@
 
             <div class="post-data">
                 <div class="images" @click="openPostDetailDialog">
-                    <BaseImageGrid :items="post?.pictureIds" />
+                    <BaseImageGrid :items="post?.medias" />
                 </div>
             </div>
         </div>
@@ -49,10 +49,12 @@ import { Prop } from 'vue-property-decorator';
     components: {},
     emits: [],
 })
-export default class PostContent extends GlobalMixin {
+export default class PostSharedContent extends GlobalMixin {
     @Prop() post!: IPost;
 
     goToProfilePage() {
+        if (!this.post?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {

@@ -15,7 +15,7 @@
                 </div>
                 <div class="information">
                     <div class="name" @click="goToProfilePage">
-                        {{ post?.author?.fullName || 'hihi' }}
+                        {{ post?.author?.fullName }}
                     </div>
                     <div class="created-at">
                         <el-tooltip
@@ -33,10 +33,10 @@
                 <div class="content">
                     {{ post?.content }}
                 </div>
-                <div class="images">
-                    <el-carousel width="100%">
-                        <el-carousel-item v-for="image in post.pictureIds" :key="image">
-                            <img :src="getImageSourceById(image)" alt="" />
+                <div class="images" v-if="post.medias.length">
+                    <el-carousel class="carousel" :autoplay="false" width="100%">
+                        <el-carousel-item v-for="media in post.medias" :key="media._id">
+                            <BaseMedia :media="media" />
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -46,14 +46,17 @@
             <div class="post-info">
                 <div class="left-section">
                     <div class="reaction-count">
+                        <Icon icon="solar:like-bold" height="16" />
                         {{ post?.numberOfReacts }}
                     </div>
                 </div>
                 <div class="right-section">
                     <div class="comment-count">
+                        <Icon icon="iconamoon:comment-fill" height="16" />
                         {{ post?.numberOfComments }}
                     </div>
                     <div class="share-count">
+                        <Icon icon="majesticons:share" height="16" />
                         {{ post?.numberOfShares }}
                     </div>
                 </div>
@@ -61,7 +64,7 @@
             <BaseDivider />
             <div class="action-group">
                 <div class="btn react">
-                    <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                    <BaseFullReactionBar :target="post" :onLike="onLike" />
                 </div>
                 <div class="btn share">
                     <el-button @click="openSharePostDialog">Chia sẻ</el-button>
@@ -73,27 +76,31 @@
             </div>
 
             <div class="comment-list">
-                <BaseCommentList :commentList="commentList" @on-load-more="onLoadMoreComments" />
+                <BaseCommentList :commentList="commentList" @on-load-more="onLoadMoreCommentDebounced" />
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script lang="ts">
-import { ReactionType } from '@/common/constants';
-import { IComment } from '@/common/interfaces';
+import { INIT_GET_COMMENT_LIST_QUERY, ReactionType } from '@/common/constants';
+import { IComment, IGetCommentListQuery } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
+import { cloneDeep, debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 
 @Options({
-    components: {},
+    components: { Icon },
     emits: [],
 })
 export default class PostDetailDialog extends GlobalMixin {
     commentList: IComment[] = [];
+    commentListQuery: IGetCommentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
+    isFetchedAllCommentList = false;
 
     get post() {
         return appModule.postDetail;
@@ -109,6 +116,9 @@ export default class PostDetailDialog extends GlobalMixin {
 
     goToProfilePage() {
         this.onClose();
+
+        if (!this.post?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {
@@ -123,15 +133,35 @@ export default class PostDetailDialog extends GlobalMixin {
 
     onClose() {
         appModule.setIsShowPostDetailDialog(false);
+        this.commentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
+        this.isFetchedAllCommentList = false;
         this.commentList = [];
     }
 
     async loadData() {
-        const response = await commentApiService.getComment(this.post._id);
+        this.commentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
+        this.getCommentList();
+    }
+
+    async getCommentList(append = false) {
+        const response = await commentApiService.getComment(this.post._id, this.commentListQuery);
         if (response.success) {
-            this.commentList.push(...(response?.data || []));
+            const data = response?.data || [];
+            if (!data.length) {
+                this.isFetchedAllCommentList = true;
+            }
+            if (append) {
+                this.commentList.push(...data);
+            } else {
+                this.commentList = data;
+            }
         } else {
-            this.commentList = [];
+            this.isFetchedAllCommentList = true;
+            if (append) {
+                this.commentList.push();
+            } else {
+                this.commentList = [];
+            }
         }
     }
 
@@ -145,12 +175,17 @@ export default class PostDetailDialog extends GlobalMixin {
 
     onCommented() {
         this.post.numberOfComments++;
-        this.loadData();
+        this.getCommentList();
     }
 
-    onLoadMoreComments() {
-        this.loadData();
-    }
+    onLoadMoreCommentDebounced = debounce(() => {
+        if (this.isFetchedAllCommentList) return;
+        this.commentListQuery = {
+            ...this.commentListQuery,
+            page: (this.commentListQuery.page || 1) + 1,
+        };
+        this.getCommentList(true);
+    }, 50);
 
     openSharePostDialog() {
         appModule.setPostDetail(this.post);
@@ -162,7 +197,7 @@ export default class PostDetailDialog extends GlobalMixin {
 <style lang="scss" scoped>
 :deep(.post-detail-dialog) {
     margin-top: 40px;
-    height: 90%;
+    max-height: 90%;
     overflow: auto;
     .el-dialog__body {
         display: flex;
@@ -192,12 +227,7 @@ export default class PostDetailDialog extends GlobalMixin {
     }
 
     .main-content {
-        .images {
-            img {
-                width: 100%;
-                object-fit: cover;
-            }
-        }
+        min-height: 100px;
     }
 
     .post-info {
@@ -216,6 +246,14 @@ export default class PostDetailDialog extends GlobalMixin {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        :deep(.full-reaction-popover) {
+            width: 300px !important;
+            .full-reaction {
+                display: flex;
+                flex-direction: row;
+            }
+        }
 
         .btn {
             width: 100%;

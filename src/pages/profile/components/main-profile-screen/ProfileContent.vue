@@ -3,15 +3,20 @@
         <div class="create-new-post" v-if="isLoginUser(user)">
             <BaseCreateNewPostBar />
         </div>
-        <div class="post-list">
+        <div class="" v-if="!isLoginUser(user) && isPrivate && !isSubscribing">
+            <el-empty description="Đây là tài khoản riêng tư. Hãy theo dõi người dùng này để xem thêm." />
+        </div>
+        <div class="post-list" v-else>
             <BasePostList :postList="postList" @on-load-more="onLoadMore" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { IUser } from '@/common/interfaces';
+import { IPost, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
+import { isNil } from 'lodash';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
 
@@ -25,6 +30,26 @@ export default class ProfileContent extends GlobalMixin {
 
     get postList() {
         return profileModule.profilePostList;
+    }
+
+    get isSubscribing() {
+        return this.user?.isSubscribing || false;
+    }
+
+    get isPrivate() {
+        return isNil(this.user?.private) ? true : this.user.private;
+    }
+
+    mounted(): void {
+        EventEmitter.on(EventName.POST_CREATED, this.postCreatedHandler);
+    }
+
+    unmounted(): void {
+        EventEmitter.off(EventName.POST_CREATED, this.postCreatedHandler);
+    }
+
+    postCreatedHandler(post: IPost) {
+        this.postList.unshift(post);
     }
 
     onLoadMore() {

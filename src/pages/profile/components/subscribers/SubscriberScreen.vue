@@ -6,17 +6,26 @@
                 <div class="sub">{{ profileUser?.numberOfSubscribers || 0 }} người</div>
             </div>
             <BaseDivider />
-            <div class="subscriber-list" v-infinite-scroll="onLoadMoreSubscribers">
+            <div class="subscriber-list" v-if="subscriberList.length">
                 <div class="subscriber-card" v-for="subscriber in subscriberList" :key="subscriber._id">
-                    <UserCard :user="subscriber" />
+                    <UserCard :user="subscriber">
+                        <el-button @click="subscribeOrUnsubscribe(subscriber)" v-if="!subscriber?.isSelf">{{
+                            subscriber?.isSubscribing ? `Hủy theo dõi` : `Theo dõi`
+                        }}</el-button>
+                    </UserCard>
                 </div>
+            </div>
+            <div class="empty" v-else>
+                <el-empty description="Danh sách hiện đang trống." />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
+import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import userApiService from '@/common/service/user.api.service';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
 import UserCard from '../common/UserCard.vue';
@@ -43,8 +52,13 @@ export default class SubscriberScreen extends GlobalMixin {
         profileModule.getSubscriberList(this.profileUser?._id);
     }
 
-    onLoadMoreSubscribers() {
-        profileModule.getSubscriberList(this.profileUser?._id);
+    async subscribeOrUnsubscribe(user: IUser) {
+        const response = await userApiService.subscribeOrUnsubscribe(user._id);
+        if (response?.success) {
+            user.isSubscribing = !user.isSubscribing;
+        } else {
+            this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra.');
+        }
     }
 }
 </script>

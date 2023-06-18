@@ -1,13 +1,13 @@
 <template>
     <div class="home-wrapper">
         <div class="home-container mx-auto">
-            <div class="feed-menu col-sm-2">
+            <div class="feed-menu">
                 <FeedMenu />
             </div>
-            <div class="feed-screen col-sm-8">
+            <div class="feed-screen">
                 <FeedScreen />
             </div>
-            <div class="right-contact col-sm-2 d-none d-sm-block">
+            <div class="right-contact">
                 <RightContact />
             </div>
         </div>
@@ -59,11 +59,13 @@ export default class HomePage extends GlobalMixin {
             top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
+            min-width: 250px;
         }
 
         .feed-screen {
             padding-top: 8px;
             margin: 0 8px;
+            flex: 1;
         }
 
         .right-contact {
@@ -71,6 +73,23 @@ export default class HomePage extends GlobalMixin {
             top: 60px;
             height: calc(100vh - 60px);
             padding-top: 8px;
+            width: 300px;
+        }
+    }
+}
+
+@media only screen and (max-width: map-get($grid-breakpoints, lg)) {
+    .home-wrapper .home-container {
+        .right-contact {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (max-width: map-get($grid-breakpoints, md)) {
+    .home-wrapper .home-container {
+        .feed-menu {
+            min-width: 70px;
         }
     }
 }

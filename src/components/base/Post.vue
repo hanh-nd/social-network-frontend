@@ -5,14 +5,17 @@
         <div class="post-info">
             <div class="left-section">
                 <div class="reaction-count" @click="openReactionListDialog">
+                    <Icon icon="solar:like-bold" height="16" />
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
             <div class="right-section">
                 <div class="comment-count">
+                    <Icon icon="iconamoon:comment-fill" height="16" />
                     {{ post?.numberOfComments }}
                 </div>
                 <div class="share-count" @click="openShareListDialog">
+                    <Icon icon="majesticons:share" height="16" />
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -20,7 +23,7 @@
         <BaseDivider />
         <div class="action-group">
             <div class="btn react">
-                <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                <BaseFullReactionBar :target="post" :onLike="onLike" />
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -39,14 +42,19 @@ import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
 import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
 })
 export default class Post extends GlobalMixin {
+    ReactionType = ReactionType;
+
     @Prop() post!: IPost;
 
     get authorAvatar() {
@@ -57,11 +65,12 @@ export default class Post extends GlobalMixin {
         return _.isNil(this.post.deletedAt);
     }
 
-    async onLike() {
+    async onLike(type = ReactionType.LIKE) {
         this.post.isReacted = !this.post.isReacted;
         this.post.numberOfReacts += this.post.isReacted ? 1 : -1;
+        this.post.reactionType = type;
         await postApiService.react(this.post._id, {
-            type: ReactionType.LIKE,
+            type,
         });
     }
 
@@ -103,6 +112,10 @@ export default class Post extends GlobalMixin {
         .left-section {
             .reaction-count {
                 cursor: pointer;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
             }
         }
 
@@ -121,6 +134,15 @@ export default class Post extends GlobalMixin {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        :deep(.full-reaction-popover) {
+            width: 300px !important;
+            .full-reaction {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+        }
 
         .btn {
             width: 100%;

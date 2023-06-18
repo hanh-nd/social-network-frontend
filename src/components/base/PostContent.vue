@@ -7,7 +7,7 @@
                 </div>
                 <div class="information">
                     <div class="name" @click="goToProfilePage">
-                        {{ post?.author?.fullName || 'hihi' }}
+                        {{ post?.author?.fullName }}
                     </div>
                     <div class="created-at" @click="goToPostDetailPage">
                         <el-tooltip
@@ -66,6 +66,8 @@ export default class PostContent extends GlobalMixin {
     @Prop() post!: IPost;
 
     goToProfilePage() {
+        if (!this.post?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {

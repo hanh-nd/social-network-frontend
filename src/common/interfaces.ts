@@ -1,5 +1,18 @@
+import { IMessage } from '@/pages/chat/interfaces';
 import { AxiosResponse } from 'axios';
-import { HttpStatus, OrderDirection, ReactionType, SubscribeRequestStatus } from './constants';
+import {
+    Gender,
+    HttpStatus,
+    NotificationAction,
+    NotificationTargetType,
+    OrderDirection,
+    ReactionType,
+    Relationship,
+    ReportAction,
+    ReportTargetType,
+    SubscribeRequestStatus,
+    SystemMessageType,
+} from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
     isRequestError?: boolean;
@@ -86,6 +99,7 @@ export interface IUser {
     username: string;
     roleId: string;
     fullName: string;
+    phone?: string;
     avatarId?: string;
     coverId?: string;
     describe?: string;
@@ -96,10 +110,26 @@ export interface IUser {
     lastOnlineAt?: Date;
     numberOfSubscribers: number;
     numberOfSubscribing: number;
+    numberOfBlocked?: number;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date;
     isSubscribing?: boolean;
+    isBlocked?: boolean;
+    isSentRequest?: boolean;
+    isSelf?: boolean;
+}
+
+export interface IUserDetail {
+    _id: string;
+    userId: string;
+    gender?: Gender;
+    birthday?: Date;
+    address?: IAddress;
+    relationship?: Relationship;
+    work?: IWork;
+    education?: IEducation;
+    tagIds?: string[];
 }
 
 export interface IAddress {
@@ -109,7 +139,18 @@ export interface IAddress {
     detail?: string;
 }
 
+export interface IWork {
+    name: string;
+    position?: string;
+}
+
+export interface IEducation {
+    name: string;
+    major?: string;
+}
+
 export interface IFile {
+    _id: string;
     originalname: string;
     mimetype: string;
     id: string;
@@ -127,15 +168,22 @@ export interface IFile {
     contentType: string;
 }
 
+export type IGetUserListQuery = ICommonGetListQuery;
+
 export interface IUpdateProfileBody {
     avatarId?: string;
     coverId?: string;
     phone?: string;
     fullName?: string;
+    gender?: Gender;
     birthday?: Date;
     address?: IAddress;
     describe?: string;
+    relationship?: Relationship;
+    work?: IWork;
+    education?: IEducation;
     private?: boolean;
+    tagIds?: string[];
 }
 
 export interface IPost {
@@ -146,14 +194,19 @@ export interface IPost {
     author: Partial<IUser>;
     content: string;
     privacy: number;
+    isAnonymous?: boolean;
     postShared: Partial<IPost>;
     pictureIds: string[];
+    medias: IFile[];
     videoIds: string[];
     numberOfComments: number;
     numberOfReacts: number;
     numberOfShares: number;
     isReacted: boolean;
+    reactionType?: ReactionType;
 }
+
+export type IGetPostListQuery = ICommonGetListQuery;
 
 export interface ICreateNewPostBody {
     privacy: number;
@@ -161,6 +214,7 @@ export interface ICreateNewPostBody {
     pictureIds: string[];
     videoIds: string[];
     postSharedId?: string;
+    isAnonymous?: boolean;
 }
 
 export interface IUpdatePostBody {
@@ -177,6 +231,8 @@ export interface IReportPostBody {
 export interface ICreateReactionBody {
     type: string;
 }
+
+export type IGetCommentListQuery = ICommonGetListQuery;
 
 export interface ICreateCommentBody {
     content: string;
@@ -198,13 +254,15 @@ export interface IComment {
     author: Partial<IUser>;
     post: Partial<IPost>;
     content: string;
-    numberOfReactions: number;
+    numberOfReacts: number;
     isReacted: boolean;
+    reactionType?: ReactionType;
 }
 
 export interface ISearchResults {
     posts: IPost[];
     users: IUser[];
+    groups: IGroup[];
 }
 
 export interface ISearchQuery extends ICommonGetListQuery {
@@ -221,6 +279,7 @@ export interface IReaction {
         username: string;
         fullName: string;
         isSubscribing?: boolean;
+        isSelf?: boolean;
     };
     target: {
         _id: string;
@@ -244,8 +303,10 @@ export interface IGroup {
     summary: string;
     coverId: string;
     memberIds: string[];
-    pinnedPostIds: IGroupPost[];
+    pinnedPosts: IGroupPost[];
     blockIds: IUser[];
+    isMember?: boolean;
+    isPending?: boolean;
 }
 
 export interface IGroupPost {
@@ -295,9 +356,7 @@ export interface IGetGroupPostListQuery extends ICommonGetListQuery {
     status?: SubscribeRequestStatus;
 }
 
-export interface ICreateGroupPostBody extends ICreateNewPostBody {
-    status: SubscribeRequestStatus;
-}
+export type ICreateGroupPostBody = ICreateNewPostBody;
 
 export interface IUpdateGroupPostBody {
     status: SubscribeRequestStatus;
@@ -309,4 +368,104 @@ export interface ICreateJoinRequestBody {
 
 export interface IUpdateJoinRequestBody {
     status: SubscribeRequestStatus;
+}
+
+export interface ITag {
+    _id: string;
+    name: string;
+    iconId: string;
+}
+
+export interface IRole {
+    _id: string;
+    name: string;
+    permissions: string[];
+}
+
+export interface INotification {
+    _id: string;
+    author: IUser;
+    to: IUser;
+    target: NotificationTarget;
+    targetType: NotificationTargetType;
+    action: NotificationAction;
+    isRead: boolean;
+    content: string;
+    additionalData?: object;
+    urgent: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export type NotificationTarget = IPost | IComment | IMessage | IUser | ISystemMessage;
+export type ReportTarget = IPost | IComment | IMessage | IUser;
+
+export interface IStatistic {
+    total: number;
+    totalActive: number;
+    totalDeactivated: number;
+    group: IGroupCount[];
+}
+export interface IGroupCount {
+    _id: string;
+    count: number;
+}
+
+export interface IReport {
+    _id: string;
+    author: IUser;
+    target: ReportTarget;
+    targetType: ReportTargetType;
+    action: ReportAction;
+    reportReason?: string;
+    note?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IGetReportListQuery extends ICommonGetListQuery {
+    targetType?: ReportTargetType;
+}
+
+export interface IUpdateReportBody {
+    note?: string;
+}
+
+export interface IGetStatisticQuery extends ICommonGetListQuery {
+    range?: number;
+}
+
+export interface ISystemMessage {
+    _id: string;
+    code: string;
+    template: string;
+    fullTemplate: string;
+    type: SystemMessageType;
+}
+
+export interface IQuestion {
+    _id: string;
+    sender: IUser;
+    receiver: IUser;
+    question: string;
+    answer?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IGetQuestionListQuery extends ICommonGetListQuery {
+    pending?: number;
+}
+
+export interface ICreateQuestionBody {
+    receiver: string;
+    isAnonymous: boolean;
+    question: string;
+}
+
+export interface IUpdateQuestionBody {
+    answer: string;
 }

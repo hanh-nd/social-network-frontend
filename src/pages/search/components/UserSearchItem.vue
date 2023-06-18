@@ -10,7 +10,7 @@
         </div>
         <div class="right-section">
             <div class="action">
-                <el-button @click="onAction" :type="isSubscribing ? `default` : `primary`">{{
+                <el-button @click="onAction" :type="isSubscribing ? `default` : `primary`" v-if="!isSelf">{{
                     isSubscribing ? `Nhắn tin` : `Theo dõi`
                 }}</el-button>
             </div>
@@ -33,6 +33,10 @@ export default class UserSearchItem extends GlobalMixin {
 
     get isSubscribing() {
         return this.user?.isSubscribing || false;
+    }
+
+    get isSelf() {
+        return this.user?.isSelf || false;
     }
 
     async onAction() {
@@ -63,6 +67,9 @@ export default class UserSearchItem extends GlobalMixin {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    padding: 16px;
+    background: $color-white;
+    border-radius: 8px;
 
     .left-section {
         display: flex;

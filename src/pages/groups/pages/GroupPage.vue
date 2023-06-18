@@ -17,10 +17,10 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
+import CreateNewGroupDialog from '../components/CreateNewGroupDialog.vue';
 import FeedMenu from '../components/FeedMenu.vue';
 import FeedScreen from '../components/FeedScreen.vue';
 import { groupModule } from '../store';
-import CreateNewGroupDialog from '../components/CreateNewGroupDialog.vue';
 
 @Options({
     components: {
@@ -35,7 +35,8 @@ export default class GroupPage extends GlobalMixin {
     }
 
     async loadData() {
-        groupModule.getJoinedGroupList();
+        groupModule.resetJoinedGroupListQuery();
+        groupModule.getJoinedGroupList({ append: false });
         groupModule.getCreatedGroupList();
     }
 }

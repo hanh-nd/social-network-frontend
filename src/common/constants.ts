@@ -11,6 +11,13 @@ export enum PageName {
     CHAT_PAGE = 'CHAT_PAGE',
     GROUP_PAGE = 'GROUP_PAGE',
     GROUP_DETAIL_PAGE = 'GROUP_DETAIL_PAGE',
+    JOIN_GROUP_REQUEST_PAGE = 'JOIN_GROUP_REQUEST_PAGE',
+    PENDING_GROUP_POSTS_PAGE = 'PENDING_GROUP_POSTS_PAGE',
+
+    DASHBOARD = 'DASHBOARD',
+    MANAGE_POST_PAGE = 'MANAGE_POST_PAGE',
+    MANAGE_REPORT_PAGE = 'MANAGE_REPORT_PAGE',
+    MANAGE_USER_PAGE = 'MANAGE_USER_PAGE',
 }
 
 export const PROVINCE_LIMIT = 100;
@@ -138,29 +145,87 @@ export enum ReportAction {
     REJECTED = 'REJECTED',
 }
 
-export const ReportTargetType = {
-    POST: 'Post',
-    COMMENT: 'Comment',
-    MESSAGE: 'Message',
-    USER: 'User',
+export enum ReportTargetType {
+    POST = 'Post',
+    COMMENT = 'Comment',
+    MESSAGE = 'Message',
+    USER = 'User',
+}
+
+export enum NotificationTargetType {
+    POST = 'Post',
+    COMMENT = 'Comment',
+    MESSAGE = 'Message',
+    USER = 'User',
+    SYSTEM_MESSAGE = 'SystemMessage',
+}
+
+export const NotificationTargetTypeName = {
+    [NotificationTargetType.POST]: 'bài viết',
+    [NotificationTargetType.COMMENT]: 'bình luận',
+    [NotificationTargetType.MESSAGE]: 'tin nhắn',
+    [NotificationTargetType.USER]: 'bạn',
 };
 
-export const NotificationTargetType = {
-    POST: 'Post',
-    COMMENT: 'Comment',
-    MESSAGE: 'Message',
-    USER: 'User',
+export enum NotificationAction {
+    REACT = 'REACT',
+    COMMENT = 'COMMENT',
+    SHARE = 'SHARE',
+    SUBSCRIBE_PROFILE = 'SUBSCRIBE_PROFILE',
+    SENT_SUBSCRIBE_REQUEST = 'SENT_SUBSCRIBE_REQUEST',
+    ACCEPT_SUBSCRIBE_REQUEST = 'ACCEPT_SUBSCRIBE_REQUEST',
+}
+
+export const NotificationActionName = {
+    [NotificationAction.REACT]: 'bày tỏ cảm xúc về một',
+    [NotificationAction.COMMENT]: 'bình luận về một',
+    [NotificationAction.SHARE]: 'chia sẻ',
+    [NotificationAction.SUBSCRIBE_PROFILE]: 'theo dõi',
+    [NotificationAction.SENT_SUBSCRIBE_REQUEST]: 'yêu cầu theo dõi',
+    [NotificationAction.ACCEPT_SUBSCRIBE_REQUEST]: 'đồng ý lời mời theo dõi của',
 };
 
-export const NotificationAction = {
-    REACT: 'REACT',
-    COMMENT: 'COMMENT',
-    SHARE: 'SHARE',
-    ACCEPT_SUBSCRIBE_REQUEST: 'ACCEPT_SUBSCRIBE_REQUEST',
+export enum SocketEvent {
+    USER_LOGIN = 'USER_LOGIN',
+    USER_REACT = 'USER_REACT',
+    USER_SUBSCRIBE_PUBLIC = 'USER_SUBSCRIBE_PUBLIC',
+    USER_SUBSCRIBE_PRIVATE = 'USER_SUBSCRIBE_PRIVATE',
+    USER_CHAT = 'USER_CHAT',
+    USER_RECALL = 'USER_RECALL',
+
+    USER_NOTIFICATION = 'USER_NOTIFICATION',
+}
+
+export const INIT_GET_COMMENT_LIST_QUERY = {
+    page: 1,
+    limit: 10,
 };
 
-export const SocketEvent = {
-    USER_REACT: 'USER_REACT',
-    USER_SUBSCRIBE_PUBLIC: 'USER_SUBSCRIBE_PUBLIC',
-    USER_SUBSCRIBE_PRIVATE: 'USER_SUBSCRIBE_PRIVATE',
+export enum Gender {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    OTHER = 'OTHER',
+}
+
+export const GenderName = {
+    [Gender.MALE]: 'Nam',
+    [Gender.FEMALE]: 'Nữ',
+    [Gender.OTHER]: 'Khác',
 };
+
+export enum Relationship {
+    SINGLE = 'SINGLE',
+    IN_A_RELATIONSHIP = 'IN_A_RELATIONSHIP',
+    MARRIED = 'MARRIED',
+}
+
+export const RelationshipName = {
+    [Relationship.SINGLE]: 'Độc thân',
+    [Relationship.IN_A_RELATIONSHIP]: 'Đang trong một mối quan hệ',
+    [Relationship.MARRIED]: 'Đã kết hôn',
+};
+
+export enum SystemMessageType {
+    INFO = 'info',
+    WARNING = 'warning',
+}

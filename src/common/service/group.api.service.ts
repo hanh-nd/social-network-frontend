@@ -13,9 +13,10 @@ import {
     IUpdateGroupBody,
     IUpdateGroupPostBody,
     IUpdateJoinRequestBody,
+    IUser,
 } from '../interfaces';
 class GroupApiService extends ApiService {
-    async createGroup(body: ICreateGroupBody): Promise<IBodyResponse<boolean>> {
+    async createGroup(body: ICreateGroupBody): Promise<IBodyResponse<IGroup>> {
         return await this.client.post(`${this.baseUrl}/`, body);
     }
 
@@ -67,7 +68,7 @@ class GroupApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/${groupId}`);
     }
 
-    async getMembers(groupId: string): Promise<IBodyResponse<IGroup>> {
+    async getMembers(groupId: string): Promise<IBodyResponse<IUser[]>> {
         return await this.client.get(`${this.baseUrl}/${groupId}/members`);
     }
 
@@ -75,11 +76,15 @@ class GroupApiService extends ApiService {
         return await this.client.post(`${this.baseUrl}/${groupId}/join-requests`);
     }
 
+    async cancelToJoin(groupId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${groupId}/cancel-join-requests`);
+    }
+
     async leave(groupId: string): Promise<IBodyResponse<boolean>> {
         return await this.client.post(`${this.baseUrl}/${groupId}/leave`);
     }
 
-    async getPosts(groupId: string, query?: IGetGroupPostListQuery): Promise<IBodyResponse<boolean>> {
+    async getPosts(groupId: string, query?: IGetGroupPostListQuery): Promise<IBodyResponse<IGroupPost[]>> {
         return await this.client.get(`${this.baseUrl}/${groupId}/group-posts`, {
             params: query,
         });
@@ -109,6 +114,20 @@ class GroupApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/group-posts`, {
             params: query,
         });
+    }
+
+    async getUserPendingPost(groupId: string, query?: IGetGroupPostListQuery): Promise<IBodyResponse<IGroupPost[]>> {
+        return await this.client.get(`${this.baseUrl}/${groupId}/my-pending`, {
+            params: query,
+        });
+    }
+
+    async makeAdministrator(groupId: string, targetId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${groupId}/make-administrator/${targetId}`);
+    }
+
+    async removeAdministrator(groupId: string, targetId: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${groupId}/remove-administrator/${targetId}`);
     }
 }
 const groupApiService = new GroupApiService({ baseUrl: '/groups' }, axiosService);

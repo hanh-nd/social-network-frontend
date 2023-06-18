@@ -16,6 +16,7 @@
         <BaseReportCommentDialog />
         <BaseReactionListDialog />
         <BaseShareListDialog />
+        <BaseSystemMessageDialog />
     </div>
 </template>
 

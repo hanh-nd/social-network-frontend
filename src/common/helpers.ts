@@ -4,7 +4,8 @@ import isPlainObject from 'lodash/isPlainObject';
 import mapKeys from 'lodash/mapKeys';
 import pick from 'lodash/pick';
 import trim from 'lodash/trim';
-import { IUser } from './interfaces';
+import { NotificationActionName, NotificationTargetTypeName } from './constants';
+import { INotification, IUser } from './interfaces';
 
 export function isJson(str: string): boolean {
     try {
@@ -70,4 +71,14 @@ export function getAvatarUrl(user?: Partial<IUser>) {
     return user?.avatarId
         ? `${process.env.VUE_APP_API_URL}/files/${user.avatarId}`
         : require('@/assets/images/common/default-avatar.svg');
+}
+
+export function generateNotificationMessageContent(notification: INotification) {
+    const { author, to, targetType, target, action, content: notificationContent } = notification;
+    if (notificationContent) {
+        return notificationContent;
+    }
+
+    const content = [author?.fullName, 'vừa', NotificationActionName[action], NotificationTargetTypeName[targetType]];
+    return content.join(' ');
 }

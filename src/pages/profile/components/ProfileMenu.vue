@@ -12,19 +12,30 @@
             <el-menu-item :index="ProfileScreenTab.DESCRIBE"
                 ><div :id="ProfileScreenTab.DESCRIBE">Giới thiệu</div></el-menu-item
             >
-            <el-menu-item :index="ProfileScreenTab.SUBSCRIBERS"
+            <el-menu-item :index="ProfileScreenTab.SUBSCRIBERS" v-if="isUser || !(isPrivate && !isSubscribing)"
                 ><div :id="ProfileScreenTab.SUBSCRIBERS">Người theo dõi</div></el-menu-item
             >
-            <el-menu-item :index="ProfileScreenTab.SUBSCRIBING"
+            <el-menu-item :index="ProfileScreenTab.SUBSCRIBING" v-if="isUser || !(isPrivate && !isSubscribing)"
                 ><div :id="ProfileScreenTab.SUBSCRIBING">Đang theo dõi</div></el-menu-item
+            >
+            <el-menu-item :index="ProfileScreenTab.REQUEST" v-if="isUser"
+                ><div :id="ProfileScreenTab.REQUEST">Yêu cầu theo dõi</div></el-menu-item
+            >
+            <el-menu-item :index="ProfileScreenTab.BLOCKS" v-if="isUser"
+                ><div :id="ProfileScreenTab.BLOCKS">Đã chặn</div></el-menu-item
+            >
+            <el-menu-item :index="ProfileScreenTab.QUESTIONS" v-if="isUser"
+                ><div :id="ProfileScreenTab.QUESTIONS">Câu hỏi dành cho tôi</div></el-menu-item
             >
         </el-menu>
     </div>
 </template>
 
 <script lang="ts">
+import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import { EventEmitter, EventName } from '@/plugins/mitt';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { ProfileScreenTab } from '../constants';
 import { profileModule } from '../store';
@@ -37,6 +48,30 @@ export default class ProfileMenu extends GlobalMixin {
 
     get currentScreen() {
         return profileModule.profileScreenTab;
+    }
+
+    get userId() {
+        return this.$route.params.id as string;
+    }
+
+    get isUser() {
+        return this.userId == this.loginUser._id;
+    }
+
+    get user() {
+        return profileModule.profileUser || ({} as IUser);
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    get isSubscribing() {
+        return this.user?.isSubscribing || false;
+    }
+
+    get isPrivate() {
+        return this.user?.private || true;
     }
 
     mounted(): void {

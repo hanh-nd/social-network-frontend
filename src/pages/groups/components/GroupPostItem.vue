@@ -7,12 +7,13 @@
                 </div>
                 <div class="information">
                     <div class="top-section">
-                        {{ group?.name }}
+                        <div class="author-name">{{ post?.author?.fullName }}</div>
+                        >
+                        <div class="group-name">
+                            {{ group?.name }}
+                        </div>
                     </div>
                     <div class="bottom-section">
-                        <div class="author-name">
-                            {{ post?.author?.fullName }}
-                        </div>
                         <div class="created-at" @click="goToPostDetailPage">
                             <el-tooltip
                                 :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
@@ -25,7 +26,18 @@
                 </div>
             </div>
             <div class="right-section">
-                <div class="author-settings" v-if="isAuthor()">
+                <div class="admin-settings" v-if="isAdministrator">
+                    <BaseThreeDotMenu>
+                        <el-dropdown-item @click="pinPost"
+                            ><el-icon :size="16"><Edit /></el-icon
+                            >{{ isPostPinned ? `Bỏ ghim bài viết` : `Ghim bài viết` }}</el-dropdown-item
+                        >
+                        <el-dropdown-item @click="deletePost"
+                            ><el-icon :size="16"><Delete /></el-icon>Xóa</el-dropdown-item
+                        >
+                    </BaseThreeDotMenu>
+                </div>
+                <div class="author-settings" v-else-if="isAuthor()">
                     <BaseThreeDotMenu>
                         <el-dropdown-item @click="editPost"
                             ><el-icon :size="16"><Edit /></el-icon>Chỉnh sửa bài viết</el-dropdown-item
@@ -56,14 +68,17 @@
         <div class="post-info">
             <div class="left-section">
                 <div class="reaction-count" @click="openReactionListDialog">
+                    <Icon icon="solar:like-bold" height="16" />
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
             <div class="right-section">
                 <div class="comment-count">
+                    <Icon icon="iconamoon:comment-fill" height="16" />
                     {{ post?.numberOfComments }}
                 </div>
-                <div class="share-count" @click="openShareListDialog">
+                <div class="share-count" @click="openShareListDialog" v-if="!group.private">
+                    <Icon icon="majesticons:share" height="16" />
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -71,12 +86,12 @@
         <BaseDivider />
         <div class="action-group">
             <div class="btn react">
-                <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                <BaseFullReactionBar :target="post" :onLike="onLike" />
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
             </div>
-            <div class="btn share">
+            <div class="btn share" v-if="!group.private">
                 <el-button @click="openSharePostDialog">Chia sẻ</el-button>
             </div>
         </div>
@@ -87,18 +102,33 @@
 import { ReactionType } from '@/common/constants';
 import { IGroupPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import groupApiService from '@/common/service/group.api.service';
 import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
+import { groupDetailModule } from '@/pages/group-detail/store';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
 import { Options } from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
     emits: [],
 })
 export default class PostContent extends GlobalMixin {
     @Prop() groupPost!: IGroupPost;
+    isPostPinned = false;
+
+    mounted() {
+        this.isPostPinned = this.group.pinnedPosts?.includes(`${this.groupPost._id}` as unknown as IGroupPost);
+    }
+
+    @Watch('group')
+    setIsPinnedPost() {
+        this.isPostPinned = this.group.pinnedPosts.includes(`${this.groupPost._id}` as unknown as IGroupPost);
+    }
 
     get post() {
         return this.groupPost.post;
@@ -108,7 +138,21 @@ export default class PostContent extends GlobalMixin {
         return this.groupPost.group;
     }
 
+    get administratorIds() {
+        return this.group?.administrators?.map((admin) => `${admin.user}`) || [];
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    get isAdministrator() {
+        return this.administratorIds.includes(`${this.loginUser?._id}`);
+    }
+
     goToProfilePage() {
+        if (!this.post?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {
@@ -126,13 +170,24 @@ export default class PostContent extends GlobalMixin {
         return appModule.loginUser?._id === this.post?.author?._id;
     }
 
+    async pinPost() {
+        const response = await groupApiService.pinOrUnpinGroupPost(this.group._id, this.groupPost._id);
+        if (response?.success) {
+            this.showSuccessNotificationFunction(`${this.isPostPinned ? `Bỏ ghim` : `Ghim`} bài viết thành công.`);
+            groupDetailModule.getGroupDetail(this.group._id);
+            this.isPostPinned = !this.isPostPinned;
+        } else {
+            this.showErrorNotificationFunction(response?.message || `Ghim bài viết thất bại.`);
+        }
+    }
+
     editPost() {
         appModule.setPostDetail(this.post);
         appModule.setIsShowEditPostDialog(true);
     }
 
     async deletePost() {
-        const response = await postApiService.deletePost(this.post._id);
+        const response = await groupApiService.deletePost(this.group._id, this.groupPost._id);
         if (response?.success) {
             this.showSuccessNotificationFunction(`Xóa bài viết thành công`);
             Object.assign(this.post, {
@@ -167,11 +222,12 @@ export default class PostContent extends GlobalMixin {
         });
     }
 
-    async onLike() {
+    async onLike(type = ReactionType.LIKE) {
         this.post.isReacted = !this.post.isReacted;
         this.post.numberOfReacts += this.post.isReacted ? 1 : -1;
+        this.post.reactionType = type;
         await postApiService.react(this.post._id, {
-            type: ReactionType.LIKE,
+            type,
         });
     }
 
@@ -222,15 +278,18 @@ export default class PostContent extends GlobalMixin {
             flex-direction: column;
 
             .top-section {
-                font-weight: 500;
-                cursor: pointer;
-            }
-
-            .bottom-section {
                 display: flex;
                 flex-direction: row;
                 gap: 8px;
 
+                .author-name,
+                .group-name {
+                    font-weight: 500;
+                    cursor: pointer;
+                }
+            }
+
+            .bottom-section {
                 .created-at {
                     font-size: 12px;
                     cursor: pointer;
@@ -266,6 +325,13 @@ export default class PostContent extends GlobalMixin {
         flex-direction: row;
         justify-content: space-between;
 
+        :deep(.full-reaction-popover) {
+            width: 300px !important;
+            .full-reaction {
+                display: flex;
+                flex-direction: row;
+            }
+        }
         .btn {
             width: 100%;
 

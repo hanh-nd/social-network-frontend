@@ -5,15 +5,23 @@
         </div>
 
         <div class="news-feed">
-            <BasePostList :postList="postList" @on-load-more="onLoadMorePost" />
+            <BasePostList :postList="postList" @on-load-more="onLoadMorePostDebounced" />
+        </div>
+
+        <div class="reload">
+            Bạn đã xem hết tin.
+            <div class="reload-button" @click="reload">Tải lại trang</div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
+import { debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 import { homeModule } from '../store';
+import { IPost } from '@/common/interfaces';
 
 @Options({
     components: {},
@@ -28,11 +36,41 @@ export default class MainFeedScreen extends GlobalMixin {
     }
 
     async loadData() {
-        homeModule.getNewsFeed();
+        homeModule.resetPostListQuery();
+        homeModule.getNewsFeed({});
     }
 
-    onLoadMorePost() {
-        homeModule.getNewsFeed();
+    mounted(): void {
+        EventEmitter.on(EventName.POST_CREATED, this.postCreatedHandler);
+    }
+
+    unmounted(): void {
+        EventEmitter.off(EventName.POST_CREATED, this.postCreatedHandler);
+    }
+
+    postCreatedHandler(post: IPost) {
+        this.postList.unshift(post);
+    }
+
+    get currentPage() {
+        return homeModule.postListQuery.page as number;
+    }
+
+    get isFetchedAllPostList() {
+        return homeModule.isFetchedAllPostList;
+    }
+
+    onLoadMorePostDebounced = debounce(() => {
+        if (this.isFetchedAllPostList) return;
+        homeModule.setPostListQuery({
+            page: this.currentPage + 1,
+        });
+        homeModule.getNewsFeed({ append: true });
+    }, 100);
+
+    reload() {
+        this.loadData();
+        window.scrollTo(0, 0);
     }
 }
 </script>
@@ -48,6 +86,20 @@ export default class MainFeedScreen extends GlobalMixin {
     .create-new-post-bar {
         background: $color-white;
         border-radius: 6px;
+    }
+
+    .reload {
+        display: flex;
+        flex-direction: row;
+        align-self: center;
+        gap: 4px;
+        margin: 16px 0;
+
+        .reload-button {
+            color: $color-green;
+            font-weight: 700;
+            cursor: pointer;
+        }
     }
 }
 </style>

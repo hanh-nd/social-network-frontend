@@ -27,10 +27,14 @@
                     </div>
                 </div>
                 <div class="action-group">
-                    <div class="react" @click="reactComment()">
-                        <div :class="comment.isReacted ? `reacted` : undefined">Thích</div>
+                    <BaseFullReactionBar :target="comment" :onLike="reactComment" />
+
+                    <div class="reaction-count">
+                        <Icon icon="solar:like-bold" height="16" />
+                        {{ comment?.numberOfReacts }}
                     </div>
                     <div class="created-at">
+                        <Icon icon="mingcute:time-fill" height="16" />
                         {{ parseDateTimeRelative(comment?.createdAt) }}
                     </div>
                 </div>
@@ -70,19 +74,29 @@ import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
+import { Icon } from '@iconify/vue';
+import { isNil } from 'lodash';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
     emits: [],
 })
 export default class Comment extends GlobalMixin {
     @Prop() comment!: IComment;
     isEditing = false;
 
+    get isShow() {
+        return isNil(this.comment.deletedAt);
+    }
+
     goToProfilePage() {
+        if (!this.comment?.author?._id) return;
+
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {
@@ -99,6 +113,8 @@ export default class Comment extends GlobalMixin {
         });
         if (response?.success) {
             this.comment.isReacted = !this.comment.isReacted;
+            this.comment.numberOfReacts += this.comment.isReacted ? 1 : -1;
+            this.comment.reactionType = type;
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi tương tác bình luận này.`);
         }
@@ -235,6 +251,14 @@ export default class Comment extends GlobalMixin {
             flex-direction: row;
             gap: 8px;
             align-items: center;
+
+            :deep(.full-reaction-popover) {
+                width: 300px !important;
+                .full-reaction {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
 
             .react {
                 cursor: pointer;

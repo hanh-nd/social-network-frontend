@@ -7,10 +7,14 @@
             v-model="selectedValue"
             :placeholder="selectedValue?.length > 0 ? '' : placeholder"
             :filterable="filterable"
+            :remote="remote"
+            :remote-method="remoteMethod"
             :clearable="clearable"
             :disabled="isDisabled"
             multiple
             :collapse-tags="collapseTags"
+            collapse-tags-tooltip
+            :max-collapse-tags="maxCollapseTags"
             popper-class="select-options"
             @keyup="press"
             @change="change"
@@ -18,6 +22,7 @@
             @focus="onFocus"
             ref="multipleSelect"
             :teleported="false"
+            :multiple-limit="limit"
         >
             <slot name="options" v-if="isCustomOption" />
             <template v-for="option in options" v-else :key="option.id">
@@ -54,10 +59,14 @@ export default class MultipleSelect extends GlobalMixin {
     @Prop({ default: false }) readonly isReadonly!: boolean;
     @Prop({ default: false }) readonly isDisabled!: boolean;
     @Prop({ default: true }) readonly collapseTags!: boolean;
+    @Prop({ default: 3 }) readonly maxCollapseTags!: number;
     @Prop({ default: false }) readonly filterable!: boolean;
     @Prop({ default: () => [] }) readonly options!: Record<string, unknown>[];
     @Prop({ default: true }) readonly clearable!: boolean;
     @Prop({ default: false }) readonly isCustomOption!: boolean;
+    @Prop({ default: false }) readonly remote!: boolean;
+    @Prop({ default: () => [] }) readonly remoteMethod!: CallableFunction;
+    @Prop({ default: 0 }) readonly limit!: number;
 
     @Model('value', { type: Array as () => string[] | number[] })
     readonly selectedValue!: string[] | number[];

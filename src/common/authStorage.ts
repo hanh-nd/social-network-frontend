@@ -8,6 +8,7 @@ export const enum AUTH_SERVICE_KEY {
     LANGUAGE = 'LANGUAGE',
     LOGIN_USER = 'USER',
     IS_REFRESHING = 'IS_REFRESHING',
+    ADMIN_ROLE_IDS = 'ADMIN_ROLE_IDS',
 }
 class LocalStorageAuthService {
     setAccessToken(value: string): void {
@@ -60,6 +61,14 @@ class LocalStorageAuthService {
 
     resetLoginUser(): void {
         storage.setLocalStorage(AUTH_SERVICE_KEY.LOGIN_USER, '');
+    }
+
+    getAdminRoleIds() {
+        return storage.getLocalStorage(AUTH_SERVICE_KEY.ADMIN_ROLE_IDS);
+    }
+
+    setAdminRoleIds(id = '') {
+        storage.setLocalStorage(AUTH_SERVICE_KEY.ADMIN_ROLE_IDS, id);
     }
 
     resetAll(): void {

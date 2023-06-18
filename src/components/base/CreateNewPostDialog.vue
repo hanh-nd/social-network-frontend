@@ -13,12 +13,22 @@
             </div>
             <div class="information">
                 <div class="user-name">{{ loginUser?.fullName || loginUser?.email }}</div>
-                <div class="privacy">
-                    <BaseSingleSelect
-                        v-model:value="createPostForm.privacy"
-                        :options="privacyOptions"
-                        :error="translateYupError(createPostForm.errors.privacy as IYupError)"
-                    />
+
+                <div class="bottom">
+                    <div class="privacy">
+                        <BaseSingleSelect
+                            v-model:value="createPostForm.privacy"
+                            :options="privacyOptions"
+                            :error="translateYupError(createPostForm.errors.privacy as IYupError)"
+                        />
+                    </div>
+                    <div class="anonymous">
+                        <BaseSingleSelect
+                            v-model:value="createPostForm.isAnonymous"
+                            :options="anonymousOptions"
+                            :error="translateYupError(createPostForm.errors.isAnonymous as IYupError)"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +46,7 @@
                     :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
                 />
             </div>
-            <BaseImageGrid :items="createPostForm.pictureIds" :cells="3" />
+            <BaseImageGrid :items="medias" :cells="3" />
             <BaseDivider />
             <div class="image-chooser">
                 <BaseUploadSingleButton @on-file-uploaded="onSelectPictures">Chọn ảnh</BaseUploadSingleButton>
@@ -56,6 +66,7 @@ import { DeviceType, Privacy, PrivacyName, ValidationForm } from '@/common/const
 import { ICreateNewPostBody, IFile, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
@@ -66,6 +77,8 @@ import { Options, setup } from 'vue-class-component';
     emits: ['on-close-dialog', 'on-click-cancel-button', 'on-click-confirm-button'],
 })
 export default class CreateNewPostDialog extends GlobalMixin {
+    medias: IFile[] = [];
+
     get privacyOptions() {
         return Object.values(Privacy).map((value) => {
             return {
@@ -73,6 +86,19 @@ export default class CreateNewPostDialog extends GlobalMixin {
                 id: value,
             };
         });
+    }
+
+    get anonymousOptions() {
+        return [
+            {
+                name: 'Công khai danh tính',
+                id: false,
+            },
+            {
+                name: 'Ẩn danh',
+                id: true,
+            },
+        ];
     }
 
     get deviceType() {
@@ -94,6 +120,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
     createPostForm = setup(() => {
         const initValues: ICreateNewPostBody = {
             privacy: Privacy.PUBLIC,
+            isAnonymous: false,
             content: '',
             pictureIds: [],
             videoIds: [],
@@ -105,6 +132,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             content: yup.string().max(ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH).required(),
             pictureIds: yup.array().of(yup.string()),
             videoIds: yup.array().of(yup.string()),
+            isAnonymous: yup.bool(),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateNewPostBody>({
@@ -124,6 +152,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
             const response = await postApiService.createPost(values);
             if (response.success) {
                 this.showSuccessNotificationFunction('Tạo bài viết mới thành công');
+                EventEmitter.emit(EventName.POST_CREATED, response?.data);
                 appModule.setIsShowCreatePostDialog(false);
                 clearFormData();
             } else {
@@ -135,12 +164,14 @@ export default class CreateNewPostDialog extends GlobalMixin {
         const { value: content } = useField<string>('content');
         const { value: pictureIds } = useField<string[]>('pictureIds');
         const { value: videoIds } = useField<string[]>('videoIds');
+        const { value: isAnonymous } = useField<boolean>('isAnonymous');
 
         return {
             privacy,
             content,
             pictureIds,
             videoIds,
+            isAnonymous,
             errors,
             submit,
             clearFormData,
@@ -156,6 +187,7 @@ export default class CreateNewPostDialog extends GlobalMixin {
     async onSelectPictures(file: IFile, filePreview: File) {
         const pictureIds = this.createPostForm.pictureIds;
         pictureIds.push(file.id);
+        this.medias.push(file);
         this.createPostForm.setFieldValue('pictureIds', pictureIds);
     }
 }
@@ -169,9 +201,19 @@ export default class CreateNewPostDialog extends GlobalMixin {
         gap: 8px;
 
         .information {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
             .user-name {
                 font-weight: 700;
                 font-size: 16px;
+            }
+
+            .bottom {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
             }
 
             :deep(.form-container) {

@@ -1,6 +1,6 @@
 <template>
     <div class="search-result-wrapper">
-        <div class="empty" v-if="!userSearchResults.length && !postSearchResults.length">
+        <div class="empty" v-if="!userSearchResults.length && !postSearchResults.length && !groupSearchResults.length">
             <el-empty description="Không tìm thấy thông tin." />
         </div>
         <div class="result">
@@ -16,20 +16,28 @@
                     <BasePostList :postList="postSearchResults" />
                 </div>
             </div>
+            <div class="result-list-wrapper" v-if="groupSearchResults.length">
+                <div class="title">Nhóm</div>
+                <div class="result-list">
+                    <GroupSearchItem v-for="group in groupSearchResults" :key="group._id" :group="group" />
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import * as _ from 'lodash';
 import { Options } from 'vue-class-component';
 import { searchModule } from '../store';
+import GroupSearchItem from './GroupSearchItem.vue';
 import UserSearchItem from './UserSearchItem.vue';
-import * as _ from 'lodash';
 
 @Options({
     components: {
         UserSearchItem,
+        GroupSearchItem,
     },
 })
 export default class AllSearchResultList extends GlobalMixin {
@@ -43,6 +51,10 @@ export default class AllSearchResultList extends GlobalMixin {
 
     get postSearchResults() {
         return searchModule.searchResults.posts;
+    }
+
+    get groupSearchResults() {
+        return searchModule.searchResults.groups;
     }
 }
 </script>
@@ -73,6 +85,11 @@ export default class AllSearchResultList extends GlobalMixin {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
+
+                :deep(.post),
+                .user-search-item {
+                    border-bottom: 1px solid $color-green-4;
+                }
             }
         }
     }

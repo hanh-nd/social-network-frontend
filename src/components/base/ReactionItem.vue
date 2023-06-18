@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="right-section">
-            <div class="button">
+            <div class="button" v-if="!reaction?.author?.isSelf">
                 <el-button
                     @click="onMessageOrSubscribe"
                     :type="reaction?.author?.isSubscribing ? `default` : `primary`"
@@ -36,6 +36,8 @@ export default class ReactionItem extends GlobalMixin {
     }
 
     goToUserProfile() {
+        if (!this.reaction?.author?._id) return;
+
         appModule.setIsShowReactionListDialog(false);
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,

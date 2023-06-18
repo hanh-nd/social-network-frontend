@@ -7,14 +7,17 @@
         <div class="post-info">
             <div class="left-section">
                 <div class="reaction-count">
+                    <Icon icon="solar:like-bold" height="16" />
                     {{ post?.numberOfReacts }}
                 </div>
             </div>
             <div class="right-section">
                 <div class="comment-count">
+                    <Icon icon="iconamoon:comment-fill" height="16" />
                     {{ post?.numberOfComments }}
                 </div>
                 <div class="share-count">
+                    <Icon icon="majesticons:share" height="16" />
                     {{ post?.numberOfShares }}
                 </div>
             </div>
@@ -22,7 +25,7 @@
         <BaseDivider />
         <div class="bottom-section">
             <div class="btn react">
-                <el-button @click="onLike" :type="post.isReacted ? `primary` : undefined">Thích</el-button>
+                <BaseFullReactionBar :target="post" :onLike="onLike" />
             </div>
             <div class="btn comment">
                 <el-button @click="openPostDetailDialog">Bình luận</el-button>
@@ -42,8 +45,13 @@ import postApiService from '@/common/service/post.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import { Icon } from '@iconify/vue';
 
-@Options({})
+@Options({
+    components: {
+        Icon,
+    },
+})
 export default class ShareItem extends GlobalMixin {
     @Prop() post!: IPost;
 
@@ -52,6 +60,8 @@ export default class ShareItem extends GlobalMixin {
     }
 
     goToUserProfile() {
+        if (!this.post?.author?._id) return;
+
         appModule.setIsShowReactionListDialog(false);
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
@@ -122,6 +132,14 @@ export default class ShareItem extends GlobalMixin {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
+        :deep(.full-reaction-popover) {
+            width: 300px !important;
+            .full-reaction {
+                display: flex;
+                flex-direction: row;
+            }
+        }
 
         .btn {
             width: 100%;

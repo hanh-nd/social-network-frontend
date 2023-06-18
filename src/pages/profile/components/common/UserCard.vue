@@ -1,6 +1,6 @@
 <template>
     <div class="user-card-wrapper h-100">
-        <div class="top-section h-100" @click="goToProfilePage">
+        <div class="top-section w-100 h-100" @click="goToProfilePage">
             <div class="avatar h-100">
                 <img :src="getAvatarUrl(user)" alt="" />
             </div>
@@ -10,9 +10,7 @@
                 {{ user?.fullName || 'undefined' }}
             </div>
             <div class="button">
-                <el-button @click="subscribeOrUnsubscribe">{{
-                    user?.isSubscribing ? `Hủy theo dõi` : `Theo dõi`
-                }}</el-button>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -24,7 +22,6 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
-import userApiService from '@/common/service/user.api.service';
 @Options({
     components: {},
 })
@@ -38,15 +35,6 @@ export default class UserCard extends GlobalMixin {
                 id: this.user._id,
             },
         });
-    }
-
-    async subscribeOrUnsubscribe() {
-        const response = await userApiService.subscribeOrUnsubscribe(this.user._id);
-        if (response?.success) {
-            this.user.isSubscribing = !this.user.isSubscribing;
-        } else {
-            this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra.');
-        }
     }
 }
 </script>

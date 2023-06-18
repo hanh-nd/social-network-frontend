@@ -1,7 +1,13 @@
 <template>
     <div class="group-post-list-wrapper" :style="style" v-infinite-scroll="onLoadMore">
-        <div class="post" v-for="groupPost in groupPostList" :key="groupPost._id">
-            <GroupPostItem :groupPost="groupPost" />
+        <div class="group-post-list" v-if="groupPostList.length">
+            <div class="post" v-for="groupPost in groupPostList" :key="groupPost._id">
+                <GroupPostItem :groupPost="groupPost" />
+            </div>
+        </div>
+
+        <div class="empty" v-else>
+            <el-empty description="Chưa có bài viết" />
         </div>
     </div>
 </template>
@@ -37,8 +43,10 @@ export default class PostList extends GlobalMixin {
 
 <style lang="scss" scoped>
 .group-post-list-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    .group-post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 }
 </style>
