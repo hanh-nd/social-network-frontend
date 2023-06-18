@@ -71,7 +71,7 @@
 import localStorageAuthService from '@/common/authStorage';
 import { HEIGHT_SHOW_STICKY_HEADER, NotificationTargetType, SocketEvent } from '@/common/constants';
 import { generateNotificationMessageContent } from '@/common/helpers';
-import { INotification, ISystemMessage, IUser } from '@/common/interfaces';
+import { INotification, ISurvey, ISystemMessage, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
 import ChatListMenu from '@/pages/chat/components/ChatListMenu.vue';
@@ -166,6 +166,7 @@ export default class AccountMenuUser extends GlobalMixin {
 
     registerNotificationEvents() {
         SocketProvider.socket.on(SocketEvent.USER_NOTIFICATION, (notification: INotification) => {
+            notificationModule.notificationList.unshift(notification);
             this.showSuccessNotificationFunction(generateNotificationMessageContent(notification));
             notificationModule.incUnreadNotificationCount(1);
 
@@ -174,6 +175,9 @@ export default class AccountMenuUser extends GlobalMixin {
                     appModule.setSystemMessageParameters(notification.additionalData || {});
                     appModule.setSystemMessage(notification.target as ISystemMessage);
                     appModule.setIsShowSystemMessageDialog(true);
+                } else if (notification.targetType === NotificationTargetType.SURVEY) {
+                    appModule.setSurvey(notification.target as ISurvey);
+                    appModule.setIsShowSurveyDialog(true);
                 }
             }
         });

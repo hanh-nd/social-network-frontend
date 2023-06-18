@@ -19,6 +19,7 @@ export enum PageName {
     MANAGE_REPORT_PAGE = 'MANAGE_REPORT_PAGE',
     MANAGE_USER_PAGE = 'MANAGE_USER_PAGE',
     SETTINGS_PAGE = 'SETTINGS_PAGE',
+    MANAGE_SURVEY_PAGE = 'MANAGE_SURVEY_PAGE',
 }
 
 export const PROVINCE_LIMIT = 100;
@@ -61,6 +62,7 @@ export enum DateFormat {
     DD_vi_MM = 'DD [Th]MM',
     DD_vi_M_YYYY = 'DD [Th]M YYYY',
     HH_mm = 'HH:mm',
+    YYYY_MM_DD_HH_MM_ss = 'YYYY/MM/DD HH:mm:ssZ',
 }
 
 export const ValidationForm = {
@@ -159,6 +161,7 @@ export enum NotificationTargetType {
     MESSAGE = 'Message',
     USER = 'User',
     SYSTEM_MESSAGE = 'SystemMessage',
+    SURVEY = 'Survey',
 }
 
 export const NotificationTargetTypeName = {
@@ -175,6 +178,8 @@ export enum NotificationAction {
     SUBSCRIBE_PROFILE = 'SUBSCRIBE_PROFILE',
     SENT_SUBSCRIBE_REQUEST = 'SENT_SUBSCRIBE_REQUEST',
     ACCEPT_SUBSCRIBE_REQUEST = 'ACCEPT_SUBSCRIBE_REQUEST',
+    SEND_MESSAGE = 'SEND_MESSAGE',
+    SEND_SURVEY = 'SEND_SURVEY',
 }
 
 export const NotificationActionName = {
@@ -197,6 +202,8 @@ export enum SocketEvent {
     USER_NOTIFICATION = 'USER_NOTIFICATION',
 
     POST_UPDATE = 'POST_UPDATE',
+
+    USER_SURVEY_MUSIC_RECOMMEND = 'USER_SURVEY_MUSIC_RECOMMEND',
 }
 
 export const INIT_GET_COMMENT_LIST_QUERY = {
@@ -232,3 +239,13 @@ export enum SystemMessageType {
     INFO = 'info',
     WARNING = 'warning',
 }
+
+export enum SurveyType {
+    CARE = 'CARE',
+    ASK_AND_ANSWER = 'ASK_AND_ANSWER',
+}
+
+export const SurveyTypeName = {
+    [SurveyType.CARE]: 'Quan tâm',
+    [SurveyType.ASK_AND_ANSWER]: 'Hỏi đáp',
+};

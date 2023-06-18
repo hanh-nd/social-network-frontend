@@ -34,6 +34,7 @@ import { GlobalMixin } from '@/common/mixins';
 import moment from 'moment';
 import { Options } from 'vue-class-component';
 import { Model, Prop } from 'vue-property-decorator';
+import 'dayjs/locale/vi';
 
 @Options({
     components: {},

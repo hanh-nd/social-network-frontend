@@ -11,6 +11,7 @@ import {
     ReportAction,
     ReportTargetType,
     SubscribeRequestStatus,
+    SurveyType,
     SystemMessageType,
 } from './constants';
 export interface IBodyResponse<T> extends AxiosResponse {
@@ -402,7 +403,7 @@ export interface INotification {
     deletedAt?: Date;
 }
 
-export type NotificationTarget = IPost | IComment | IMessage | IUser | ISystemMessage;
+export type NotificationTarget = IPost | IComment | IMessage | IUser | ISystemMessage | ISurvey;
 export type ReportTarget = IPost | IComment | IMessage | IUser;
 
 export interface IStatistic {
@@ -477,3 +478,47 @@ export interface IUpdateQuestionBody {
 export interface IUpdateUserRoleBody {
     roleId: string;
 }
+
+export interface ISurvey {
+    _id: string;
+    name: string;
+    description?: string;
+    type: SurveyType;
+    question: string;
+    askDate: Date;
+    urgent: boolean;
+    userAnswer: ISurveyAnswer;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface ISurveyAnswer {
+    _id: string;
+    survey: ISurvey;
+    user: IUser;
+    answer: string;
+    additionalData?: object;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export type IGetSurveyListQuery = ICommonGetListQuery;
+
+export interface ICreateSurveyBody {
+    name: string;
+    description?: string;
+    type: SurveyType;
+    question: string;
+    askDate: Date;
+    urgent: boolean;
+}
+
+export type IUpdateSurveyBody = Partial<ICreateSurveyBody>;
+
+export interface IAnswerSurveyBody {
+    answer: string;
+}
+
+export type IGetUserAnswerQuery = ICommonGetListQuery;

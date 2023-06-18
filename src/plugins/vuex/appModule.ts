@@ -1,6 +1,6 @@
 import authStorageService from '@/common/authStorage';
 import { DeviceType, MD_GRID_BREAKPOINT } from '@/common/constants';
-import { IComment, IPost, IRole, ISystemMessage, ITag, IUser } from '@/common/interfaces';
+import { IComment, IPost, IRole, ISurvey, ISystemMessage, ITag, IUser } from '@/common/interfaces';
 import { default as appApiService } from '@/common/service/app.api.service';
 import roleApiService from '@/common/service/role.api.service';
 import tagApiService from '@/common/service/tag.api.service';
@@ -24,6 +24,7 @@ class AppModule extends VuexModule {
     isShowReactionListDialog = false;
     isShowShareListDialog = false;
     isShowSystemMessageDialog = false;
+    isShowSurveyDialog = false;
     postDetail: IPost = {} as IPost;
     commentDetail: IComment = {} as IComment;
     loginUser: IUser = {} as IUser;
@@ -35,6 +36,7 @@ class AppModule extends VuexModule {
     roles: IRole[] = [];
     systemMessage: ISystemMessage = {} as ISystemMessage;
     systemMessageParameters: object = {};
+    survey: ISurvey = {} as ISurvey;
 
     get deviceType() {
         return this.screenWidth <= MD_GRID_BREAKPOINT ? DeviceType.MOBILE : DeviceType.DESKTOP;
@@ -253,6 +255,26 @@ class AppModule extends VuexModule {
     @Mutation
     SET_SYSTEM_MESSAGE_PARAMETERS(systemMessageParameters: object) {
         this.systemMessageParameters = systemMessageParameters;
+    }
+
+    @Action
+    setIsShowSurveyDialog(isShowSurveyDialog: boolean) {
+        this.SET_IS_SHOW_SURVEY_DIALOG(isShowSurveyDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_SURVEY_DIALOG(isShowSurveyDialog: boolean) {
+        this.isShowSurveyDialog = isShowSurveyDialog;
+    }
+
+    @Action
+    setSurvey(survey: ISurvey) {
+        this.SET_SURVEY(survey);
+    }
+
+    @Mutation
+    SET_SURVEY(survey: ISurvey) {
+        this.survey = survey;
     }
 }
 
