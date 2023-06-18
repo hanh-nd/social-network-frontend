@@ -32,7 +32,7 @@
 <script lang="ts">
 import { NotificationTargetType } from '@/common/constants';
 import { generateNotificationMessageContent } from '@/common/helpers';
-import { IComment, INotification, ISystemMessage } from '@/common/interfaces';
+import { IComment, INotification, ISurvey, ISystemMessage } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import notificationApiService from '@/common/service/notification.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
@@ -77,14 +77,17 @@ export default class NotificationItem extends GlobalMixin {
                 return this.goToPostCommentDetail();
             case NotificationTargetType.SYSTEM_MESSAGE:
                 return this.openSystemMessageDialog();
+            case NotificationTargetType.SURVEY:
+                return this.openSurveyDialog();
         }
     }
 
     async markAsRead() {
+        if (this.notification.isRead) return;
         const response = await notificationApiService.markAsRead(this.notification._id);
         if (response?.success) {
-            this.notification.isRead = true;
             notificationModule.incUnreadNotificationCount(-1);
+            this.notification.isRead = true;
         } else {
             this.showErrorNotificationFunction(response?.message || `Có lỗi xảy ra khi đánh dấu trạng thái thông báo`);
         }
@@ -115,6 +118,11 @@ export default class NotificationItem extends GlobalMixin {
         appModule.setSystemMessageParameters(this.notification.additionalData || {});
         appModule.setSystemMessage(this.notification.target as ISystemMessage);
         appModule.setIsShowSystemMessageDialog(true);
+    }
+
+    openSurveyDialog() {
+        appModule.setSurvey(this.notification.target as ISurvey);
+        appModule.setIsShowSurveyDialog(true);
     }
 
     async undoMarkAsRead() {
@@ -149,6 +157,10 @@ export default class NotificationItem extends GlobalMixin {
     margin-bottom: 8px;
     border-radius: 8px;
     word-break: break-word;
+
+    .mid-section {
+        flex: 1;
+    }
 
     .right-section {
         display: flex;
