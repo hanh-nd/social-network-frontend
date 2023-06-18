@@ -13,6 +13,7 @@ import VuePlyr from 'vue-plyr';
 import 'vue-plyr/dist/vue-plyr.css';
 import VueClickAway from 'vue3-click-away';
 import './plugins/chartjs';
+import vi from './plugins/element-ui/locale/vi.mjs';
 
 const app = createApp(App)
     .use(store)
@@ -20,10 +21,12 @@ const app = createApp(App)
     .use(plugins.i18n)
     .use<{
         i18n: (key: string) => string;
+        locale: any;
     }>(plugins.ElementUI as any, {
         i18n: (key: string) => {
             return (plugins.i18n.global as any).t(key, plugins.i18n.global.locale);
         },
+        locale: vi,
     })
     .use(VueClickAway)
     .use(VuePlyr, {

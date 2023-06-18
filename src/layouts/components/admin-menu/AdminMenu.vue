@@ -13,6 +13,10 @@
             <el-menu-item :index="PageName.MANAGE_USER_PAGE">
                 <div :id="PageName.MANAGE_USER_PAGE">Quản lý người dùng</div>
             </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_SURVEY_PAGE">
+                <div :id="PageName.MANAGE_SURVEY_PAGE">Quản lý khảo sát</div>
+            </el-menu-item>
+
             <el-menu-item :index="PageName.SETTINGS_PAGE">
                 <div :id="PageName.SETTINGS_PAGE">Cài đặt hệ thống</div>
             </el-menu-item>
