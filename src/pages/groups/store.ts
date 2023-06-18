@@ -21,6 +21,8 @@ class GroupModule extends VuexModule {
     joinedGroupListQuery: IGetGroupListQuery = cloneDeep(INIT_GET_GROUP_LIST_QUERY);
     isFetchedAllJoinedGroupList = false;
     createdGroupList: IGroup[] = [];
+    createdGroupListQuery: IGetGroupListQuery = cloneDeep(INIT_GET_GROUP_LIST_QUERY);
+    isFetchedAllCreatedGroupList = false;
     isShowCreateNewGroupDialog = false;
 
     @Action
@@ -159,18 +161,60 @@ class GroupModule extends VuexModule {
     }
 
     @Action
-    async getCreatedGroupList() {
-        const response = await groupApiService.getUserCreatedGroups();
+    async getCreatedGroupList({ append }: { append: boolean } = { append: false }) {
+        const response = await groupApiService.getUserCreatedGroups(this.createdGroupListQuery);
         if (response?.success) {
-            this.SET_CREATED_GROUP_LIST(response?.data || []);
+            const data = response?.data || [];
+            if (!data.length) {
+                this.SET_IS_FETCHED_ALL_CREATED_GROUP_LIST(true);
+            }
+
+            if (append) {
+                this.APPEND_CREATED_GROUP_LIST(data);
+            } else {
+                this.SET_CREATED_GROUP_LIST(data);
+            }
         } else {
-            this.SET_CREATED_GROUP_LIST([]);
+            this.SET_IS_FETCHED_ALL_CREATED_GROUP_LIST(true);
+            if (append) {
+                this.APPEND_CREATED_GROUP_LIST([]);
+            } else {
+                this.SET_CREATED_GROUP_LIST([]);
+            }
         }
+    }
+
+    @Mutation
+    APPEND_CREATED_GROUP_LIST(createdGroupList: IGroup[]) {
+        this.createdGroupList = createdGroupList;
     }
 
     @Mutation
     SET_CREATED_GROUP_LIST(createdGroupList: IGroup[]) {
         this.createdGroupList = createdGroupList;
+    }
+
+    @Action
+    resetCreatedGroupListQuery() {
+        this.SET_CREATED_GROUP_LIST_QUERY(cloneDeep(INIT_GET_GROUP_LIST_QUERY));
+    }
+
+    @Action
+    setCreatedGroupListQuery(createdGroupListQuery: IGetGroupListQuery) {
+        this.SET_CREATED_GROUP_LIST_QUERY(createdGroupListQuery);
+    }
+
+    @Mutation
+    SET_CREATED_GROUP_LIST_QUERY(createdGroupListQuery: IGetGroupListQuery) {
+        this.createdGroupListQuery = {
+            ...this.createdGroupListQuery,
+            ...createdGroupListQuery,
+        };
+    }
+
+    @Mutation
+    SET_IS_FETCHED_ALL_CREATED_GROUP_LIST(isFetchedAllCreatedGroupList: boolean) {
+        this.isFetchedAllCreatedGroupList = isFetchedAllCreatedGroupList;
     }
 
     @Action

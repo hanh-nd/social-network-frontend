@@ -6,16 +6,36 @@
                     <BaseRoundAvatar :user="post?.author" :size="42" />
                 </div>
                 <div class="information">
-                    <div class="name" @click="goToProfilePage">
-                        {{ post?.author?.fullName }}
-                    </div>
-                    <div class="created-at" @click="goToPostDetailPage">
-                        <el-tooltip
-                            :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
-                            :hide-after="100"
+                    <div class="top">
+                        <span class="name" @click="goToProfilePage"> {{ post?.author?.fullName }} </span>
+                        <span class="name" v-if="post.postedInGroup" @click="goToGroupDetailPage">
+                            > {{ post.postedInGroup?.name }}</span
                         >
-                            {{ parseDateTimeRelative(post?.createdAt) }}
-                        </el-tooltip>
+                    </div>
+                    <div class="bottom" @click="goToPostDetailPage">
+                        <div class="created-at">
+                            <el-tooltip
+                                :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
+                                :hide-after="100"
+                            >
+                                {{ parseDateTimeRelative(post?.createdAt) }}
+                            </el-tooltip>
+                        </div>
+                        <div class="tags" v-if="post?.tagIds?.length">
+                            <el-popover placement="top-start" :width="300" :teleported="false" trigger="hover">
+                                <template #reference>
+                                    <el-tag>{{
+                                        post?.tagIds[0]?.name +
+                                        (post.tagIds.length > 1 ? ` +${post.tagIds.length - 1}` : '')
+                                    }}</el-tag>
+                                </template>
+                                <div class="tag-list">
+                                    <div class="tag-item" v-for="tag in post?.tagIds" :key="tag._id">
+                                        <el-tag>{{ tag.name }}</el-tag>
+                                    </div>
+                                </div>
+                            </el-popover>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -125,6 +145,17 @@ export default class PostContent extends GlobalMixin {
             },
         });
     }
+
+    goToGroupDetailPage() {
+        if (!this.post.postedInGroup?._id) return;
+
+        this.$router.push({
+            name: this.PageName.GROUP_DETAIL_PAGE,
+            params: {
+                id: this.post.postedInGroup._id,
+            },
+        });
+    }
 }
 </script>
 
@@ -159,9 +190,22 @@ export default class PostContent extends GlobalMixin {
                 cursor: pointer;
             }
 
-            .created-at {
-                font-size: 12px;
-                cursor: pointer;
+            .bottom {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                .created-at {
+                    font-size: 12px;
+                    cursor: pointer;
+                }
+
+                .tags {
+                    :deep(.tag-list) {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                    }
+                }
             }
         }
     }

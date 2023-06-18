@@ -1,8 +1,11 @@
 <template>
     <div class="joined-group-list-screen-wrapper">
         <div class="title">Nhóm bạn tham gia</div>
-        <div class="group-list" v-infinite-scroll="onLoadMore">
+        <div class="group-list" v-infinite-scroll="onLoadMore" v-if="joinedGroupList.length">
             <GroupGridCard v-for="group in joinedGroupList" :key="group._id" :group="group" />
+        </div>
+        <div class="empty" v-else>
+            <el-empty description="Bạn chưa tham gia một nhóm nào." />
         </div>
     </div>
 </template>

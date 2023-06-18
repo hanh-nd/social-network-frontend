@@ -53,6 +53,12 @@ class PostApiService extends ApiService {
     async getPostDetail(postId: string): Promise<IBodyResponse<IPost>> {
         return await this.client.get(`${this.baseUrl}/${postId}`);
     }
+
+    async getInterestedFeed(query?: IGetPostListQuery): Promise<IBodyResponse<IPost[]>> {
+        return await this.client.get(`${this.baseUrl}/interested`, {
+            params: query,
+        });
+    }
 }
 const postApiService = new PostApiService({ baseUrl: '/posts' }, axiosService);
 

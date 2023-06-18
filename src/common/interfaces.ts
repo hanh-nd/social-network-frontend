@@ -196,14 +196,17 @@ export interface IPost {
     privacy: number;
     isAnonymous?: boolean;
     postShared: Partial<IPost>;
+    postedInGroup: Partial<IGroup>;
     pictureIds: string[];
     medias: IFile[];
+    tagIds: ITag[];
     videoIds: string[];
     numberOfComments: number;
     numberOfReacts: number;
     numberOfShares: number;
     isReacted: boolean;
     reactionType?: ReactionType;
+    isToxic?: boolean;
 }
 
 export type IGetPostListQuery = ICommonGetListQuery;
@@ -257,6 +260,7 @@ export interface IComment {
     numberOfReacts: number;
     isReacted: boolean;
     reactionType?: ReactionType;
+    isToxic?: boolean;
 }
 
 export interface ISearchResults {

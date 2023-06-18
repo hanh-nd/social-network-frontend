@@ -15,7 +15,7 @@
             </el-menu-item>
             <el-menu-item :index="FeedScreenType.EXPLORE">
                 <el-icon><Notification /></el-icon>
-                <template #title>Khám phá</template>
+                <template #title>Dành cho bạn</template>
             </el-menu-item>
             <el-menu-item :index="2" @click="goToGroupPage">
                 <el-icon><Connection /></el-icon>
