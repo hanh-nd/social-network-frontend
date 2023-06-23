@@ -116,7 +116,7 @@ export default class PostDetailDialog extends GlobalMixin {
 
         const schema = yup.object({
             privacy: yup.number().integer().required(),
-            content: yup.string().max(ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH).required(),
+            content: yup.string().max(ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateNewPostBody>({
@@ -132,17 +132,18 @@ export default class PostDetailDialog extends GlobalMixin {
             });
         };
 
-        const submit = handleSubmit(async (values) => {
-            const response = await postApiService.createPost(values);
-            if (response.success) {
-                this.showSuccessNotificationFunction('Chia sẻ bài viết mới thành công');
-                EventEmitter.emit(EventName.POST_CREATED, response?.data);
-                appModule.setIsShowCreatePostDialog(false);
-                clearFormData();
-            } else {
-                this.showErrorNotificationFunction(response?.message || 'Chia sẻ bài viết mới thất bại');
-            }
-        });
+        const submit = (id: string) =>
+            handleSubmit(async (values) => {
+                const response = await postApiService.sharePost(id, values);
+                if (response.success) {
+                    this.showSuccessNotificationFunction('Chia sẻ bài viết mới thành công');
+                    EventEmitter.emit(EventName.POST_CREATED, response?.data);
+                    appModule.setIsShowCreatePostDialog(false);
+                    clearFormData();
+                } else {
+                    this.showErrorNotificationFunction(response?.message || 'Chia sẻ bài viết mới thất bại');
+                }
+            })();
 
         const { value: privacy } = useField<number>('privacy');
         const { value: content } = useField<string>('content');
@@ -159,7 +160,7 @@ export default class PostDetailDialog extends GlobalMixin {
     });
 
     async onSubmit() {
-        await this.sharePostForm.submit();
+        await this.sharePostForm.submit(this.post._id);
         this.onClose();
     }
 

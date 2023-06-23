@@ -96,6 +96,8 @@ interface IDropdown {
 })
 export default class AccountMenuUser extends GlobalMixin {
     @Prop({ default: false }) readonly isSticky!: boolean;
+    @Prop({ default: false }) readonly shouldRegisterSocket!: boolean;
+
     dropdown = ref();
 
     get name() {
@@ -138,10 +140,12 @@ export default class AccountMenuUser extends GlobalMixin {
         }
     }
     logout() {
-        appModule.setLoginUser({} as IUser);
-        localStorageAuthService.resetAll();
+        if (this.loginUser?._id) {
+            appApiService.logout();
+            appModule.setLoginUser({} as IUser);
+            localStorageAuthService.resetAll();
+        }
         this.$router.push('/login');
-        appApiService.logout();
         SocketProvider.disconnect();
     }
 
@@ -165,6 +169,7 @@ export default class AccountMenuUser extends GlobalMixin {
     }
 
     registerNotificationEvents() {
+        if (!this.shouldRegisterSocket) return;
         SocketProvider.socket.on(SocketEvent.USER_NOTIFICATION, (notification: INotification) => {
             notificationModule.notificationList.unshift(notification);
             this.showSuccessNotificationFunction(generateNotificationMessageContent(notification));
