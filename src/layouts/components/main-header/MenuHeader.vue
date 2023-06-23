@@ -6,7 +6,7 @@
             <!-- Main Menu -->
             <MainMenu class="main-menu"></MainMenu>
             <!-- Account -->
-            <AccountMenu class="account-menu"></AccountMenu>
+            <AccountMenu class="account-menu" :shouldRegisterSocket="isMain"></AccountMenu>
         </div>
     </div>
 </template>
@@ -29,6 +29,7 @@ import AccountMenu from './AccountMenu.vue';
 export default class MenuHeader extends GlobalMixin {
     @Prop({ default: false }) readonly isSticky!: boolean;
     @Prop({ default: false }) isVisible!: boolean;
+    @Prop({ default: false }) readonly isMain!: boolean;
 
     get currentPage() {
         return this.$route.name || '';

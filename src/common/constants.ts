@@ -162,6 +162,8 @@ export enum NotificationTargetType {
     USER = 'User',
     SYSTEM_MESSAGE = 'SystemMessage',
     SURVEY = 'Survey',
+    GROUP = 'Group',
+    QUESTION = 'Question',
 }
 
 export const NotificationTargetTypeName = {
@@ -169,6 +171,8 @@ export const NotificationTargetTypeName = {
     [NotificationTargetType.COMMENT]: 'bình luận',
     [NotificationTargetType.MESSAGE]: 'tin nhắn',
     [NotificationTargetType.USER]: 'bạn',
+    [NotificationTargetType.QUESTION]: 'câu hỏi',
+    [NotificationTargetType.GROUP]: 'nhóm',
 };
 
 export enum NotificationAction {
@@ -180,6 +184,9 @@ export enum NotificationAction {
     ACCEPT_SUBSCRIBE_REQUEST = 'ACCEPT_SUBSCRIBE_REQUEST',
     SEND_MESSAGE = 'SEND_MESSAGE',
     SEND_SURVEY = 'SEND_SURVEY',
+    ASK_QUESTION = 'ASK_QUESTION',
+    REQUEST_JOIN_GROUP = 'REQUEST_JOIN_GROUP',
+    ACCEPT_JOIN_GROUP = 'ACCEPT_JOIN_GROUP',
 }
 
 export const NotificationActionName = {
@@ -189,6 +196,10 @@ export const NotificationActionName = {
     [NotificationAction.SUBSCRIBE_PROFILE]: 'theo dõi',
     [NotificationAction.SENT_SUBSCRIBE_REQUEST]: 'yêu cầu theo dõi',
     [NotificationAction.ACCEPT_SUBSCRIBE_REQUEST]: 'đồng ý lời mời theo dõi của',
+    [NotificationAction.SEND_MESSAGE]: 'gửi cho bạn một',
+    [NotificationAction.ASK_QUESTION]: 'đặt cho bạn một',
+    [NotificationAction.REQUEST_JOIN_GROUP]: 'gửi cho bạn một yêu cầu tham gia',
+    [NotificationAction.ACCEPT_JOIN_GROUP]: 'chấp thuận yêu cầu tham gia',
 };
 
 export enum SocketEvent {
