@@ -17,6 +17,7 @@ class NotificationModule extends VuexModule {
     notificationList: INotification[] = [];
     notificationListQuery: IGetNotificationListQuery = cloneDeep(INIT_GET_NOTIFICATION_LIST_QUERY);
     isFetchedAllNotificationList = false;
+    unreadNotificationCount = 0;
 
     @Action
     async getNotifications({ append = false }: { append?: boolean } = { append: false }) {
@@ -77,6 +78,31 @@ class NotificationModule extends VuexModule {
             ...this.notificationListQuery,
             ...notificationListQuery,
         };
+    }
+
+    @Action
+    async getUnreadNotificationCount() {
+        const response = await notificationApiService.getUnreadNotificationCount();
+        if (response?.success) {
+            this.SET_UNREAD_NOTIFICATION_COUNT(response?.data || 0);
+        } else {
+            this.SET_UNREAD_NOTIFICATION_COUNT(0);
+        }
+    }
+
+    @Action
+    incUnreadNotificationCount(amount: number) {
+        this.SET_UNREAD_NOTIFICATION_COUNT(this.unreadNotificationCount + amount);
+    }
+
+    @Action
+    setUnreadNotificationCount(amount: number) {
+        this.SET_UNREAD_NOTIFICATION_COUNT(amount);
+    }
+
+    @Mutation
+    SET_UNREAD_NOTIFICATION_COUNT(unreadNotificationCount: number) {
+        this.unreadNotificationCount = unreadNotificationCount;
     }
 }
 

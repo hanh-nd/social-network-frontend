@@ -75,7 +75,6 @@ export default class MainFeedScreen extends GlobalMixin {
         const post = this.postList.find((p) => p._id === postId);
         if (!post) return;
 
-        console.log('rest', rest);
         Object.assign(post, rest);
     }
 

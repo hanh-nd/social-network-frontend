@@ -10,6 +10,7 @@
         </div>
     </div>
     <UpdateUserDialog />
+    <UpdateUserRoleDialog />
 </template>
 
 <script lang="ts">
@@ -18,11 +19,13 @@ import { Options } from 'vue-class-component';
 import UserTable from '../components/UserTable.vue';
 import { adminUserModule } from '../store';
 import UpdateUserDialog from '../components/UpdateUserDialog.vue';
+import UpdateUserRoleDialog from '../components/UpdateUserRoleDialog.vue';
 
 @Options({
     components: {
         UserTable,
         UpdateUserDialog,
+        UpdateUserRoleDialog,
     },
 })
 export default class ManageUserPage extends GlobalMixin {

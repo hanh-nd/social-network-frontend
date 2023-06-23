@@ -1,15 +1,25 @@
 <template>
     <div class="admin-menu-wrapper">
-        <el-menu
-            class="admin-menu"
-            :collapse="isCollapse"
-            @select="onSelectPage"
-            :default-active="PageName.MANAGE_POST_PAGE"
-        >
-            <el-menu-item :index="PageName.DASHBOARD" v-if="isSystemAdmin"> Dashboard </el-menu-item>
-            <el-menu-item :index="PageName.MANAGE_POST_PAGE"> Quản lý bài viết </el-menu-item>
-            <el-menu-item :index="PageName.MANAGE_REPORT_PAGE"> Quản lý báo cáo </el-menu-item>
-            <el-menu-item :index="PageName.MANAGE_USER_PAGE"> Quản lý người dùng </el-menu-item>
+        <el-menu class="admin-menu" :collapse="isCollapse" @select="onSelectPage" v-model="page">
+            <el-menu-item :index="PageName.DASHBOARD" v-if="isSystemAdmin">
+                <div :id="PageName.DASHBOARD">Dashboard</div>
+            </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_POST_PAGE">
+                <div :id="PageName.MANAGE_POST_PAGE">Quản lý bài viết</div>
+            </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_REPORT_PAGE">
+                <div :id="PageName.MANAGE_REPORT_PAGE">Quản lý báo cáo</div>
+            </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_USER_PAGE">
+                <div :id="PageName.MANAGE_USER_PAGE">Quản lý người dùng</div>
+            </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_SURVEY_PAGE">
+                <div :id="PageName.MANAGE_SURVEY_PAGE">Quản lý khảo sát</div>
+            </el-menu-item>
+
+            <el-menu-item :index="PageName.SETTINGS_PAGE">
+                <div :id="PageName.SETTINGS_PAGE">Cài đặt hệ thống</div>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -22,6 +32,8 @@ import { Options } from 'vue-class-component';
 
 @Options({})
 export default class AdminMenu extends GlobalMixin {
+    page = PageName.MANAGE_POST_PAGE;
+
     onSelectPage(page: PageName) {
         this.$router.push({
             name: page,
@@ -30,6 +42,16 @@ export default class AdminMenu extends GlobalMixin {
 
     get isCollapse() {
         return appModule.screenWidth < 768;
+    }
+
+    mounted(): void {
+        this.setCurrentTab();
+    }
+
+    setCurrentTab() {
+        const route = this.$route.name as string;
+        if (!route) return;
+        (document.getElementById(route) as HTMLDivElement)?.click();
     }
 }
 </script>

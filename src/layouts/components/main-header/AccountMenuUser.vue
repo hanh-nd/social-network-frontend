@@ -15,7 +15,11 @@
             </div>
 
             <template #reference>
-                <el-icon :size="24" class="chat-btn me-2"><Bell /></el-icon>
+                <el-icon :size="24" class="chat-btn me-2">
+                    <el-badge :value="unreadNotificationCount" :hidden="!unreadNotificationCount">
+                        <Bell />
+                    </el-badge>
+                </el-icon>
             </template>
         </el-popover>
 
@@ -67,7 +71,7 @@
 import localStorageAuthService from '@/common/authStorage';
 import { HEIGHT_SHOW_STICKY_HEADER, NotificationTargetType, SocketEvent } from '@/common/constants';
 import { generateNotificationMessageContent } from '@/common/helpers';
-import { INotification, ISystemMessage, IUser } from '@/common/interfaces';
+import { INotification, ISurvey, ISystemMessage, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
 import ChatListMenu from '@/pages/chat/components/ChatListMenu.vue';
@@ -92,6 +96,8 @@ interface IDropdown {
 })
 export default class AccountMenuUser extends GlobalMixin {
     @Prop({ default: false }) readonly isSticky!: boolean;
+    @Prop({ default: false }) readonly shouldRegisterSocket!: boolean;
+
     dropdown = ref();
 
     get name() {
@@ -108,6 +114,10 @@ export default class AccountMenuUser extends GlobalMixin {
         return appModule.loginUser;
     }
 
+    get unreadNotificationCount() {
+        return notificationModule.unreadNotificationCount;
+    }
+
     mounted(): void {
         this.registerNotificationEvents();
 
@@ -116,6 +126,7 @@ export default class AccountMenuUser extends GlobalMixin {
         });
         chatModule.getChatList();
         notificationModule.getNotifications();
+        notificationModule.getUnreadNotificationCount();
     }
     beforeDestroy(): void {
         window.removeEventListener('scroll', this.scrollHandler);
@@ -129,10 +140,12 @@ export default class AccountMenuUser extends GlobalMixin {
         }
     }
     logout() {
-        appModule.setLoginUser({} as IUser);
-        localStorageAuthService.resetAll();
+        if (this.loginUser?._id) {
+            appApiService.logout();
+            appModule.setLoginUser({} as IUser);
+            localStorageAuthService.resetAll();
+        }
         this.$router.push('/login');
-        appApiService.logout();
         SocketProvider.disconnect();
     }
 
@@ -156,14 +169,20 @@ export default class AccountMenuUser extends GlobalMixin {
     }
 
     registerNotificationEvents() {
+        if (!this.shouldRegisterSocket) return;
         SocketProvider.socket.on(SocketEvent.USER_NOTIFICATION, (notification: INotification) => {
+            notificationModule.notificationList.unshift(notification);
             this.showSuccessNotificationFunction(generateNotificationMessageContent(notification));
+            notificationModule.incUnreadNotificationCount(1);
 
             if (notification.urgent) {
                 if (notification.targetType === NotificationTargetType.SYSTEM_MESSAGE) {
                     appModule.setSystemMessageParameters(notification.additionalData || {});
                     appModule.setSystemMessage(notification.target as ISystemMessage);
                     appModule.setIsShowSystemMessageDialog(true);
+                } else if (notification.targetType === NotificationTargetType.SURVEY) {
+                    appModule.setSurvey(notification.target as ISurvey);
+                    appModule.setIsShowSurveyDialog(true);
                 }
             }
         });

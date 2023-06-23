@@ -8,6 +8,7 @@ import {
 } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import axiosService from '@/plugins/axios';
+import { IUpdateUserRoleBody } from './../interfaces';
 class AdminUserApiService extends ApiService {
     async getUserList(query?: IGetUserListQuery): Promise<IBodyResponse<IUser[]>> {
         return await this.client.get(`${this.baseUrl}`, {
@@ -31,6 +32,10 @@ class AdminUserApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/statistic`, {
             params: query,
         });
+    }
+
+    async updateUserRole(id: string, body: IUpdateUserRoleBody): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/${id}/roles`, body);
     }
 }
 const adminUserApiService = new AdminUserApiService({ baseUrl: '/admin/users' }, axiosService);
