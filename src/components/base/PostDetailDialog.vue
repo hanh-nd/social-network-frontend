@@ -31,7 +31,7 @@
 
             <div class="main-content">
                 <div class="content">
-                    {{ post?.content }}
+                    <BaseCensorableContent :target="post" />
                 </div>
                 <div class="images" v-if="post.medias.length">
                     <el-carousel class="carousel" :autoplay="false" width="100%">

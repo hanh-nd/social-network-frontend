@@ -1,6 +1,6 @@
 <template>
     <div>
-        <MenuHeader></MenuHeader>
+        <MenuHeader :isMain="true"></MenuHeader>
         <StickyHeader>
             <template #default="{ isVisible }">
                 <div class="sticky-header">

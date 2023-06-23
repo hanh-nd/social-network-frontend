@@ -23,7 +23,7 @@ interface IDropdown {
 @Options({
     components: {},
 })
-export default class AccountMenuUser extends GlobalMixin {
+export default class AccountMenuGuest extends GlobalMixin {
     @Prop({ default: false }) readonly isSticky!: boolean;
     dropdown = ref();
 

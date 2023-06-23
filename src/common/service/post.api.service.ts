@@ -16,6 +16,10 @@ class PostApiService extends ApiService {
         return await this.client.post(`${this.baseUrl}/`, data);
     }
 
+    async sharePost(id: string, data: ICreateNewPostBody): Promise<IBodyResponse<IPost>> {
+        return await this.client.post(`${this.baseUrl}/${id}/share`, data);
+    }
+
     async getNewsFeed(query?: IGetPostListQuery): Promise<IBodyResponse<IPost[]>> {
         return await this.client.get(`${this.baseUrl}/news-feed`, {
             params: query,

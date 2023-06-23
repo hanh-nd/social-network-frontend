@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts">
-import { NotificationTargetType } from '@/common/constants';
+import { NotificationAction, NotificationTargetType } from '@/common/constants';
 import { generateNotificationMessageContent } from '@/common/helpers';
-import { IComment, INotification, ISurvey, ISystemMessage } from '@/common/interfaces';
+import { IComment, IGroup, INotification, ISurvey, ISystemMessage, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import notificationApiService from '@/common/service/notification.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
@@ -79,6 +79,12 @@ export default class NotificationItem extends GlobalMixin {
                 return this.openSystemMessageDialog();
             case NotificationTargetType.SURVEY:
                 return this.openSurveyDialog();
+            case NotificationTargetType.GROUP:
+                return this.openGroupAction();
+            case NotificationTargetType.MESSAGE:
+            case NotificationTargetType.QUESTION:
+            case NotificationTargetType.USER:
+                return this.openAskQuestion();
         }
     }
 
@@ -123,6 +129,38 @@ export default class NotificationItem extends GlobalMixin {
     openSurveyDialog() {
         appModule.setSurvey(this.notification.target as ISurvey);
         appModule.setIsShowSurveyDialog(true);
+    }
+
+    openGroupAction() {
+        const group = this.notification.target || ({} as IGroup);
+        const action = this.notification.action;
+
+        if (action === NotificationAction.REQUEST_JOIN_GROUP) {
+            this.$router.push({
+                name: this.PageName.JOIN_GROUP_REQUEST_PAGE,
+                params: {
+                    id: group._id,
+                },
+            });
+        } else if (action === NotificationAction.ACCEPT_JOIN_GROUP) {
+            this.$router.push({
+                name: this.PageName.GROUP_DETAIL_PAGE,
+                params: {
+                    id: group._id,
+                },
+            });
+        }
+    }
+
+    openAskQuestion() {
+        const user = this.notification.target || ({} as IUser);
+
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: user._id,
+            },
+        });
     }
 
     async undoMarkAsRead() {
