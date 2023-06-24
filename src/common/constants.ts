@@ -20,6 +20,7 @@ export enum PageName {
     MANAGE_USER_PAGE = 'MANAGE_USER_PAGE',
     SETTINGS_PAGE = 'SETTINGS_PAGE',
     MANAGE_SURVEY_PAGE = 'MANAGE_SURVEY_PAGE',
+    MANAGE_SYSTEM_MESSAGE_PAGE = 'MANAGE_SYSTEM_MESSAGE_PAGE',
 }
 
 export const PROVINCE_LIMIT = 100;
@@ -259,4 +260,9 @@ export enum SurveyType {
 export const SurveyTypeName = {
     [SurveyType.CARE]: 'Quan tâm',
     [SurveyType.ASK_AND_ANSWER]: 'Hỏi đáp',
+};
+
+export const SystemMessageTypeName = {
+    [SystemMessageType.INFO]: 'Thông báo',
+    [SystemMessageType.WARNING]: 'Cảnh bảo',
 };

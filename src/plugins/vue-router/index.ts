@@ -14,6 +14,7 @@ import PublicLayout from '../../layouts/PublicLayout.vue';
 import AdminDashboardPage from '../../pages/admin/dashboard/pages/AdminDashboardPage.vue';
 import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
 import ManageSurveyPage from '../../pages/admin/surveys/pages/ManageSurveyPage.vue';
+import ManageSystemMessagePage from '../../pages/admin/system-messages/pages/ManageSystemMessagePage.vue';
 import ManageReportPage from '../../pages/admin/reports/pages/ManageReportPage.vue';
 import AdminSettingsPage from '../../pages/admin/settings/pages/SettingsPage.vue';
 import ManageUserPage from '../../pages/admin/users/pages/ManageUserPage.vue';
@@ -166,6 +167,14 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/admin/surveys',
                 name: PageName.MANAGE_SURVEY_PAGE,
                 component: ManageSurveyPage,
+                meta: {
+                    admin: true,
+                },
+            },
+            {
+                path: '/admin/system-messages',
+                name: PageName.MANAGE_SYSTEM_MESSAGE_PAGE,
+                component: ManageSystemMessagePage,
                 meta: {
                     admin: true,
                 },

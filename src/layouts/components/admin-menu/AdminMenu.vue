@@ -16,7 +16,9 @@
             <el-menu-item :index="PageName.MANAGE_SURVEY_PAGE">
                 <div :id="PageName.MANAGE_SURVEY_PAGE">Quản lý khảo sát</div>
             </el-menu-item>
-
+            <el-menu-item :index="PageName.MANAGE_SYSTEM_MESSAGE_PAGE">
+                <div :id="PageName.MANAGE_SYSTEM_MESSAGE_PAGE">Quản lý tin nhắn hệ thống</div>
+            </el-menu-item>
             <el-menu-item :index="PageName.SETTINGS_PAGE">
                 <div :id="PageName.SETTINGS_PAGE">Cài đặt hệ thống</div>
             </el-menu-item>
