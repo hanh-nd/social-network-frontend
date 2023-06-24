@@ -506,6 +506,8 @@ export interface ISurveyAnswer {
 
 export type IGetSurveyListQuery = ICommonGetListQuery;
 
+export type IGetSystemMessageListQuery = ICommonGetListQuery;
+
 export interface ICreateSurveyBody {
     name: string;
     description?: string;
@@ -515,7 +517,20 @@ export interface ICreateSurveyBody {
     urgent: boolean;
 }
 
+export interface ICreateSystemMessageBody {
+    code: string;
+    template: string;
+    fullTemplate: string;
+    type: SystemMessageType;
+}
+
 export type IUpdateSurveyBody = Partial<ICreateSurveyBody>;
+
+export interface IUpdateSystemMessageBody {
+    template?: string;
+    fullTemplate?: string;
+    type?: SystemMessageType;
+}
 
 export interface IAnswerSurveyBody {
     answer: string;
