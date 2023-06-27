@@ -10,7 +10,7 @@
             <el-table-column prop="name" label="Tên khảo sát" width="150" />
             <el-table-column prop="description" label="Mô tả" width="150" />
             <el-table-column prop="type" label="Phân loại" width="150" />
-            <el-table-column prop="question" label="Câu hỏi" width="300" />
+            <el-table-column prop="question" label="Câu hỏi" width="500" />
             <el-table-column label="Thời gian gửi" width="150">
                 <template #default="scope">
                     {{ parseDateTime(scope.row.askDate, DateFormat.DD_vi_MM_YYYY_HH_mm) }}
@@ -23,9 +23,11 @@
             </el-table-column>
             <el-table-column fixed="right" label="Thao tác" width="120">
                 <template #default="scope">
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="onUpdateSurvey(scope.row)"
-                        ><Edit
-                    /></el-icon>
+                    <el-tooltip content="Cập nhật khảo sát" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="onUpdateSurvey(scope.row)"
+                            ><Edit
+                        /></el-icon>
+                    </el-tooltip>
                 </template>
             </el-table-column>
         </el-table>
