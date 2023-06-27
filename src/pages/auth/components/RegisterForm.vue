@@ -133,12 +133,12 @@ export default class RegisterForm extends GlobalMixin {
 
     async onSubmit() {
         await this.registerForm.submit();
-        this.goToHomePage();
+        this.goToWelcomePage();
     }
 
-    goToHomePage() {
+    goToWelcomePage() {
         this.$router.push({
-            name: this.PageName.HOME_PAGE,
+            name: this.PageName.WELCOME_PAGE,
         });
     }
 }

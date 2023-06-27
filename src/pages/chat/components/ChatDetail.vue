@@ -1,7 +1,7 @@
 <template>
     <div class="chat-detail-wrapper h-100">
         <div class="header">
-            <div class="left-section">
+            <div class="left-section" @click="goToProfilePage">
                 <div class="avatar">
                     <BaseRoundAvatar :fileId="avatarId" :size="40" />
                 </div>
@@ -62,6 +62,17 @@ export default class ChatDetail extends GlobalMixin {
     showChatInfo() {
         chatModule.setIsShowChatInfoDrawer(true);
     }
+
+    goToProfilePage() {
+        if (!this.targetMember?._id) return;
+
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: this.targetMember?._id,
+            },
+        });
+    }
 }
 </script>
 
@@ -84,6 +95,7 @@ export default class ChatDetail extends GlobalMixin {
             flex-direction: row;
             gap: 8px;
             align-items: center;
+            cursor: pointer;
         }
 
         .right-section {
