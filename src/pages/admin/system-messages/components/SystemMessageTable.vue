@@ -14,18 +14,20 @@
         >
             <el-table-column prop="_id" label="ID thông báo" width="150" />
             <el-table-column prop="code" label="Mã thông báo" width="150" />
-            <el-table-column prop="template" label="Template" width="150" />
-            <el-table-column prop="fullTemplate" label="Template đầy đủ" width="150" />
-            <el-table-column label="Loại thông báo" min-width="150">
+            <el-table-column prop="template" label="Template" width="300" />
+            <el-table-column prop="fullTemplate" label="Template đầy đủ" width="500" />
+            <el-table-column label="Loại thông báo" min-width="300">
                 <template #default="scope">
                     {{ SystemMessageTypeName[scope.row.type] }}
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="Thao tác" width="120">
                 <template #default="scope">
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="onUpdateSystemMessage(scope.row)"
-                        ><Edit
-                    /></el-icon>
+                    <el-tooltip content="Cập nhật thông báo" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="onUpdateSystemMessage(scope.row)"
+                            ><Edit
+                        /></el-icon>
+                    </el-tooltip>
                 </template>
             </el-table-column>
         </el-table>

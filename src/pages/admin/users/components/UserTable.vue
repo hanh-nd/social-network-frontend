@@ -30,13 +30,21 @@
             </el-table-column>
             <el-table-column fixed="right" label="Thao tác" width="120">
                 <template #default="scope">
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="activateOrDeactivate(scope.row)"
-                        ><SwitchFilled
-                    /></el-icon>
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="getDetail(scope.row)"><Edit /></el-icon>
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="updateUserRole(scope.row)"
-                        ><Setting
-                    /></el-icon>
+                    <el-tooltip content="Kích hoạt/Hủy kích hoạt" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="activateOrDeactivate(scope.row)"
+                            ><SwitchFilled
+                        /></el-icon>
+                    </el-tooltip>
+                    <el-tooltip content="Xem chi tiết" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="getDetail(scope.row)"
+                            ><Edit
+                        /></el-icon>
+                    </el-tooltip>
+                    <el-tooltip content="Cập nhật quyền" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="updateUserRole(scope.row)"
+                            ><Setting
+                        /></el-icon>
+                    </el-tooltip>
                 </template>
             </el-table-column>
         </el-table>

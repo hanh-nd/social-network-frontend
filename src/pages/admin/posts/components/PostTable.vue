@@ -34,10 +34,16 @@
             </el-table-column>
             <el-table-column fixed="right" label="Thao tác" width="120">
                 <template #default="scope">
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="deletePost(scope.row)"
-                        ><Delete
-                    /></el-icon>
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="getDetail(scope.row)"><Edit /></el-icon>
+                    <el-tooltip content="Xóa bài viết" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="deletePost(scope.row)"
+                            ><Delete
+                        /></el-icon>
+                    </el-tooltip>
+                    <el-tooltip content="Xem chi tiết" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="getDetail(scope.row)"
+                            ><Edit
+                        /></el-icon>
+                    </el-tooltip>
                 </template>
             </el-table-column>
         </el-table>
