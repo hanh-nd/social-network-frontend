@@ -8,7 +8,7 @@
                 <div class="name" @click="goToProfilePage">
                     {{ post?.author?.fullName }}
                 </div>
-                <div class="created-at">
+                <div class="created-at" @click="goToPostDetailPage">
                     <el-tooltip
                         :content="parseDateTime(post?.createdAt, DateFormat.DD_vi_MM_YYYY_HH_mm)"
                         :hide-after="100"
@@ -22,7 +22,7 @@
 
         <div class="main-content">
             <div class="content">
-                {{ post?.content }}
+                <BaseCensorableContent :target="post" />
             </div>
 
             <div class="post-data">
@@ -70,6 +70,15 @@ export default class PostSharedContent extends GlobalMixin {
 
     get isShowPost() {
         return _.isNil(this.post.deletedAt);
+    }
+
+    goToPostDetailPage() {
+        this.$router.push({
+            name: this.PageName.POST_DETAIL_PAGE,
+            params: {
+                id: this.post._id,
+            },
+        });
     }
 }
 </script>

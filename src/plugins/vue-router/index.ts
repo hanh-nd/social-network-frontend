@@ -13,10 +13,10 @@ import AdminLayout from '../../layouts/AdminLayout.vue';
 import PublicLayout from '../../layouts/PublicLayout.vue';
 import AdminDashboardPage from '../../pages/admin/dashboard/pages/AdminDashboardPage.vue';
 import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
-import ManageSurveyPage from '../../pages/admin/surveys/pages/ManageSurveyPage.vue';
-import ManageSystemMessagePage from '../../pages/admin/system-messages/pages/ManageSystemMessagePage.vue';
 import ManageReportPage from '../../pages/admin/reports/pages/ManageReportPage.vue';
 import AdminSettingsPage from '../../pages/admin/settings/pages/SettingsPage.vue';
+import ManageSurveyPage from '../../pages/admin/surveys/pages/ManageSurveyPage.vue';
+import ManageSystemMessagePage from '../../pages/admin/system-messages/pages/ManageSystemMessagePage.vue';
 import ManageUserPage from '../../pages/admin/users/pages/ManageUserPage.vue';
 import GroupDetailPage from '../../pages/group-detail/pages/GroupDetailPage.vue';
 import GroupPendingPostsPage from '../../pages/group-detail/pages/GroupPendingPostsPage.vue';
@@ -26,6 +26,7 @@ import HomePage from '../../pages/home/pages/HomePage.vue';
 import NotFoundPage from '../../pages/not-found/pages/NotFoundPage.vue';
 import NotificationPage from '../../pages/notifications/pages/NotificationPage.vue';
 import PostDetailPage from '../../pages/post-detail/pages/PostDetailPage.vue';
+import SuggestionPage from '../../pages/suggestion/pages/SuggestionPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -113,9 +114,19 @@ const routes: Array<RouteRecordRaw> = [
                 component: ChatPage,
             },
             {
+                path: '/chats',
+                name: PageName.EMPTY_CHAT_PAGE,
+                component: ChatPage,
+            },
+            {
                 path: '/notifications',
                 name: PageName.NOTIFICATION_PAGE,
                 component: NotificationPage,
+            },
+            {
+                path: '/suggestions',
+                name: PageName.SUGGESTION_PAGE,
+                component: SuggestionPage,
             },
         ],
     },

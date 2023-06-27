@@ -4,6 +4,9 @@
             <div class="header">
                 <div class="main">Đang theo dõi</div>
                 <div class="sub">{{ profileUser?.numberOfSubscribing || 0 }} người</div>
+                <div class="button">
+                    <el-button @click="goToSuggestionPage">Xem gợi ý</el-button>
+                </div>
             </div>
             <BaseDivider />
             <div class="subscribing-list" v-if="subscribingList.length">
@@ -23,12 +26,12 @@
 </template>
 
 <script lang="ts">
+import { IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import userApiService from '@/common/service/user.api.service';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
 import UserCard from '../common/UserCard.vue';
-import { IUser } from '@/common/interfaces';
-import userApiService from '@/common/service/user.api.service';
 
 @Options({
     components: {
@@ -59,6 +62,12 @@ export default class SubscribingScreen extends GlobalMixin {
         } else {
             this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra.');
         }
+    }
+
+    goToSuggestionPage() {
+        this.$router.push({
+            name: this.PageName.SUGGESTION_PAGE,
+        });
     }
 }
 </script>

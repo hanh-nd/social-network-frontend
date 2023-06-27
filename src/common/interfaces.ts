@@ -537,3 +537,5 @@ export interface IAnswerSurveyBody {
 }
 
 export type IGetUserAnswerQuery = ICommonGetListQuery;
+
+export type IGetSuggestionListQuery = ICommonGetListQuery;

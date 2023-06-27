@@ -30,7 +30,8 @@ export default class App extends GlobalMixin {
         appModule.setLoginUser(loginUser);
         appModule.getTags();
         appModule.getRoles();
-        if (loginUser) {
+        if (loginUser?._id) {
+            appApiService.ping();
             SocketProvider.connect(loginUser._id);
         }
 
@@ -52,13 +53,19 @@ export default class App extends GlobalMixin {
         return this.$router.currentRoute?.value?.name || '';
     }
 
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
     setScreenWidth() {
         appModule.setScreenWidth(window.innerWidth);
     }
 
     mounted() {
         this.intervalId = setInterval(() => {
-            appApiService.ping();
+            if (this.loginUser?._id) {
+                appApiService.ping();
+            }
         }, 60000);
 
         window.addEventListener('resize', this.setScreenWidth);

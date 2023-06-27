@@ -9,7 +9,7 @@
             <el-empty
                 description="Bạn chưa có ai trong danh sách để liên hệ. Hãy theo dõi thêm mọi người để mở rộng kết nối nhé."
             >
-                <el-button type="primary">Xem gợi ý người dùng</el-button>
+                <el-button type="primary" @click="goToSuggestionPage">Xem gợi ý người dùng</el-button>
             </el-empty>
         </div>
     </div>
@@ -30,6 +30,12 @@ import ContactItem from './ContactItem.vue';
 })
 export default class ContactList extends GlobalMixin {
     @Prop() contactList!: IUser[];
+
+    goToSuggestionPage() {
+        this.$router.push({
+            name: this.PageName.SUGGESTION_PAGE,
+        });
+    }
 }
 </script>
 
