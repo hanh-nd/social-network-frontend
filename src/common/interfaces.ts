@@ -425,6 +425,7 @@ export interface IReport {
     action: ReportAction;
     reportReason?: string;
     note?: string;
+    systemReporter?: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;

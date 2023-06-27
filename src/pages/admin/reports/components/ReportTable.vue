@@ -15,7 +15,8 @@
         <el-table :data="reportList" stripe style="width: 100%" ref="multipleTableRef" cell-class-name="cell-item">
             <el-table-column prop="_id" label="Mã báo cáo" width="150" />
             <el-table-column prop="author.fullName" label="Người báo cáo" width="150" />
-            <el-table-column prop="author.username" label="Mã báo cáo" width="150" />
+            <el-table-column prop="author.username" label="Mã người báo cáo" width="150" />
+            <el-table-column prop="systemReporter" label="Hệ thống" width="150" />
             <el-table-column prop="reportReason" label="Lý do" width="150" />
             <el-table-column label="Nội dung" width="150">
                 <template #default="scope">
@@ -39,15 +40,16 @@
             </el-table-column>
             <el-table-column fixed="right" label="Thao tác" width="120">
                 <template #default="scope">
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="acceptReport(scope.row)"
-                        ><Delete
-                    /></el-icon>
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="rejectReport(scope.row)"
-                        ><CircleClose
-                    /></el-icon>
-                    <el-icon :size="20" style="cursor: pointer" @click.prevent="rejectReport(scope.row)"
-                        ><CircleClose
-                    /></el-icon>
+                    <el-tooltip content="Chấp nhận báo cáo" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="acceptReport(scope.row)"
+                            ><Delete
+                        /></el-icon>
+                    </el-tooltip>
+                    <el-tooltip content="Từ chối báo cáo" :hide-after="100">
+                        <el-icon :size="20" style="cursor: pointer" @click.prevent="rejectReport(scope.row)"
+                            ><CircleClose
+                        /></el-icon>
+                    </el-tooltip>
                 </template>
             </el-table-column>
         </el-table>
