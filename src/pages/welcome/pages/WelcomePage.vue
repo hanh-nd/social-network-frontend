@@ -6,6 +6,9 @@
         <div class="choose-avatar-wrapper">
             <ChooseAvatar />
         </div>
+        <div class="user-suggestions">
+            <UserSuggestionList />
+        </div>
     </div>
 </template>
 
@@ -15,11 +18,13 @@ import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import ChooseAvatar from '../components/ChooseAvatar.vue';
 import WelcomeMessage from '../components/WelcomeMessage.vue';
+import UserSuggestionList from '../components/UserSuggestionList.vue';
 
 @Options({
     components: {
         WelcomeMessage,
         ChooseAvatar,
+        UserSuggestionList,
     },
 })
 export default class WelcomePage extends GlobalMixin {

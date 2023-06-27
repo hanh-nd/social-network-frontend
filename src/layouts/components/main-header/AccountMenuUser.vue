@@ -150,15 +150,8 @@ export default class AccountMenuUser extends GlobalMixin {
     }
 
     goToChatPage() {
-        const chatList = chatModule.chatList;
-        if (!chatList || !chatList.length) return;
-
-        const firstChatId = chatList[0]._id;
         this.$router.push({
-            name: this.PageName.CHAT_PAGE,
-            params: {
-                id: firstChatId,
-            },
+            name: this.PageName.EMPTY_CHAT_PAGE,
         });
     }
 

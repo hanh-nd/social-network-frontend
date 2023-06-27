@@ -1,6 +1,7 @@
 import {
     IBodyResponse,
     IGetPostListQuery,
+    IGetSuggestionListQuery,
     IGetUserListQuery,
     IPost,
     IUpdateProfileBody,
@@ -75,8 +76,10 @@ class UserApiService extends ApiService {
         return await this.client.patch(`${this.baseUrl}/subscribe-requests/${id}`, body);
     }
 
-    async getUserSuggestions(): Promise<IBodyResponse<IUser[]>> {
-        return await this.client.get(`${this.baseUrl}/suggestions`);
+    async getUserSuggestions(query?: IGetSuggestionListQuery): Promise<IBodyResponse<IUser[]>> {
+        return await this.client.get(`${this.baseUrl}/suggestions`, {
+            params: query,
+        });
     }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);
