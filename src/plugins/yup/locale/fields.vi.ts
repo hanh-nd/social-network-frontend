@@ -25,4 +25,5 @@ export const fields = {
     gender: 'Giới tính',
     relationship: 'Tình trạng quan hệ',
     tagIds: 'Thể loại',
+    oldPassword: 'Mật khẩu cũ',
 };

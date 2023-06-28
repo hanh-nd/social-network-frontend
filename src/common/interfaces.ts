@@ -176,6 +176,7 @@ export interface IUpdateProfileBody {
     coverId?: string;
     phone?: string;
     fullName?: string;
+    email?: string;
     gender?: Gender;
     birthday?: Date;
     address?: IAddress;
@@ -540,3 +541,9 @@ export interface IAnswerSurveyBody {
 export type IGetUserAnswerQuery = ICommonGetListQuery;
 
 export type IGetSuggestionListQuery = ICommonGetListQuery;
+
+export interface IChangePasswordBody {
+    oldPassword: string;
+    password: string;
+    rePassword?: string;
+}

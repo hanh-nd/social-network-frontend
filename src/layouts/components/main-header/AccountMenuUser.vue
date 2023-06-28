@@ -51,6 +51,13 @@
                     </router-link>
                     <hr />
                     <hr />
+                    <router-link class="router-link" :to="`/profile`">
+                        <el-dropdown-item class="dropdown-item">
+                            <p>Thông tin của tôi</p>
+                        </el-dropdown-item>
+                    </router-link>
+                    <hr />
+                    <hr />
                     <router-link class="router-link" :to="`/admin/posts`" v-if="isModerator">
                         <el-dropdown-item class="dropdown-item">
                             <p>Quản trị</p>
