@@ -1,5 +1,6 @@
 import {
     IBodyResponse,
+    IChangePasswordBody,
     IGetPostListQuery,
     IGetSuggestionListQuery,
     IGetUserListQuery,
@@ -80,6 +81,10 @@ class UserApiService extends ApiService {
         return await this.client.get(`${this.baseUrl}/suggestions`, {
             params: query,
         });
+    }
+
+    async changePassword(body: IChangePasswordBody): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/change-password`, body);
     }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);
