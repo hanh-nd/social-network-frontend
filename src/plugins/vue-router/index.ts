@@ -4,6 +4,7 @@ import MainLayout from '@/layouts/MainLayout.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
 import ChatPage from '@/pages/chat/pages/ChatPage.vue';
+import ProfileInfoPage from '@/pages/profile-info/pages/ProfileInfoPage.vue';
 import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
 import SearchPage from '@/pages/search/pages/SearchPage.vue';
 import WelcomePage from '@/pages/welcome/pages/WelcomePage.vue';
@@ -67,6 +68,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/',
                 name: PageName.HOME_PAGE,
                 component: HomePage,
+            },
+            {
+                path: '/profile',
+                name: PageName.PROFILE_INFORMATION_PAGE,
+                component: ProfileInfoPage,
             },
             {
                 path: '/profile/:id',
