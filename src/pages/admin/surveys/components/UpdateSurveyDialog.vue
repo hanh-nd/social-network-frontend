@@ -72,6 +72,18 @@
                     :error="translateYupError(updateSurveyForm.errors.urgent as IYupError)"
                 />
             </div>
+            <div class="form-item">
+                <div>Lặp lại</div>
+                <el-checkbox-group v-model="updateSurveyForm.repeatDays">
+                    <el-checkbox :label="1">Thứ 2</el-checkbox>
+                    <el-checkbox :label="2">Thứ 3</el-checkbox>
+                    <el-checkbox :label="3">Thứ 4</el-checkbox>
+                    <el-checkbox :label="4">Thứ 5</el-checkbox>
+                    <el-checkbox :label="5">Thứ 6</el-checkbox>
+                    <el-checkbox :label="6">Thứ 7</el-checkbox>
+                    <el-checkbox :label="7">Chủ nhật</el-checkbox>
+                </el-checkbox-group>
+            </div>
         </div>
         <template #footer>
             <span class="footer">
@@ -144,6 +156,7 @@ export default class UpdateSurveyDialog extends GlobalMixin {
             type: undefined,
             askDate: undefined,
             urgent: undefined,
+            repeatDays: undefined,
         };
 
         const schema = yup.object({
@@ -153,6 +166,7 @@ export default class UpdateSurveyDialog extends GlobalMixin {
             type: yup.string(),
             askDate: yup.string(),
             urgent: yup.bool(),
+            repeatDays: yup.array().of(yup.number()),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<IUpdateSurveyBody>({
@@ -187,6 +201,7 @@ export default class UpdateSurveyDialog extends GlobalMixin {
         const { value: type } = useField<SurveyType>('type');
         const { value: askDate } = useField<Date>('askDate');
         const { value: urgent } = useField<boolean>('urgent');
+        const { value: repeatDays } = useField<number[]>('repeatDays');
 
         return {
             name,
@@ -195,6 +210,7 @@ export default class UpdateSurveyDialog extends GlobalMixin {
             type,
             askDate,
             urgent,
+            repeatDays,
             errors,
             submit,
             clearFormData,

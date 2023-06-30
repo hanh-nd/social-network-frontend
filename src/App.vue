@@ -27,13 +27,13 @@ export default class App extends GlobalMixin {
     created(): void {
         SocketProvider.init();
         const loginUser = localStorageAuthService.getLoginUser();
-        appModule.setLoginUser(loginUser);
-        appModule.getTags();
-        appModule.getRoles();
         if (loginUser?._id) {
             appApiService.ping();
             SocketProvider.connect(loginUser._id);
         }
+        appModule.setLoginUser(loginUser);
+        appModule.getTags();
+        appModule.getRoles();
 
         window.addEventListener('error', (e) => {
             if (e.message === 'ResizeObserver loop limit exceeded') {

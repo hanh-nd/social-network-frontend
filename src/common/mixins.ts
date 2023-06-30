@@ -23,19 +23,24 @@ export class GlobalMixin extends Vue {
     }
 
     //
-    parseDateTime(dateTime: Date | string | undefined, dateTimeFormat: string, language = DEFAULT_LANGUAGE): string {
+    parseDateTime(
+        dateTime: Date | string | undefined,
+        dateTimeFormat: string,
+        language = DEFAULT_LANGUAGE,
+        utc = false,
+    ): string {
         if (!moment(dateTime).isValid) {
             return '';
         }
-        return moment(dateTime).locale(language).format(dateTimeFormat);
+        return moment(dateTime).utc(utc).locale(language).format(dateTimeFormat);
     }
 
     //
-    parseDateTimeRelative(dateTime: Date | string | undefined, language = DEFAULT_LANGUAGE): string {
+    parseDateTimeRelative(dateTime: Date | string | undefined, language = DEFAULT_LANGUAGE, utc = false): string {
         if (!moment(dateTime).isValid) {
             return '';
         }
-        const date = moment(dateTime).locale(language);
+        const date = moment(dateTime).utc(utc).locale(language);
         if (moment().diff(date, 'years') > 1) {
             return date.format(DateFormat.DD_vi_MM_YYYY_HH_mm);
         } else if (moment().diff(date, 'days') > 1) {

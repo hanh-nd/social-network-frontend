@@ -72,6 +72,18 @@
                     :error="translateYupError(createSurveyForm.errors.urgent as IYupError)"
                 />
             </div>
+            <div class="form-item">
+                <div>Lặp lại</div>
+                <el-checkbox-group v-model="createSurveyForm.repeatDays">
+                    <el-checkbox :label="1">Thứ 2</el-checkbox>
+                    <el-checkbox :label="2">Thứ 3</el-checkbox>
+                    <el-checkbox :label="3">Thứ 4</el-checkbox>
+                    <el-checkbox :label="4">Thứ 5</el-checkbox>
+                    <el-checkbox :label="5">Thứ 6</el-checkbox>
+                    <el-checkbox :label="6">Thứ 7</el-checkbox>
+                    <el-checkbox :label="7">Chủ nhật</el-checkbox>
+                </el-checkbox-group>
+            </div>
         </div>
         <template #footer>
             <span class="footer">
@@ -138,15 +150,17 @@ export default class CreateSurveyDialog extends GlobalMixin {
             type: SurveyType.CARE,
             askDate: new Date(),
             urgent: false,
+            repeatDays: [],
         };
 
         const schema = yup.object({
             name: yup.string().required(),
-            description: yup.string().required(),
+            description: yup.string(),
             question: yup.string().required(),
             type: yup.string().required(),
             askDate: yup.string().required(),
-            urgent: yup.bool().required(),
+            urgent: yup.bool(),
+            repeatDays: yup.array().of(yup.number()),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateSurveyBody>({
@@ -167,6 +181,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
             if (response.success) {
                 adminSurveyModule.setIsShowCreateSurveyDialog(false);
                 clearFormData();
+                adminSurveyModule.getSurveyList();
                 this.showSuccessNotificationFunction('Tạo mới khảo sát thành công');
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra khi tạo mới khảo sát');
@@ -179,6 +194,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
         const { value: type } = useField<SurveyType>('type');
         const { value: askDate } = useField<Date>('askDate');
         const { value: urgent } = useField<boolean>('urgent');
+        const { value: repeatDays } = useField<number[]>('repeatDays');
 
         return {
             name,
@@ -187,6 +203,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
             type,
             askDate,
             urgent,
+            repeatDays,
             errors,
             submit,
             clearFormData,
