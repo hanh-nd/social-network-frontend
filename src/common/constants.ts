@@ -66,7 +66,7 @@ export enum DateFormat {
     DD_vi_MM = 'DD [Th]MM',
     DD_vi_M_YYYY = 'DD [Th]M YYYY',
     HH_mm = 'HH:mm',
-    YYYY_MM_DD_HH_MM_ss = 'YYYY/MM/DD HH:mm:ssZ',
+    YYYY_MM_DD_HH_MM_ss = 'YYYY/MM/DD HH:mm:ss',
 }
 
 export const ValidationForm = {

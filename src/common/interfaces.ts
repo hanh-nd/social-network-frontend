@@ -517,6 +517,7 @@ export interface ICreateSurveyBody {
     question: string;
     askDate: Date;
     urgent: boolean;
+    repeatDays?: number[];
 }
 
 export interface ICreateSystemMessageBody {

@@ -130,6 +130,7 @@ export default class CreateSystemMessageDialog extends GlobalMixin {
                 adminSystemMessageModule.setIsShowCreateSystemMessageDialog(false);
                 clearFormData();
                 this.showSuccessNotificationFunction('Tạo mới khảo sát thành công');
+                adminSystemMessageModule.getSystemMessageList();
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Có lỗi xảy ra khi tạo mới khảo sát');
             }

@@ -13,7 +13,7 @@
             <el-table-column prop="question" label="Câu hỏi" width="500" />
             <el-table-column label="Thời gian gửi" width="150">
                 <template #default="scope">
-                    {{ parseDateTime(scope.row.askDate, DateFormat.DD_vi_MM_YYYY_HH_mm) }}
+                    {{ parseDateTime(scope.row.askDate, DateFormat.DD_vi_MM_YYYY_HH_mm, 'vi' as any, true) }}
                 </template>
             </el-table-column>
             <el-table-column label="Ngay lập tức" min-width="150">
