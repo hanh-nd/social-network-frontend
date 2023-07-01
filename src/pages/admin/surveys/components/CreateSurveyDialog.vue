@@ -84,6 +84,19 @@
                     <el-checkbox :label="7">Chủ nhật</el-checkbox>
                 </el-checkbox-group>
             </div>
+            <div class="form-item">
+                <BaseInputText
+                    v-model:value="createSurveyForm.quickAnswers"
+                    label="Trả lời nhanh"
+                    placeholder="Nhập những câu trả lời nhanh"
+                    :error="translateYupError(createSurveyForm.errors.quickAnswers as IYupError)"
+                    type="textarea"
+                    :autosize="{
+                        minRows: 3,
+                    }"
+                    :maxLength="ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH"
+                />
+            </div>
         </div>
         <template #footer>
             <span class="footer">
@@ -151,6 +164,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
             askDate: new Date(),
             urgent: false,
             repeatDays: [],
+            quickAnswers: undefined,
         };
 
         const schema = yup.object({
@@ -161,6 +175,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
             askDate: yup.string().required(),
             urgent: yup.bool(),
             repeatDays: yup.array().of(yup.number()),
+            quickAnswers: yup.string(),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<ICreateSurveyBody>({
@@ -195,6 +210,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
         const { value: askDate } = useField<Date>('askDate');
         const { value: urgent } = useField<boolean>('urgent');
         const { value: repeatDays } = useField<number[]>('repeatDays');
+        const { value: quickAnswers } = useField<string>('quickAnswers');
 
         return {
             name,
@@ -204,6 +220,7 @@ export default class CreateSurveyDialog extends GlobalMixin {
             askDate,
             urgent,
             repeatDays,
+            quickAnswers,
             errors,
             submit,
             clearFormData,
