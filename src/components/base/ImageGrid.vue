@@ -25,7 +25,7 @@ export default class ImageGrid extends GlobalMixin {
     @Prop({ default: [] }) items!: IFile[];
     @Prop({ default: 'h-250 h-md-400 h-lg-600' }) css!: string;
     @Prop({ default: 5 }) cells!: number;
-    @Prop({ default: 200 }) height!: number;
+    @Prop({ default: 300 }) height!: number;
 
     get style() {
         return {

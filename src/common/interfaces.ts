@@ -227,6 +227,7 @@ export interface IUpdatePostBody {
     content?: string;
     pictureIds?: string[];
     videoIds?: string[];
+    tagIds?: string[];
 }
 
 export interface IReportPostBody {

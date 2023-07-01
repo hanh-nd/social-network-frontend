@@ -34,11 +34,11 @@
                     <BaseCensorableContent :target="post" />
                 </div>
                 <div class="images" v-if="post.medias.length">
-                    <el-carousel class="carousel" :autoplay="false" width="100%">
-                        <el-carousel-item v-for="media in post.medias" :key="media._id">
+                    <Carousel>
+                        <Slide v-for="media in post.medias" :key="media._id">
                             <BaseMedia :media="media" />
-                        </el-carousel-item>
-                    </el-carousel>
+                        </Slide>
+                    </Carousel>
                 </div>
             </div>
 
@@ -92,9 +92,11 @@ import { appModule } from '@/plugins/vuex/appModule';
 import { Icon } from '@iconify/vue';
 import { cloneDeep, debounce } from 'lodash';
 import { Options } from 'vue-class-component';
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 
 @Options({
-    components: { Icon },
+    components: { Icon, Carousel, Slide, Pagination, Navigation },
     emits: [],
 })
 export default class PostDetailDialog extends GlobalMixin {

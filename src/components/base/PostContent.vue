@@ -21,6 +21,20 @@
                                 {{ parseDateTimeRelative(post?.createdAt) }}
                             </el-tooltip>
                         </div>
+                        <div class="privacy">
+                            <el-tooltip :content="PrivacyName[post?.privacy]" :hide-after="100">
+                                <Icon
+                                    :icon="
+                                        post.privacy === Privacy.PUBLIC
+                                            ? `ant-design:global-outlined`
+                                            : post.privacy === Privacy.SUBSCRIBED
+                                            ? `la:user-friends`
+                                            : `material-symbols:private-connectivity-outline`
+                                    "
+                                    height="16"
+                                />
+                            </el-tooltip>
+                        </div>
                         <div class="tags" v-if="post?.tagIds?.length">
                             <el-popover placement="top-start" :width="300" :teleported="false" trigger="hover">
                                 <template #reference>
@@ -70,20 +84,26 @@
 </template>
 
 <script lang="ts">
+import { Privacy, PrivacyName } from '@/common/constants';
 import { IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import postApiService from '@/common/service/post.api.service';
 import userApiService from '@/common/service/user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
+import { Icon } from '@iconify/vue';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
 @Options({
-    components: {},
+    components: {
+        Icon,
+    },
     emits: [],
 })
 export default class PostContent extends GlobalMixin {
     @Prop() post!: IPost;
+    Privacy = Privacy;
+    PrivacyName = PrivacyName;
 
     goToProfilePage() {
         if (!this.post?.author?._id) return;
@@ -194,6 +214,7 @@ export default class PostContent extends GlobalMixin {
                 display: flex;
                 flex-direction: row;
                 gap: 8px;
+                align-items: center;
                 .created-at {
                     font-size: 12px;
                     cursor: pointer;
