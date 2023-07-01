@@ -36,6 +36,19 @@
                     />
                 </div>
             </div>
+            <div class="quick-answer-section" v-if="!survey.userAnswer?.answer && survey.quickAnswers">
+                <div class="title">Trả lời nhanh:</div>
+                <div class="quick-answers">
+                    <div
+                        class="quick-answer-item"
+                        v-for="(answer, index) in survey.quickAnswers"
+                        :key="index"
+                        @click="setQuickAnswer(answer)"
+                    >
+                        {{ answer }}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="recommend" v-if="musics.length">
             <div class="title">Dưới đây là một số gợi ý dành cho bạn. Chúc bạn một ngày tốt lành :></div>
@@ -172,6 +185,10 @@ export default class SurveyDialog extends GlobalMixin {
     async onSubmit() {
         await this.answerSurveyForm.submit(this.survey);
     }
+
+    setQuickAnswer(answer: string) {
+        this.answerSurveyForm.setFieldValue('answer', answer);
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -186,6 +203,21 @@ export default class SurveyDialog extends GlobalMixin {
     .recommend {
         .title {
             font-weight: 700;
+        }
+    }
+
+    .quick-answer-section {
+        .quick-answers {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .quick-answer-item {
+            padding: 8px;
+            border-radius: 8px;
+            background: $color-green-4;
+            cursor: pointer;
         }
     }
 }

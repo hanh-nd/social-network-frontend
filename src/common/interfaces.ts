@@ -491,6 +491,7 @@ export interface ISurvey {
     askDate: Date;
     urgent: boolean;
     userAnswer: ISurveyAnswer;
+    quickAnswers: string[];
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
@@ -519,6 +520,7 @@ export interface ICreateSurveyBody {
     askDate: Date;
     urgent: boolean;
     repeatDays?: number[];
+    quickAnswers?: string;
 }
 
 export interface ICreateSystemMessageBody {
