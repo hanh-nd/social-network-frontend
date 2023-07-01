@@ -14,12 +14,39 @@
             </div>
             <div class="information">
                 <div class="user-name">{{ loginUser?.fullName || loginUser?.email }}</div>
-                <div class="privacy">
-                    <BaseSingleSelect
-                        v-model:value="editPostForm.privacy"
-                        :options="privacyOptions"
-                        :error="translateYupError(editPostForm.errors.privacy as IYupError)"
-                    />
+                <div class="select-group">
+                    <div class="privacy">
+                        <BaseSingleSelect
+                            v-model:value="editPostForm.privacy"
+                            :options="privacyOptions"
+                            :error="translateYupError(editPostForm.errors.privacy as IYupError)"
+                        />
+                    </div>
+                    <div class="tag">
+                        <BaseMultipleSelect
+                            v-model:value="editPostForm.tagIds"
+                            :filterable="true"
+                            :isCustomOption="true"
+                            :error="translateYupError(editPostForm.errors.tagIds as IYupError)"
+                            :limit="3"
+                            :maxCollapseTags="1"
+                        >
+                            <template #options>
+                                <div v-for="option in tags" :key="option._id">
+                                    <el-option
+                                        :label="option.name"
+                                        :value="option._id"
+                                        :id="`option_${option._id}`"
+                                        :style="optionStyle"
+                                    >
+                                        <div class="d-flex flex-row align-items-center">
+                                            {{ option.name }}
+                                        </div>
+                                    </el-option>
+                                </div>
+                            </template>
+                        </BaseMultipleSelect>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,6 +121,17 @@ export default class EditPostDialog extends GlobalMixin {
         return appModule.postDetail;
     }
 
+    get tags() {
+        return appModule.tags || [];
+    }
+
+    optionStyle: Record<string, string> = {
+        whiteSpace: 'normal',
+        overflow: 'visible',
+        textOverflow: 'unset',
+        height: 'auto',
+    };
+
     onClose() {
         appModule.setIsShowEditPostDialog(false);
     }
@@ -105,6 +143,7 @@ export default class EditPostDialog extends GlobalMixin {
             content: this.postDetail.content,
             pictureIds: this.postDetail.pictureIds,
             videoIds: this.postDetail.videoIds,
+            tagIds: (this.postDetail.tagIds || []).map((t) => t._id),
         });
     }
 
@@ -114,6 +153,7 @@ export default class EditPostDialog extends GlobalMixin {
             content: this.postDetail.content,
             pictureIds: this.postDetail.pictureIds,
             videoIds: this.postDetail.videoIds,
+            tagIds: (this.postDetail.tagIds || []).map((t) => t._id),
         };
 
         const schema = yup.object({
@@ -121,6 +161,7 @@ export default class EditPostDialog extends GlobalMixin {
             content: yup.string().max(ValidationForm.INPUT_TEXT_AREA_MAX_LENGTH).required(),
             pictureIds: yup.array().of(yup.string()),
             videoIds: yup.array().of(yup.string()),
+            tagIds: yup.array().of(yup.string()),
         });
 
         const { resetForm, setValues, setFieldValue, errors, handleSubmit } = useForm<IUpdatePostBody>({
@@ -141,7 +182,13 @@ export default class EditPostDialog extends GlobalMixin {
             if (response.success) {
                 this.showSuccessNotificationFunction('Chỉnh sửa bài viết thành công');
                 appModule.setIsShowEditPostDialog(false);
-                Object.assign(this.postDetail, values);
+                Object.assign(this.postDetail, {
+                    ...values,
+                    tagIds: (values.tagIds || []).map((tId) => {
+                        const tag = this.tags.find((t) => t._id == tId);
+                        return tag;
+                    }),
+                });
                 clearFormData();
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Chỉnh sửa bài viết thất bại');
@@ -152,12 +199,14 @@ export default class EditPostDialog extends GlobalMixin {
         const { value: content } = useField<string>('content');
         const { value: pictureIds } = useField<string[]>('pictureIds');
         const { value: videoIds } = useField<string[]>('videoIds');
+        const { value: tagIds } = useField<string[]>('tagIds');
 
         return {
             privacy,
             content,
             pictureIds,
             videoIds,
+            tagIds,
             errors,
             submit,
             clearFormData,
@@ -190,6 +239,20 @@ export default class EditPostDialog extends GlobalMixin {
             .user-name {
                 font-weight: 700;
                 font-size: 16px;
+            }
+
+            .select-group {
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+
+                .privacy {
+                    flex: 2;
+                }
+
+                .tag {
+                    flex: 3;
+                }
             }
 
             :deep(.form-container) {
