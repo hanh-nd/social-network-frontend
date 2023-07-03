@@ -26,15 +26,7 @@ export default class App extends GlobalMixin {
 
     created(): void {
         SocketProvider.init();
-        const loginUser = localStorageAuthService.getLoginUser();
-        if (loginUser?._id) {
-            appApiService.ping();
-            SocketProvider.connect(loginUser._id);
-        }
-        appModule.setLoginUser(loginUser);
-        appModule.getTags();
-        appModule.getRoles();
-
+        this.loadData();
         window.addEventListener('error', (e) => {
             if (e.message === 'ResizeObserver loop limit exceeded') {
                 const resizeObserverErrDiv = document.getElementById('webpack-dev-server-client-overlay-div');
@@ -47,6 +39,17 @@ export default class App extends GlobalMixin {
                 }
             }
         });
+    }
+
+    async loadData() {
+        const loginUser = localStorageAuthService.getLoginUser();
+        if (loginUser?._id) {
+            await appApiService.ping();
+            SocketProvider.connect(loginUser._id);
+        }
+        appModule.setLoginUser(loginUser);
+        await appModule.getTags();
+        await appModule.getRoles();
     }
 
     get pageName(): RouteRecordName {
