@@ -149,11 +149,11 @@ export default class AccountMenuUser extends GlobalMixin {
     async logout() {
         if (this.loginUser?._id) {
             await appApiService.logout();
+            SocketProvider.logout(this.loginUser._id);
             appModule.setLoginUser({} as IUser);
             localStorageAuthService.resetAll();
         }
         this.$router.push('/login');
-        SocketProvider.disconnect();
     }
 
     goToChatPage() {
