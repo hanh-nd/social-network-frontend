@@ -31,6 +31,12 @@ export class SocketProvider {
         });
     }
 
+    static logout(userId: string) {
+        this.socket.emit(SocketEvent.USER_LOGOUT, {
+            userId,
+        });
+    }
+
     static disconnect() {
         if (this.socket.connected) {
             this.socket.disconnect();
