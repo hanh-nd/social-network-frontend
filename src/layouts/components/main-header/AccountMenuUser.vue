@@ -146,9 +146,9 @@ export default class AccountMenuUser extends GlobalMixin {
             (this.$refs.dropdown as IDropdown)?.handleClose();
         }
     }
-    logout() {
+    async logout() {
         if (this.loginUser?._id) {
-            appApiService.logout();
+            await appApiService.logout();
             appModule.setLoginUser({} as IUser);
             localStorageAuthService.resetAll();
         }
