@@ -69,7 +69,7 @@ export default class App extends GlobalMixin {
             if (this.loginUser?._id) {
                 appApiService.ping();
             }
-        }, 60000);
+        }, 30000);
 
         window.addEventListener('resize', this.setScreenWidth);
         document.addEventListener('focusin', this.removeReadonlyElSelect);
