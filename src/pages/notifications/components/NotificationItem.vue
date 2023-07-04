@@ -32,7 +32,7 @@
 <script lang="ts">
 import { NotificationAction, NotificationTargetType } from '@/common/constants';
 import { generateNotificationMessageContent } from '@/common/helpers';
-import { IComment, IGroup, INotification, ISurvey, ISystemMessage, IUser } from '@/common/interfaces';
+import { IComment, IGroup, INotification, IQuestion, ISurvey, ISystemMessage, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import notificationApiService from '@/common/service/notification.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
@@ -83,8 +83,9 @@ export default class NotificationItem extends GlobalMixin {
                 return this.openGroupAction();
             case NotificationTargetType.MESSAGE:
             case NotificationTargetType.QUESTION:
+                return this.openAskUserQuestion();
             case NotificationTargetType.USER:
-                return this.openAskQuestion();
+                return this.openUserProfile();
         }
     }
 
@@ -152,7 +153,18 @@ export default class NotificationItem extends GlobalMixin {
         }
     }
 
-    openAskQuestion() {
+    openAskUserQuestion() {
+        const question = (this.notification.target || {}) as IQuestion;
+
+        this.$router.push({
+            name: this.PageName.PROFILE_PAGE,
+            params: {
+                id: question.receiver._id ?? question.receiver,
+            },
+        });
+    }
+
+    openUserProfile() {
         const user = this.notification.target || ({} as IUser);
 
         this.$router.push({

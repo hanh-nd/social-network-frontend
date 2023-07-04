@@ -405,7 +405,7 @@ export interface INotification {
     deletedAt?: Date;
 }
 
-export type NotificationTarget = IPost | IComment | IMessage | IUser | ISystemMessage | ISurvey;
+export type NotificationTarget = IPost | IComment | IMessage | IUser | ISystemMessage | ISurvey | IQuestion;
 export type ReportTarget = IPost | IComment | IMessage | IUser;
 
 export interface IStatistic {
