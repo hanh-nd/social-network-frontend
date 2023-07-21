@@ -21,7 +21,8 @@ import { SocketEvent } from '@/common/constants';
 import { GlobalMixin } from '@/common/mixins';
 import { EventEmitter, EventName } from '@/plugins/mitt';
 import { SocketProvider } from '@/plugins/socket.io';
-import { pick } from 'lodash';
+import { cloneDeep, pick, remove } from 'lodash';
+import moment from 'moment';
 import { Options } from 'vue-class-component';
 import ChatDetail from '../components/ChatDetail.vue';
 import ChatInfoDrawer from '../components/ChatInfoDrawer.vue';
@@ -56,6 +57,7 @@ export default class ChatPage extends GlobalMixin {
     }
 
     loadData() {
+        if (!this.chatId) return;
         chatModule.getChatDetail(this.chatId);
     }
 
@@ -80,7 +82,12 @@ export default class ChatPage extends GlobalMixin {
             const chat = this.chatList.find((chat) => chat._id == chatId);
             if (!chat) return;
 
-            chat.lastMessage = message;
+            const clonedChat = cloneDeep(chat);
+            clonedChat.lastMessage = message;
+            clonedChat.lastMessageAt = moment().toISOString();
+
+            remove(this.chatList, (chat) => chat._id == chatId);
+            this.chatList.unshift(clonedChat);
         });
 
         SocketProvider.socket.on(SocketEvent.USER_RECALL, ({ chatId, message: updatedMessage }) => {

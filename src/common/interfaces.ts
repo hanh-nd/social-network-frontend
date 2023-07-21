@@ -119,6 +119,7 @@ export interface IUser {
     isBlocked?: boolean;
     isSentRequest?: boolean;
     isSelf?: boolean;
+    alertRange: number;
 }
 
 export interface IUserDetail {
@@ -186,6 +187,10 @@ export interface IUpdateProfileBody {
     education?: IEducation;
     private?: boolean;
     tagIds?: string[];
+}
+
+export interface IUpdateAlertTimeRange {
+    alertRange: number;
 }
 
 export interface IPost {

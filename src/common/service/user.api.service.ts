@@ -5,6 +5,7 @@ import {
     IGetSuggestionListQuery,
     IGetUserListQuery,
     IPost,
+    IUpdateAlertTimeRange,
     IUpdateProfileBody,
     IUser,
     IUserDetail,
@@ -85,6 +86,10 @@ class UserApiService extends ApiService {
 
     async changePassword(body: IChangePasswordBody): Promise<IBodyResponse<boolean>> {
         return await this.client.patch(`${this.baseUrl}/change-password`, body);
+    }
+
+    async updateSetting(body: IUpdateAlertTimeRange): Promise<IBodyResponse<boolean>> {
+        return await this.client.patch(`${this.baseUrl}/setting`, body);
     }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);

@@ -2,7 +2,12 @@
     <div class="profile-info-page-wrapper">
         <div class="profile-info-page-container mx-auto">
             <div class="left-section">
-                <ProfileSection />
+                <div class="top-section">
+                    <ProfileSection />
+                </div>
+                <div class="bottom-section">
+                    <SettingSection />
+                </div>
             </div>
             <div class="right-section">
                 <div class="top-section">
@@ -22,12 +27,14 @@ import { Options } from 'vue-class-component';
 import InformationSection from '../components/InfomationSection.vue';
 import PasswordSection from '../components/PasswordSection.vue';
 import ProfileSection from '../components/ProfileSection.vue';
+import SettingSection from '../components/SettingSection.vue';
 
 @Options({
     components: {
         InformationSection,
         ProfileSection,
         PasswordSection,
+        SettingSection,
     },
 })
 export default class ProfileInfoPage extends GlobalMixin {
@@ -61,9 +68,6 @@ export default class ProfileInfoPage extends GlobalMixin {
     .left-section,
     .right-section {
         flex: 1;
-    }
-
-    .right-section {
         display: flex;
         flex-direction: column;
         gap: 16px;

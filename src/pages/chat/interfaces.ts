@@ -16,6 +16,7 @@ export interface IChat {
     type: ChatType;
     deletedFor: string[];
     lastMessage?: IMessage;
+    lastMessageAt?: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
