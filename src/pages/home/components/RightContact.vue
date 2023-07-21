@@ -19,6 +19,7 @@ import { isEmpty } from 'lodash';
 import { Options } from 'vue-class-component';
 import { homeModule } from '../store';
 import ContactList from './ContactList.vue';
+import { Watch } from 'vue-property-decorator';
 
 @Options({
     components: {
@@ -32,7 +33,10 @@ export default class RightContact extends GlobalMixin {
         return appModule.loginUser;
     }
 
-    created(): void {
+    @Watch('loginUser')
+    onLoginUserChanged() {
+        if (!this.loginUser._id) return;
+
         homeModule.resetContactListQuery();
         homeModule.getSubscribing({ id: this.loginUser._id });
     }

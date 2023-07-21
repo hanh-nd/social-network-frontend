@@ -25,7 +25,10 @@
 
         <el-popover popper-class="chat-list-dialog" placement="bottom" :width="250" trigger="click" :teleported="false">
             <div class="chat-list">
-                <ChatListMenu />
+                <ChatListMenu
+                    @on-click-chat-item="onClickChatItem"
+                    @on-open-create-chat-dialog="openCreateChatDialog"
+                />
                 <div class="see-more">
                     <el-button type="info" @click="goToChatPage">Xem tất cả</el-button>
                 </div>
@@ -53,7 +56,7 @@
                     <hr />
                     <router-link class="router-link" :to="`/profile`">
                         <el-dropdown-item class="dropdown-item">
-                            <p>Thông tin của tôi</p>
+                            <p>Thiết lập tài khoản</p>
                         </el-dropdown-item>
                     </router-link>
                     <hr />
@@ -82,6 +85,7 @@ import { INotification, ISurvey, ISystemMessage, IUser } from '@/common/interfac
 import { GlobalMixin } from '@/common/mixins';
 import appApiService from '@/common/service/app.api.service';
 import ChatListMenu from '@/pages/chat/components/ChatListMenu.vue';
+import { IChat } from '@/pages/chat/interfaces';
 import { chatModule } from '@/pages/chat/store';
 import NotificationList from '@/pages/notifications/components/NotificationList.vue';
 import { notificationModule } from '@/pages/notifications/store';
@@ -160,6 +164,19 @@ export default class AccountMenuUser extends GlobalMixin {
         this.$router.push({
             name: this.PageName.EMPTY_CHAT_PAGE,
         });
+    }
+
+    onClickChatItem(chat: IChat) {
+        this.$router.replace({
+            name: this.PageName.CHAT_PAGE,
+            params: {
+                id: chat._id,
+            },
+        });
+    }
+
+    openCreateChatDialog() {
+        chatModule.setIsShowCreateChatDialog(true);
     }
 
     goToNotificationPage() {

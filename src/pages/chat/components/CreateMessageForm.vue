@@ -6,7 +6,7 @@
                 type="textarea"
                 :autosize="true"
                 placeholder="Nhập nội dung tin nhắn"
-                @on-enter="onSubmit"
+                @on-enter="onEnter"
             >
                 <template #iconRight>
                     <BaseEmojiPicker @on-pick-emoji="onPickEmoji" />
@@ -97,6 +97,11 @@ export default class CreateMessageForm extends GlobalMixin {
 
     async onSubmit() {
         this.messageForm.submit(this.chatId);
+    }
+
+    onEnter() {
+        if (!this.messageForm.content.trim() || this.isSending) return;
+        this.onSubmit();
     }
 
     onPickEmoji(emoji: string) {

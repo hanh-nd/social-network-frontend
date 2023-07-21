@@ -61,7 +61,6 @@ export enum DateFormat {
     DD_vi_MM_YYYY_HH_mm = 'DD [tháng] MM, YYYY [lúc] HH:mm',
     DD_vi_MM_HH_mm = 'DD [tháng] MM [lúc] HH:mm',
     dddd_vi_DD_MM_YYYY_DASH = 'dddd [Ngày] DD/MM/YYYY',
-    DD_MM_YY_DASH = 'DD/MM/YYYY',
     dddd_vi_L_SPACE = 'dddd, [ngày] L',
     DD_vi_MM = 'DD [Th]MM',
     DD_vi_M_YYYY = 'DD [Th]M YYYY',
