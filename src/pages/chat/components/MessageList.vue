@@ -159,12 +159,10 @@ export default class MessageList extends GlobalMixin {
 <style lang="scss" scoped>
 .message-list-wrapper {
     .message-list-container {
-        display: flex;
         overflow-y: scroll;
 
         .message-list {
             display: flex;
-            flex: 1;
             flex-direction: column-reverse;
             gap: 2px;
             justify-content: flex-start;
