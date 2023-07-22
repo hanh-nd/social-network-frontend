@@ -471,6 +471,7 @@ export interface IQuestion {
 
 export interface IGetQuestionListQuery extends ICommonGetListQuery {
     pending?: number;
+    query?: number;
 }
 
 export interface ICreateQuestionBody {

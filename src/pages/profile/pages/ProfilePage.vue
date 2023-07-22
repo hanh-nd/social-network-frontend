@@ -17,6 +17,8 @@
             </div>
         </div>
     </div>
+
+    <ReportUserDialog />
 </template>
 
 <script lang="ts">
@@ -26,13 +28,14 @@ import ProfileHeader from '../components/ProfileHeader.vue';
 import BlocksScreen from '../components/blocks/BlocksScreen.vue';
 import DescribeScreen from '../components/describe-screen/DescribeScreen.vue';
 import MainProfileScreen from '../components/main-profile-screen/MainProfileScreen.vue';
+import QuestionScreen from '../components/questions/QuestionScreen.vue';
+import RequestScreen from '../components/requests/RequestScreen.vue';
+import StatisticScreen from '../components/statistics/StatisticScreen.vue';
 import SubscriberScreen from '../components/subscribers/SubscriberScreen.vue';
 import SubscribingScreen from '../components/subscribing/SubscribingScreen.vue';
 import { ProfileScreenTab } from '../constants';
 import { profileModule } from '../store';
-import RequestScreen from '../components/requests/RequestScreen.vue';
-import QuestionScreen from '../components/questions/QuestionScreen.vue';
-import StatisticScreen from '../components/statistics/StatisticScreen.vue';
+import ReportUserDialog from '../components/ReportUserDialog.vue';
 
 @Options({
     components: {
@@ -45,6 +48,7 @@ import StatisticScreen from '../components/statistics/StatisticScreen.vue';
         RequestScreen,
         QuestionScreen,
         StatisticScreen,
+        ReportUserDialog,
     },
 })
 export default class ProfilePage extends GlobalMixin {
@@ -56,7 +60,8 @@ export default class ProfilePage extends GlobalMixin {
 
     created() {
         this.loadData();
-        profileModule.setProfileScreenTab(ProfileScreenTab.MAIN);
+        const defaultTab = (this.$route.query.tab as ProfileScreenTab) || ProfileScreenTab.MAIN;
+        profileModule.setProfileScreenTab(defaultTab);
     }
 
     async loadData() {

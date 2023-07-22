@@ -5,6 +5,7 @@ import {
     IGetSuggestionListQuery,
     IGetUserListQuery,
     IPost,
+    IReportPostBody,
     IUpdateAlertTimeRange,
     IUpdateProfileBody,
     IUser,
@@ -90,6 +91,10 @@ class UserApiService extends ApiService {
 
     async updateSetting(body: IUpdateAlertTimeRange): Promise<IBodyResponse<boolean>> {
         return await this.client.patch(`${this.baseUrl}/setting`, body);
+    }
+
+    async reportUser(targetUserId: string, body: IReportPostBody): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${targetUserId}/report`, body);
     }
 }
 const userApiService = new UserApiService({ baseUrl: '/users' }, axiosService);

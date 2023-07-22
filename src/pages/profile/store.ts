@@ -41,6 +41,7 @@ class ProfileModule extends VuexModule {
     isFetchedAllQuestionList = false;
     userStatistics: IUserStatistic[] = [];
     statisticsQuery: IGetStatisticQuery = cloneDeep(INIT_GET_STATISTIC_QUERY);
+    isShowReportUserDialog = false;
 
     @Action
     async getProfileUser(userId: string) {
@@ -333,7 +334,7 @@ class ProfileModule extends VuexModule {
 
     @Action
     resetQuestionListQuery() {
-        this.SET_QUESTION_LIST_QUERY(cloneDeep(INIT_GET_QUESTION_LIST_QUERY));
+        this.RESET_QUESTION_LIST_QUERY();
     }
 
     @Action
@@ -347,6 +348,11 @@ class ProfileModule extends VuexModule {
             ...this.questionListQuery,
             ...questionListQuery,
         };
+    }
+
+    @Mutation
+    RESET_QUESTION_LIST_QUERY() {
+        this.questionListQuery = cloneDeep(INIT_GET_QUESTION_LIST_QUERY);
     }
 
     @Action
@@ -382,6 +388,16 @@ class ProfileModule extends VuexModule {
     @Mutation
     SET_STATISTICS_QUERY(statisticsQuery: IGetStatisticQuery) {
         this.statisticsQuery = statisticsQuery;
+    }
+
+    @Action
+    setIsShowReportUserDialog(isShowReportUserDialog: boolean) {
+        this.SET_IS_SHOW_REPORT_USER_DIALOG(isShowReportUserDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_REPORT_USER_DIALOG(isShowReportUserDialog: boolean) {
+        this.isShowReportUserDialog = isShowReportUserDialog;
     }
 }
 

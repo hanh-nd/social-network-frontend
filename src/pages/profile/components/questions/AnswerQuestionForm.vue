@@ -21,7 +21,7 @@
             <div class="content">
                 {{ question?.answer || 'Chưa có câu trả lời.' }}
             </div>
-            <div class="edit-btn">
+            <div class="edit-btn" v-if="receiver?._id === loginUser?._id">
                 <el-button type="primary" @click="onEditDescribe">Trả lời</el-button>
             </div>
         </div>
@@ -32,6 +32,7 @@
 import { IQuestion, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import questionApiService from '@/common/service/question.api.service';
+import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
@@ -42,6 +43,14 @@ import { Prop } from 'vue-property-decorator';
 })
 export default class ProfileDescribeForm extends GlobalMixin {
     @Prop() question!: IQuestion;
+
+    get receiver() {
+        return this.question.receiver;
+    }
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
 
     isEditing = false;
 

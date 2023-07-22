@@ -3,7 +3,7 @@
         custom-class="base-system-message-dialog"
         :model-value="isShowSystemMessageDialog"
         @closed="onCloseDialog"
-        :title="systemMessage.type === SystemMessageType.INFO ? `Thông báo` : `Cảnh báo`"
+        :title="systemMessage?.type === SystemMessageType.INFO ? `Thông báo` : `Cảnh báo`"
         :width="deviceType === DeviceType.MOBILE ? '80%' : '30%'"
         center
     >
@@ -34,7 +34,7 @@ export default class SystemMessageDialog extends GlobalMixin {
     }
 
     get template() {
-        return this.systemMessage.fullTemplate || this.systemMessage.template;
+        return this.systemMessage?.fullTemplate || this.systemMessage?.template;
     }
 
     get parameters() {

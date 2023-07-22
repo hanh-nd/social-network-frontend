@@ -188,6 +188,7 @@ export enum NotificationAction {
     SEND_MESSAGE = 'SEND_MESSAGE',
     SEND_SURVEY = 'SEND_SURVEY',
     ASK_QUESTION = 'ASK_QUESTION',
+    ANSWER_QUESTION = 'ANSWER_QUESTION',
     REQUEST_JOIN_GROUP = 'REQUEST_JOIN_GROUP',
     ACCEPT_JOIN_GROUP = 'ACCEPT_JOIN_GROUP',
 }
@@ -201,6 +202,7 @@ export const NotificationActionName = {
     [NotificationAction.ACCEPT_SUBSCRIBE_REQUEST]: 'đồng ý lời mời theo dõi của',
     [NotificationAction.SEND_MESSAGE]: 'gửi cho bạn một',
     [NotificationAction.ASK_QUESTION]: 'đặt cho bạn một',
+    [NotificationAction.ANSWER_QUESTION]: 'trả lời một',
     [NotificationAction.REQUEST_JOIN_GROUP]: 'gửi cho bạn một yêu cầu tham gia',
     [NotificationAction.ACCEPT_JOIN_GROUP]: 'chấp thuận yêu cầu tham gia',
 };
