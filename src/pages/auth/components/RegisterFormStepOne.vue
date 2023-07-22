@@ -43,6 +43,7 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { Model } from 'vue-property-decorator';
 import { IRegisterForm } from '../interface';
+import appApiService from '@/common/service/app.api.service';
 
 @Options({
     components: {},
@@ -58,7 +59,15 @@ export default class RegisterFormStepOne extends GlobalMixin {
         ]);
         const isValid = results.every((result) => result.valid);
         if (isValid) {
-            this.$emit(`on-next-step`);
+            const response = await appApiService.preRegister({
+                username: this.formData.username,
+                email: this.formData.email,
+            });
+            if (response?.success) {
+                this.$emit(`on-next-step`);
+            } else {
+                this.showErrorNotificationFunction(response?.message || 'Đăng ký thất bại');
+            }
         }
     }
 

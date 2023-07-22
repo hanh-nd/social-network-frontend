@@ -23,6 +23,10 @@ class AppApiService extends ApiService {
         return await this.client.post('/register', data);
     }
 
+    async preRegister(data: Partial<IRegisterForm>): Promise<IBodyResponse<ILoginResponse>> {
+        return await this.client.post('/pre-register', data);
+    }
+
     async getUserProfile(): Promise<IBodyResponse<IUser>> {
         return await this.client.get(`/users/me`);
     }
