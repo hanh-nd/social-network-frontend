@@ -26,8 +26,10 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
+import { EventEmitter, EventName } from '@/plugins/mitt';
 import { Options } from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
+import { ProfileScreenTab } from '../../constants';
 import { profileModule } from '../../store';
 import UserCard from '../common/UserCard.vue';
 import RequestItem from './RequestItem.vue';
@@ -74,6 +76,7 @@ export default class RequestScreen extends GlobalMixin {
     }
 
     mounted(): void {
+        EventEmitter.emit(EventName.CHANGE_PROFILE_SCREEN_TAB, ProfileScreenTab.REQUEST);
         this.loadData();
     }
 

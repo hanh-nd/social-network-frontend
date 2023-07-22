@@ -1,18 +1,18 @@
 <template>
     <el-dialog
-        custom-class="report-post-dialog"
-        :model-value="isShowReportCommentDialog"
+        custom-class="report-user-dialog"
+        :model-value="isShowReportUserDialog"
         @closed="onClose"
-        title="Báo cáo bình luận"
+        title="Báo cáo người dùng"
         :width="deviceType === DeviceType.MOBILE ? '80%' : '30%'"
         center
     >
         <div class="body">
             <div class="content">
                 <BaseInputText
-                    v-model:value="reportCommentForm.reportReason"
-                    :error="translateYupError(reportCommentForm.errors.reportReason as IYupError)"
-                    placeholder="Bình luận vi phạm điều gì?"
+                    v-model:value="reportUserForm.reportReason"
+                    :error="translateYupError(reportUserForm.errors.reportReason as IYupError)"
+                    placeholder="Người dùng vi phạm điều gì?"
                     type="textarea"
                     :autosize="{
                         minRows: 3,
@@ -33,34 +33,35 @@
 import { DeviceType, ValidationForm } from '@/common/constants';
 import { IReportPostBody, IYupError } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
-import commentApiService from '@/common/service/comment.api.service';
+import userApiService from '@/common/service/user.api.service';
 import { appModule } from '@/plugins/vuex/appModule';
 import yup from '@/plugins/yup';
 import { useField, useForm } from 'vee-validate';
 import { Options, setup } from 'vue-class-component';
+import { profileModule } from '../store';
 
 @Options({
     components: {},
     emits: ['on-close-dialog', 'on-click-cancel-button', 'on-click-confirm-button'],
 })
-export default class ReportCommentDialog extends GlobalMixin {
+export default class ReportUserDialog extends GlobalMixin {
     get deviceType() {
         return appModule.deviceType;
     }
 
-    get isShowReportCommentDialog() {
-        return appModule.isShowReportCommentDialog;
+    get isShowReportUserDialog() {
+        return profileModule.isShowReportUserDialog;
     }
 
-    get commentDetail() {
-        return appModule.commentDetail;
+    get profileUser() {
+        return profileModule.profileUser;
     }
 
     onClose() {
-        appModule.setIsShowReportCommentDialog(false);
+        profileModule.setIsShowReportUserDialog(false);
     }
 
-    reportCommentForm = setup(() => {
+    reportUserForm = setup(() => {
         const initValues: IReportPostBody = {
             reportReason: '',
         };
@@ -83,19 +84,15 @@ export default class ReportCommentDialog extends GlobalMixin {
         };
 
         const submit = handleSubmit(async (values) => {
-            if (!this.commentDetail?.post?._id) return;
+            if (!this.profileUser?._id) return;
 
-            const response = await commentApiService.reportComment(
-                this.commentDetail?.post?._id,
-                this.commentDetail?._id,
-                values,
-            );
+            const response = await userApiService.reportUser(this.profileUser._id, values);
             if (response.success) {
-                this.showSuccessNotificationFunction('Báo cáo bình luận thành công');
-                appModule.setIsShowReportCommentDialog(false);
+                this.showSuccessNotificationFunction('Báo cáo người dùng thành công');
+                profileModule.setIsShowReportUserDialog(false);
                 clearFormData();
             } else {
-                this.showErrorNotificationFunction(response?.message || 'Báo cáo bình luận thất bại');
+                this.showErrorNotificationFunction(response?.message || 'Báo cáo người dùng thất bại');
             }
         });
 
@@ -112,12 +109,12 @@ export default class ReportCommentDialog extends GlobalMixin {
     });
 
     async onSubmit() {
-        await this.reportCommentForm.submit();
+        await this.reportUserForm.submit();
     }
 }
 </script>
 <style lang="scss" scoped>
-.report-post-dialog {
+.report-user-dialog {
     .body {
         .content {
             :deep(.el-textarea__inner) {

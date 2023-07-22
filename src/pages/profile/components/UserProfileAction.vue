@@ -9,7 +9,7 @@
                 >Nhắn tin</el-dropdown-item
             >
             <el-dropdown-item @click="createAskUserQuestion">Đặt câu hỏi</el-dropdown-item>
-            <el-dropdown-item>Báo cáo</el-dropdown-item>
+            <el-dropdown-item @click="openReportUserDialog">Báo cáo</el-dropdown-item>
             <el-dropdown-item @click="block">Chặn</el-dropdown-item>
         </BaseThreeDotMenu>
     </div>
@@ -106,6 +106,10 @@ export default class UserProfileAction extends GlobalMixin {
 
     async createAskUserQuestion() {
         profileModule.setIsShowCreateQuestionDialog(true);
+    }
+
+    openReportUserDialog() {
+        profileModule.setIsShowReportUserDialog(true);
     }
 }
 </script>

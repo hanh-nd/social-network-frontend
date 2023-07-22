@@ -35,6 +35,7 @@ import { generateNotificationMessageContent } from '@/common/helpers';
 import { IComment, IGroup, INotification, IQuestion, ISurvey, ISystemMessage, IUser } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import notificationApiService from '@/common/service/notification.api.service';
+import { ProfileScreenTab } from '@/pages/profile/constants';
 import { appModule } from '@/plugins/vuex/appModule';
 import { isNil } from 'lodash';
 import { Options } from 'vue-class-component';
@@ -155,11 +156,17 @@ export default class NotificationItem extends GlobalMixin {
 
     openAskUserQuestion() {
         const question = (this.notification.target || {}) as IQuestion;
+        const action = this.notification.action;
+        const receiverId = question.receiver._id ?? question.receiver;
+        const senderId = question.sender._id ?? question.sender;
 
         this.$router.push({
             name: this.PageName.PROFILE_PAGE,
             params: {
-                id: question.receiver._id ?? question.receiver,
+                id: action === NotificationAction.ASK_QUESTION ? receiverId : senderId,
+            },
+            query: {
+                tab: ProfileScreenTab.QUESTIONS,
             },
         });
     }
@@ -171,6 +178,9 @@ export default class NotificationItem extends GlobalMixin {
             name: this.PageName.PROFILE_PAGE,
             params: {
                 id: user._id,
+            },
+            query: {
+                tab: ProfileScreenTab.REQUEST,
             },
         });
     }

@@ -1,10 +1,11 @@
 <template>
     <div class="question-screen-wrapper">
         <div class="header">
-            <div class="title">Câu hỏi dành cho bạn</div>
+            <div class="title">Câu hỏi</div>
             <el-radio-group v-model="questionType" @change="onChange">
                 <el-radio-button :label="QuestionType.ALL">Tất cả</el-radio-button>
                 <el-radio-button :label="QuestionType.UNANSWERED">Chưa trả lời</el-radio-button>
+                <el-radio-button :label="QuestionType.ASKED">Đã hỏi</el-radio-button>
             </el-radio-group>
         </div>
         <div class="question-list">
@@ -18,6 +19,8 @@ import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
 import QuestionList from './QuestionList.vue';
+import { EventEmitter, EventName } from '@/plugins/mitt';
+import { ProfileScreenTab } from '../../constants';
 
 @Options({
     components: {
@@ -28,6 +31,7 @@ export default class QuestionScreen extends GlobalMixin {
     QuestionType = {
         ALL: 'Tất cả',
         UNANSWERED: 'Chưa trả lời',
+        ASKED: 'Đã hỏi',
     };
     questionType = this.QuestionType.ALL;
 
@@ -38,9 +42,13 @@ export default class QuestionScreen extends GlobalMixin {
             profileModule.setQuestionListQuery({
                 pending: 0,
             });
-        } else {
+        } else if (questionType === this.QuestionType.UNANSWERED) {
             profileModule.setQuestionListQuery({
                 pending: 1,
+            });
+        } else if (questionType === this.QuestionType.ASKED) {
+            profileModule.setQuestionListQuery({
+                asked: 1,
             });
         }
         profileModule.getQuestionList({ append: false });
@@ -56,6 +64,10 @@ export default class QuestionScreen extends GlobalMixin {
 
     created(): void {
         this.loadData();
+    }
+
+    mounted(): void {
+        EventEmitter.emit(EventName.CHANGE_PROFILE_SCREEN_TAB, ProfileScreenTab.QUESTIONS);
     }
 
     loadData() {

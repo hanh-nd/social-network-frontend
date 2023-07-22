@@ -16,6 +16,7 @@ export interface IUpdateSubscribeRequestBody {
 
 export interface IGetQuestionListQuery extends ICommonGetListQuery {
     pending?: number;
+    asked?: number;
 }
 
 export interface IUserStatistic {
