@@ -83,8 +83,8 @@
 </template>
 
 <script lang="ts">
-import { INIT_GET_COMMENT_LIST_QUERY, ReactionType } from '@/common/constants';
-import { IComment, IGetCommentListQuery } from '@/common/interfaces';
+import { INIT_GET_COMMENT_LIST_QUERY, ReactionType, SocketEvent } from '@/common/constants';
+import { IComment, IGetCommentListQuery, IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
 import commentApiService from '@/common/service/comment.api.service';
 import postApiService from '@/common/service/post.api.service';
@@ -94,6 +94,7 @@ import { cloneDeep, debounce } from 'lodash';
 import { Options } from 'vue-class-component';
 import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+import { SocketProvider } from '@/plugins/socket.io';
 
 @Options({
     components: { Icon, Carousel, Slide, Pagination, Navigation },
@@ -130,10 +131,26 @@ export default class PostDetailDialog extends GlobalMixin {
     }
 
     onOpen() {
+        SocketProvider.socket.on(SocketEvent.POST_UPDATE, ({ postId, ...rest }) => {
+            this.postUpdateHandler(postId, rest);
+        });
+
         this.loadData();
     }
 
+    postUpdateHandler(postId: string, rest: Partial<IPost>) {
+        if (this.post._id !== postId) return;
+        if ('comment' in rest) {
+            const { _id, isToxic } = rest.comment as IComment;
+            const comment = this.commentList.find((c) => c._id === _id);
+            if (!comment) return;
+
+            Object.assign(comment, { isToxic });
+        }
+    }
+
     onClose() {
+        SocketProvider.socket.off(SocketEvent.POST_UPDATE);
         appModule.setIsShowPostDetailDialog(false);
         this.commentListQuery = cloneDeep(INIT_GET_COMMENT_LIST_QUERY);
         this.isFetchedAllCommentList = false;
