@@ -1,4 +1,4 @@
-import { IBodyResponse, IUser } from '@/common/interfaces';
+import { IBodyResponse, IForgotPasswordForm, IUser, IVerifyTokenRequest } from '@/common/interfaces';
 import { ApiService } from '@/common/service/api';
 import { ILoginForm, ILoginResponse, IRegisterForm } from '@/pages/auth/interface';
 import axiosService from '@/plugins/axios';
@@ -33,6 +33,14 @@ class AppApiService extends ApiService {
 
     async ping(): Promise<IBodyResponse<void>> {
         return await this.client.get(`/ping`);
+    }
+
+    async forgotPassword(data: IForgotPasswordForm): Promise<IBodyResponse<boolean>> {
+        return await this.client.post('/forgot-password', data);
+    }
+
+    async resetPassword(data: IVerifyTokenRequest): Promise<IBodyResponse<ILoginResponse>> {
+        return await this.client.post('/new-password', data);
     }
 }
 const appApiService = new AppApiService({ baseUrl: '/' }, axiosService);

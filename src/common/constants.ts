@@ -2,6 +2,8 @@ export enum PageName {
     HOME_PAGE = 'HomePage',
     LOGIN_PAGE = 'LoginPage',
     REGISTER_PAGE = 'RegisterPage',
+    FORGOT_PASSWORD_PAGE = 'ForgotPasswordPage',
+    RESET_PASSWORD_PAGE = 'ResetPasswordPage',
     NOT_FOUND_PAGE = 'NotFoundPage',
     WELCOME_PAGE = 'WelcomePage',
     PROFILE_PAGE = 'ProfilePage',

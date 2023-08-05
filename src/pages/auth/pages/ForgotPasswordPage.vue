@@ -1,20 +1,16 @@
 <template>
-    <div class="login-container">
+    <div class="forgot-password-container">
         <div class="left-panel container">
             <div class="logo">
                 <img :src="require('@/assets/images/common/logo.svg')" />
             </div>
-            <div class="welcome">Xin chào bạn!</div>
-            <div class="login">
-                <LoginForm />
-            </div>
+            <div class="welcome">Quên mật khẩu</div>
             <div class="forgot-password">
-                Quên mật khẩu?
-                <span class="btn" @click="goToForgotPasswordPage">Lấy lại mật khẩu</span>
+                <ForgotPasswordForm />
             </div>
-            <div class="register">
-                Chưa có tài khoản?
-                <span class="btn" @click="goToRegisterPage">Đăng ký</span>
+            <div class="login">
+                Đã nhớ lại mật khẩu?
+                <span class="btn" @click="goToLoginPage">Đăng nhập</span>
             </div>
         </div>
         <div class="right-panel"></div>
@@ -24,27 +20,23 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
-import LoginForm from '../components/LoginForm.vue';
+import ForgotPasswordForm from '../components/ForgotPasswordForm.vue';
 
 @Options({
-    components: { LoginForm },
+    components: {
+        ForgotPasswordForm,
+    },
 })
-export default class LoginPage extends GlobalMixin {
-    goToRegisterPage() {
+export default class ForgotPasswordPage extends GlobalMixin {
+    goToLoginPage() {
         this.$router.push({
-            name: this.PageName.REGISTER_PAGE,
-        });
-    }
-
-    goToForgotPasswordPage() {
-        this.$router.push({
-            name: this.PageName.FORGOT_PASSWORD_PAGE,
+            name: this.PageName.LOGIN_PAGE,
         });
     }
 }
 </script>
 <style lang="scss" scoped>
-.login-container {
+.forgot-password-container {
     display: flex;
     flex-direction: row;
     flex: 1;
@@ -68,8 +60,7 @@ export default class LoginPage extends GlobalMixin {
         font-weight: 500;
     }
 
-    .register,
-    .forgot-password {
+    .login {
         padding: 12px 0;
         .btn {
             padding: 0;

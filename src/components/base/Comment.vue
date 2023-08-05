@@ -156,7 +156,7 @@ export default class Comment extends GlobalMixin {
         }
     }
 
-    @Watch('comment')
+    @Watch('comment', { immediate: true })
     onCommentChange() {
         this.editCommentForm.setFieldValue('content', this.comment.content);
     }
