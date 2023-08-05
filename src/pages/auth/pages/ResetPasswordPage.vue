@@ -1,20 +1,12 @@
 <template>
-    <div class="login-container">
+    <div class="reset-password-container">
         <div class="left-panel container">
             <div class="logo">
                 <img :src="require('@/assets/images/common/logo.svg')" />
             </div>
-            <div class="welcome">Xin chào bạn!</div>
-            <div class="login">
-                <LoginForm />
-            </div>
-            <div class="forgot-password">
-                Quên mật khẩu?
-                <span class="btn" @click="goToForgotPasswordPage">Lấy lại mật khẩu</span>
-            </div>
-            <div class="register">
-                Chưa có tài khoản?
-                <span class="btn" @click="goToRegisterPage">Đăng ký</span>
+            <div class="welcome">Lấy lại mật khẩu</div>
+            <div class="reset-password">
+                <ResetPasswordForm />
             </div>
         </div>
         <div class="right-panel"></div>
@@ -24,27 +16,17 @@
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
 import { Options } from 'vue-class-component';
-import LoginForm from '../components/LoginForm.vue';
+import ResetPasswordForm from '../components/ResetPasswordForm.vue';
 
 @Options({
-    components: { LoginForm },
+    components: {
+        ResetPasswordForm,
+    },
 })
-export default class LoginPage extends GlobalMixin {
-    goToRegisterPage() {
-        this.$router.push({
-            name: this.PageName.REGISTER_PAGE,
-        });
-    }
-
-    goToForgotPasswordPage() {
-        this.$router.push({
-            name: this.PageName.FORGOT_PASSWORD_PAGE,
-        });
-    }
-}
+export default class ResetPasswordPage extends GlobalMixin {}
 </script>
 <style lang="scss" scoped>
-.login-container {
+.reset-password-container {
     display: flex;
     flex-direction: row;
     flex: 1;
@@ -68,8 +50,7 @@ export default class LoginPage extends GlobalMixin {
         font-weight: 500;
     }
 
-    .register,
-    .forgot-password {
+    .login {
         padding: 12px 0;
         .btn {
             padding: 0;

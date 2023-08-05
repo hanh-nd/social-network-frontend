@@ -32,8 +32,8 @@ export interface IForgotPasswordForm {
 }
 
 export interface IVerifyTokenRequest {
-    code: string;
-    email: string;
+    token: string;
+    password: string;
 }
 
 export interface IResetPasswordForm {

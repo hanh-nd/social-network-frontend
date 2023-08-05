@@ -1,8 +1,10 @@
 import localStorageAuthService from '@/common/authStorage';
 import { PageName } from '@/common/constants';
 import MainLayout from '@/layouts/MainLayout.vue';
+import ForgotPasswordPage from '@/pages/auth/pages/ForgotPasswordPage.vue';
 import LoginPage from '@/pages/auth/pages/LoginPage.vue';
 import RegisterPage from '@/pages/auth/pages/RegisterPage.vue';
+import ResetPasswordPage from '@/pages/auth/pages/ResetPasswordPage.vue';
 import ChatPage from '@/pages/chat/pages/ChatPage.vue';
 import ProfileInfoPage from '@/pages/profile-info/pages/ProfileInfoPage.vue';
 import ProfilePage from '@/pages/profile/pages/ProfilePage.vue';
@@ -46,6 +48,22 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/register',
                 name: PageName.REGISTER_PAGE,
                 component: RegisterPage,
+                meta: {
+                    public: true,
+                },
+            },
+            {
+                path: '/forgot-password',
+                name: PageName.FORGOT_PASSWORD_PAGE,
+                component: ForgotPasswordPage,
+                meta: {
+                    public: true,
+                },
+            },
+            {
+                path: '/reset-password',
+                name: PageName.RESET_PASSWORD_PAGE,
+                component: ResetPasswordPage,
                 meta: {
                     public: true,
                 },
