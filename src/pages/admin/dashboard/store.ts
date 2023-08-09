@@ -1,4 +1,5 @@
 import { IGetStatisticQuery, IStatistic } from '@/common/interfaces';
+import adminGroupApiService from '@/common/service/admin.group.api.service';
 import adminPostApiService from '@/common/service/admin.post.api.service';
 import adminUserApiService from '@/common/service/admin.user.api.service';
 import store from '@/plugins/vuex';
@@ -17,6 +18,7 @@ import { DEFAULT_STATISTIC } from './constants';
 class AdminDashboardModule extends VuexModule {
     userStatistic: IStatistic = cloneDeep(DEFAULT_STATISTIC);
     postStatistic: IStatistic = cloneDeep(DEFAULT_STATISTIC);
+    groupStatistic: IStatistic = cloneDeep(DEFAULT_STATISTIC);
     statisticQuery: IGetStatisticQuery = cloneDeep(INIT_GET_STATISTIC_QUERY);
 
     @Action
@@ -47,6 +49,21 @@ class AdminDashboardModule extends VuexModule {
     @Mutation
     SET_POST_STATISTIC(postStatistic: IStatistic) {
         this.postStatistic = postStatistic;
+    }
+
+    @Action
+    async getGroupStatistic() {
+        const response = await adminGroupApiService.getGroupStatistic(this.statisticQuery);
+        if (response?.success) {
+            this.SET_GROUP_STATISTIC(response?.data || cloneDeep(DEFAULT_STATISTIC));
+        } else {
+            this.SET_GROUP_STATISTIC(cloneDeep(DEFAULT_STATISTIC));
+        }
+    }
+
+    @Mutation
+    SET_GROUP_STATISTIC(groupStatistic: IStatistic) {
+        this.groupStatistic = groupStatistic;
     }
 }
 export const adminDashboardModule = getModule(AdminDashboardModule);

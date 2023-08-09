@@ -7,6 +7,9 @@
             <el-menu-item :index="PageName.MANAGE_POST_PAGE">
                 <div :id="PageName.MANAGE_POST_PAGE">Quản lý bài viết</div>
             </el-menu-item>
+            <el-menu-item :index="PageName.MANAGE_GROUP_PAGE">
+                <div :id="PageName.MANAGE_GROUP_PAGE">Quản lý hội nhóm</div>
+            </el-menu-item>
             <el-menu-item :index="PageName.MANAGE_REPORT_PAGE">
                 <div :id="PageName.MANAGE_REPORT_PAGE">Quản lý báo cáo</div>
             </el-menu-item>
