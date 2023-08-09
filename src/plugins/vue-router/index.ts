@@ -15,6 +15,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import AdminLayout from '../../layouts/AdminLayout.vue';
 import PublicLayout from '../../layouts/PublicLayout.vue';
 import AdminDashboardPage from '../../pages/admin/dashboard/pages/AdminDashboardPage.vue';
+import ManageGroupPage from '../../pages/admin/groups/pages/ManageGroupPage.vue';
 import ManagePostPage from '../../pages/admin/posts/pages/ManagePostPage.vue';
 import ManageReportPage from '../../pages/admin/reports/pages/ManageReportPage.vue';
 import AdminSettingsPage from '../../pages/admin/settings/pages/SettingsPage.vue';
@@ -162,6 +163,14 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/admin/posts',
                 name: PageName.MANAGE_POST_PAGE,
                 component: ManagePostPage,
+                meta: {
+                    admin: true,
+                },
+            },
+            {
+                path: '/admin/groups',
+                name: PageName.MANAGE_GROUP_PAGE,
+                component: ManageGroupPage,
                 meta: {
                     admin: true,
                 },

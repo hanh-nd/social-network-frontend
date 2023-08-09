@@ -15,6 +15,12 @@
                     </div>
                     <PostChart />
                 </div>
+                <div class="chart group">
+                    <div>
+                        Thống kê hội nhóm: <span style="font-weight: 700">{{ totalGroups }}</span> nhóm
+                    </div>
+                    <PostChart />
+                </div>
             </div>
         </div>
     </div>
@@ -26,11 +32,13 @@ import { Options } from 'vue-class-component';
 import PostChart from '../components/PostChart.vue';
 import UserChart from '../components/UserChart.vue';
 import { adminDashboardModule } from '../store';
+import GroupChart from '../components/GroupChart.vue';
 
 @Options({
     components: {
         UserChart,
         PostChart,
+        GroupChart,
     },
 })
 export default class AdminDashboardPage extends GlobalMixin {
@@ -46,9 +54,14 @@ export default class AdminDashboardPage extends GlobalMixin {
         return adminDashboardModule.postStatistic.total;
     }
 
+    get totalGroups() {
+        return adminDashboardModule.groupStatistic.total;
+    }
+
     async loadData() {
         adminDashboardModule.getUserStatistic();
         adminDashboardModule.getPostStatistic();
+        adminDashboardModule.getGroupStatistic();
     }
 }
 </script>
