@@ -161,7 +161,7 @@ class GroupModule extends VuexModule {
     }
 
     @Action
-    async getCreatedGroupList({ append }: { append: boolean } = { append: false }) {
+    async getCreatedGroupList({ append = false }: { append?: boolean }) {
         const response = await groupApiService.getUserCreatedGroups(this.createdGroupListQuery);
         if (response?.success) {
             const data = response?.data || [];
@@ -186,7 +186,7 @@ class GroupModule extends VuexModule {
 
     @Mutation
     APPEND_CREATED_GROUP_LIST(createdGroupList: IGroup[]) {
-        this.createdGroupList = createdGroupList;
+        this.createdGroupList.push(...createdGroupList);
     }
 
     @Mutation
@@ -196,7 +196,13 @@ class GroupModule extends VuexModule {
 
     @Action
     resetCreatedGroupListQuery() {
-        this.SET_CREATED_GROUP_LIST_QUERY(cloneDeep(INIT_GET_GROUP_LIST_QUERY));
+        this.RESET_CREATED_GROUP_LIST_QUERY();
+        this.SET_IS_FETCHED_ALL_CREATED_GROUP_LIST(false);
+    }
+
+    @Mutation
+    RESET_CREATED_GROUP_LIST_QUERY() {
+        this.createdGroupListQuery = cloneDeep(INIT_GET_GROUP_LIST_QUERY);
     }
 
     @Action

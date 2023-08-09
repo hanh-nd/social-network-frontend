@@ -36,8 +36,9 @@ export default class GroupPage extends GlobalMixin {
 
     async loadData() {
         groupModule.resetJoinedGroupListQuery();
+        groupModule.resetCreatedGroupListQuery();
         groupModule.getJoinedGroupList({ append: false });
-        groupModule.getCreatedGroupList();
+        groupModule.getCreatedGroupList({ append: false });
     }
 }
 </script>

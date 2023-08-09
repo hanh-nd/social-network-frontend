@@ -1,7 +1,7 @@
 <template>
     <div class="time-spent-chart-wrapper w-100">
         <div class="bar-chart w-100">
-            <Bar
+            <Line
                 :data="{
                     labels: barLabels,
                     datasets: barDatasets,
@@ -14,27 +14,37 @@
 
 <script lang="ts">
 import { GlobalMixin } from '@/common/mixins';
-import { Bar } from 'vue-chartjs';
+import { Line } from 'vue-chartjs';
 import { Options } from 'vue-class-component';
 import { profileModule } from '../../store';
+import moment from 'moment';
+import { keyBy } from 'lodash';
 
 @Options({
-    components: { Bar },
+    components: { Line },
 })
 export default class TimeSpentChart extends GlobalMixin {
     get statistics() {
-        return profileModule.userStatistics;
+        return keyBy(profileModule.userStatistics, 'date');
+    }
+
+    get range() {
+        return profileModule.statisticsQuery.range as number;
     }
 
     get barLabels() {
-        return this.statistics.map((s) => s.date);
+        return Array.from(Array(this.range).keys()).map((num) =>
+            moment()
+                .subtract(this.range - num - 1, 'day')
+                .format(`YYYYMMDD`),
+        );
     }
 
     get barDatasets() {
         return [
             {
                 label: 'Thời gian hoat động',
-                data: this.statistics.map((s) => s.spentHour),
+                data: this.barLabels.map((label) => this.statistics[label]?.spentHour ?? 0),
                 fill: false,
                 borderColor: '#79bf43',
                 tension: 0.1,
