@@ -49,6 +49,19 @@ export class GlobalMixin extends Vue {
         return date.fromNow(true);
     }
 
+    formatDateTime(
+        dateTime: Date | string | undefined,
+        dateTimeFromFormat: string,
+        dateTimeToFormat: string,
+        language = DEFAULT_LANGUAGE,
+        utc = true,
+    ): string {
+        if (!moment(dateTime, dateTimeFromFormat).isValid) {
+            return '';
+        }
+        return moment(dateTime, dateTimeFromFormat).utc(utc).locale(language).format(dateTimeToFormat);
+    }
+
     translateYupError(yupError: IYupError): string {
         if (!yupError) return '';
         if ((yupError as IYupError)?.i18nKey)
