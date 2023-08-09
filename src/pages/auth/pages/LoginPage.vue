@@ -2,7 +2,7 @@
     <div class="login-container">
         <div class="left-panel container">
             <div class="logo">
-                <img :src="require('@/assets/images/common/logo.svg')" />
+                <img :src="require('@/assets/images/common/new-logo.png')" />
             </div>
             <div class="welcome">Xin chào bạn!</div>
             <div class="login">
@@ -58,7 +58,7 @@ export default class LoginPage extends GlobalMixin {
         padding: 40px 0;
 
         img {
-            width: 120px;
+            width: 250px;
         }
     }
 

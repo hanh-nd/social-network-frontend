@@ -2,7 +2,7 @@
     <div class="forgot-password-container">
         <div class="left-panel container">
             <div class="logo">
-                <img :src="require('@/assets/images/common/logo.svg')" />
+                <img :src="require('@/assets/images/common/new-logo.png')" />
             </div>
             <div class="welcome">Quên mật khẩu</div>
             <div class="forgot-password">
@@ -50,7 +50,7 @@ export default class ForgotPasswordPage extends GlobalMixin {
         padding: 40px 0;
 
         img {
-            width: 120px;
+            width: 250px;
         }
     }
 
