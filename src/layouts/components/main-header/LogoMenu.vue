@@ -2,12 +2,13 @@
     <div class="logo-menu-wrapper">
         <div class="logo">
             <router-link to="/" @click="onClick">
-                <img src="@/assets/images/common/logo.svg" alt="" />
+                <img src="@/assets/images/common/new-logo.png" alt="" width="150" />
             </router-link>
         </div>
         <div class="search-bar">
             <BaseAutocomplete
                 v-model:value="keyword"
+                style="width: 300px"
                 :options="options"
                 placeholder="Nhập từ khóa để tìm kiếm"
                 @on-change-keyword="onChangeKeyword"
@@ -97,11 +98,9 @@ export default class LogoMenu extends GlobalMixin {
     height: 80%;
     gap: 8px;
     .logo {
+        display: flex;
+        align-items: center;
         height: 100%;
-
-        img {
-            height: 100%;
-        }
     }
 
     :deep(.search-bar) {

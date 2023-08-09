@@ -2,7 +2,7 @@
     <div class="reset-password-container">
         <div class="left-panel container">
             <div class="logo">
-                <img :src="require('@/assets/images/common/logo.svg')" />
+                <img :src="require('@/assets/images/common/new-logo.png')" />
             </div>
             <div class="welcome">Lấy lại mật khẩu</div>
             <div class="reset-password">
@@ -40,7 +40,7 @@ export default class ResetPasswordPage extends GlobalMixin {}
         padding: 40px 0;
 
         img {
-            width: 120px;
+            width: 250px;
         }
     }
 
