@@ -24,7 +24,7 @@ class ChatApiService extends ApiService {
     }
 
     async blockOrUnblockMember(id: string, memberId: string): Promise<IBodyResponse<boolean>> {
-        return await this.client.post(`${this.baseUrl}/${id}/members/${memberId}`);
+        return await this.client.post(`${this.baseUrl}/${id}/members/${memberId}/block`);
     }
 
     async deleteChat(id: string): Promise<IBodyResponse<boolean>> {
@@ -51,6 +51,14 @@ class ChatApiService extends ApiService {
 
     async leaveChat(id: string): Promise<IBodyResponse<boolean>> {
         return await this.client.post(`${this.baseUrl}/${id}/leave`);
+    }
+
+    async markRead(id: string): Promise<IBodyResponse<boolean>> {
+        return await this.client.post(`${this.baseUrl}/${id}/mark-read`);
+    }
+
+    async getUnreadCount(): Promise<IBodyResponse<number>> {
+        return await this.client.get(`${this.baseUrl}/unread-count`);
     }
 }
 const chatApiService = new ChatApiService({ baseUrl: '/chats' }, axiosService);

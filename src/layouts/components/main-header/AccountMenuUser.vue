@@ -35,7 +35,11 @@
             </div>
 
             <template #reference>
-                <el-icon :size="24" class="chat-btn me-2"><ChatDotRound /></el-icon>
+                <el-icon :size="24" class="chat-btn me-2">
+                    <el-badge :value="unreadChatCount" :hidden="!unreadChatCount">
+                        <ChatDotRound />
+                    </el-badge>
+                </el-icon>
             </template>
         </el-popover>
 
@@ -129,6 +133,10 @@ export default class AccountMenuUser extends GlobalMixin {
         return notificationModule.unreadNotificationCount;
     }
 
+    get unreadChatCount() {
+        return chatModule.unreadChatCount;
+    }
+
     mounted(): void {
         this.registerNotificationEvents();
 
@@ -136,6 +144,7 @@ export default class AccountMenuUser extends GlobalMixin {
             passive: true,
         });
         chatModule.getChatList();
+        chatModule.getUnreadChatCount();
         notificationModule.getNotifications();
         notificationModule.getUnreadNotificationCount();
     }
