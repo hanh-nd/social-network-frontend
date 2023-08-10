@@ -21,7 +21,9 @@ class ChatModule extends VuexModule {
     isShowChatInfoDrawer = false;
     messageListQuery: IGetMessageListQuery = cloneDeep(INIT_GET_MESSAGE_LIST_QUERY);
     isShowCreateChatDialog = false;
+    isShowAddMemberDialog = false;
     searchUsers: IUser[] = [];
+    unreadChatCount = 0;
 
     @Action
     async getChatList() {
@@ -139,6 +141,16 @@ class ChatModule extends VuexModule {
     }
 
     @Action
+    setIsShowAddMemberDialog(isShowAddMemberDialog: boolean) {
+        this.SET_IS_SHOW_ADD_MEMBER_DIALOG(isShowAddMemberDialog);
+    }
+
+    @Mutation
+    SET_IS_SHOW_ADD_MEMBER_DIALOG(isShowAddMemberDialog: boolean) {
+        this.isShowAddMemberDialog = isShowAddMemberDialog;
+    }
+
+    @Action
     async getSearchUsers(keyword: string) {
         const response = await searchApiService.searchUsers({
             keyword,
@@ -153,6 +165,31 @@ class ChatModule extends VuexModule {
     @Mutation
     SET_SEARCH_USERS(searchUsers: IUser[]) {
         this.searchUsers = searchUsers;
+    }
+
+    @Action
+    async getUnreadChatCount() {
+        const response = await chatApiService.getUnreadCount();
+        if (response?.success) {
+            this.SET_UNREAD_CHAT_COUNT(response?.data || 0);
+        } else {
+            this.SET_UNREAD_CHAT_COUNT(0);
+        }
+    }
+
+    @Action
+    incUnreadChatCount(amount: number) {
+        this.SET_UNREAD_CHAT_COUNT(this.unreadChatCount + amount);
+    }
+
+    @Action
+    setUnreadChatCount(amount: number) {
+        this.SET_UNREAD_CHAT_COUNT(amount);
+    }
+
+    @Mutation
+    SET_UNREAD_CHAT_COUNT(unreadChatCount: number) {
+        this.unreadChatCount = unreadChatCount;
     }
 }
 

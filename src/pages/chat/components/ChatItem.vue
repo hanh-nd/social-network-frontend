@@ -4,9 +4,7 @@
             <BaseRoundAvatar :fileId="avatarId" />
         </div>
         <div class="right-section">
-            <div class="top-section">
-                {{ name }}
-            </div>
+            <div class="top-section">{{ name }} - {{ isRead ? 'Đã đọc' : 'Chưa đọc' }}</div>
             <div class="bottom-section">
                 {{ lastMessage?.content }} - {{ parseDateTimeRelative(lastMessage?.createdAt) }}
             </div>
@@ -47,6 +45,10 @@ export default class ChatItem extends GlobalMixin {
 
     get lastMessage() {
         return this.chat.lastMessage;
+    }
+
+    get isRead() {
+        return this.chat.readBy.includes(`${this.loginUser._id}`);
     }
 }
 </script>

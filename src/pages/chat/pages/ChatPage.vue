@@ -75,22 +75,39 @@ export default class ChatPage extends GlobalMixin {
     }
 
     registerUserChatEvent() {
-        SocketProvider.socket.on(SocketEvent.USER_CHAT, ({ chatId, message }) => {
-            chatModule.unshiftMessageList(message);
-            EventEmitter.emit(EventName.USER_CHAT);
+        SocketProvider.socket.on(SocketEvent.USER_CHAT, ({ chat: _chat, message, userId }) => {
+            const chat = this.chatList.find((chat) => chat._id == _chat._id);
+            if (!chat) {
+                _chat.lastMessage = message;
+                _chat.lastMessageAt = moment().toISOString();
+                _chat.readBy = [userId];
+                this.chatList.unshift(_chat);
+                return;
+            }
 
-            const chat = this.chatList.find((chat) => chat._id == chatId);
-            if (!chat) return;
+            if (userId == this.loginUser._id) {
+                if (!chat.readBy.includes(userId)) {
+                    chatModule.incUnreadChatCount(-1);
+                }
+            } else {
+                chatModule.incUnreadChatCount(1);
+            }
+
+            if (this.chatId === _chat._id) {
+                chatModule.unshiftMessageList(message);
+                EventEmitter.emit(EventName.USER_CHAT);
+            }
 
             const clonedChat = cloneDeep(chat);
             clonedChat.lastMessage = message;
             clonedChat.lastMessageAt = moment().toISOString();
+            clonedChat.readBy = [userId];
 
-            remove(this.chatList, (chat) => chat._id == chatId);
+            remove(this.chatList, (chat) => chat._id == _chat._id);
             this.chatList.unshift(clonedChat);
         });
 
-        SocketProvider.socket.on(SocketEvent.USER_RECALL, ({ chatId, message: updatedMessage }) => {
+        SocketProvider.socket.on(SocketEvent.USER_RECALL, ({ chat, message: updatedMessage }) => {
             const message = chatModule.messageList.find((m) => m._id == updatedMessage._id);
             if (!message) return;
 

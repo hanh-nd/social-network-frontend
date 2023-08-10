@@ -15,6 +15,7 @@ export interface IChat {
     blockedIds: string[];
     type: ChatType;
     deletedFor: string[];
+    readBy: string[];
     lastMessage?: IMessage;
     lastMessageAt?: string;
     createdAt: Date;
