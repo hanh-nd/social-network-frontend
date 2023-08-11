@@ -19,7 +19,7 @@
                     <div>
                         Thống kê hội nhóm: <span style="font-weight: 700">{{ totalGroups }}</span> nhóm
                     </div>
-                    <PostChart />
+                    <GroupChart />
                 </div>
             </div>
         </div>
