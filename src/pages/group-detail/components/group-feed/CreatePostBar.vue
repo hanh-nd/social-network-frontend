@@ -1,5 +1,5 @@
 <template>
-    <div class="create-post-bar-wrapper">
+    <div class="create-post-bar-wrapper" v-if="allowCreatePost">
         <div class="avatar">
             <router-link to="/my-profile">
                 <BaseRoundAvatar :user="loginUser" />
@@ -30,6 +30,14 @@ export default class CreatePostBar extends GlobalMixin {
     }
     get loginUser() {
         return appModule.loginUser;
+    }
+
+    get group() {
+        return groupDetailModule.groupDetail;
+    }
+
+    get allowCreatePost() {
+        return !this.group.private || this.group.memberIds.includes(this.loginUser._id);
     }
 
     openCreatePostDialog() {

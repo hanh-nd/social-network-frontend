@@ -28,7 +28,7 @@
                     <el-button type="primary" @click="acceptRequest">Chấp nhận</el-button>
                 </div>
                 <div class="btn reject">
-                    <el-button>Từ chối</el-button>
+                    <el-button @click="rejectRequest">Từ chối</el-button>
                 </div>
             </div>
         </div>

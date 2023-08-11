@@ -90,7 +90,7 @@ class GroupApiService extends ApiService {
         });
     }
 
-    async createPost(groupId: string, body: ICreatePostInGroupBody): Promise<IBodyResponse<boolean>> {
+    async createPost(groupId: string, body: ICreatePostInGroupBody): Promise<IBodyResponse<IGroupPost>> {
         return await this.client.post(`${this.baseUrl}/${groupId}/group-posts`, body);
     }
 
