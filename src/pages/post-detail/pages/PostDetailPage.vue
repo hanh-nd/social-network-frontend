@@ -63,7 +63,7 @@ export default class PostDetailPage extends GlobalMixin {
 
     .post-detail-page-container {
         width: 100%;
-        max-width: 575px;
+        max-width: 1120px;
         padding: $content-padding;
         margin: auto;
         background: $color-white;
