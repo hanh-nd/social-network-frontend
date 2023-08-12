@@ -3,7 +3,7 @@
         <el-popover
             popper-class="notification-list-dialog"
             placement="bottom"
-            :width="250"
+            :width="400"
             trigger="click"
             :teleported="false"
         >
@@ -23,7 +23,7 @@
             </template>
         </el-popover>
 
-        <el-popover popper-class="chat-list-dialog" placement="bottom" :width="250" trigger="click" :teleported="false">
+        <el-popover popper-class="chat-list-dialog" placement="bottom" :width="400" trigger="click" :teleported="false">
             <div class="chat-list">
                 <ChatListMenu
                     @on-click-chat-item="onClickChatItem"

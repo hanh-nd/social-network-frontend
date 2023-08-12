@@ -1,10 +1,10 @@
 <template>
-    <div class="hidable-content-wrapper">
-        <div class="content-wrapper" v-if="isAuthor || isShow || !isToxic">
+    <div class="hidable-content-wrapper" v-if="isAuthor || (!isAuthor && !isToxic)">
+        <div class="content-wrapper" v-if="isShow || !isToxic">
             <div class="content">
                 {{ target?.content }}
             </div>
-            <div class="hide" v-if="!isAuthor && isToxic" @click="show">Ẩn</div>
+            <div class="hide" v-if="isToxic" @click="show">Ẩn</div>
         </div>
         <div class="censored" v-else>
             Nội dung đã được ẩn đi do chứa từ ngữ không phù hợp. <span class="show" @click="show">Hiện</span>
