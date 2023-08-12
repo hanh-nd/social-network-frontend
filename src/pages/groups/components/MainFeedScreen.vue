@@ -56,6 +56,7 @@ export default class MainFeedScreen extends GlobalMixin {
     flex-direction: column;
     gap: 8px;
     margin: auto;
-    max-width: map-get($grid-breakpoints, sm);
+    // max-width: map-get($grid-breakpoints, sm);
+    max-width: 1120px;
 }
 </style>
