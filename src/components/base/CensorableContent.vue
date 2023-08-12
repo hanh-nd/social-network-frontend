@@ -1,6 +1,6 @@
 <template>
     <div class="hidable-content-wrapper">
-        <div class="content-wrapper" v-if="isShow || !isToxic">
+        <div class="content-wrapper" v-if="isAuthor || isShow || !isToxic">
             <div class="content">
                 {{ target?.content }}
             </div>
@@ -15,6 +15,7 @@
 <script lang="ts">
 import { IComment, IPost } from '@/common/interfaces';
 import { GlobalMixin } from '@/common/mixins';
+import { appModule } from '@/plugins/vuex/appModule';
 import { Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
@@ -22,6 +23,14 @@ import { Prop } from 'vue-property-decorator';
 export default class CensorableContent extends GlobalMixin {
     @Prop() target!: IPost | IComment;
     isShow = false;
+
+    get loginUser() {
+        return appModule.loginUser;
+    }
+
+    get isAuthor() {
+        return this.target.author._id == this.loginUser._id || this.target.author == this.loginUser._id;
+    }
 
     get isToxic() {
         return this.target?.isToxic || false;
