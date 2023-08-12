@@ -26,6 +26,15 @@
                     :error="translateYupError(updatePrivacyForm.errors.reviewPost as IYupError)"
                 />
             </div>
+            <div class="auto-reject">
+                <BaseSingleSelect
+                    label="Tự động từ chối bài viết xấu"
+                    v-model:value="updatePrivacyForm.autoReject"
+                    :options="reviewPostOptions"
+                    :error="translateYupError(updatePrivacyForm.errors.autoReject as IYupError)"
+                />
+            </div>
+
             <div class="submit-btn">
                 <el-button @click="onSubmit" type="primary">Lưu</el-button>
             </div>
@@ -49,6 +58,16 @@
                         group?.reviewPost
                             ? `Các bài viết của thành viên cần sự phê duyệt của quản trị viên.`
                             : `Mọi bài viết từ thành viên sẽ được đăng tải ngay lập tức.`
+                    }}
+                </div>
+            </div>
+            <div class="auto-reject-section">
+                <div class="header">{{ group?.autoReject ? `Tự động từ chối.` : `Không tự động từ chối` }}</div>
+                <div class="private">
+                    {{
+                        group?.autoReject
+                            ? `Các bài viết với nội dung xấu sẽ bị tự động từ chối.`
+                            : `Các bài viết với nội dung xấu cần duyệt thủ công để hiển thị.`
                     }}
                 </div>
             </div>
@@ -99,6 +118,19 @@ export default class ProfileDescribeForm extends GlobalMixin {
         ];
     }
 
+    get autoRejectOptions() {
+        return [
+            {
+                name: 'Không. Các bài viết với nội dung xấu cần duyệt thủ công để hiển thị.',
+                id: false,
+            },
+            {
+                name: 'Có. Các bài viết với nội dung xấu sẽ bị tự động từ chối.',
+                id: true,
+            },
+        ];
+    }
+
     get group() {
         return groupDetailModule.groupDetail;
     }
@@ -119,11 +151,13 @@ export default class ProfileDescribeForm extends GlobalMixin {
         const initValues = {
             private: this.group?.private,
             reviewPost: this.group?.reviewPost,
+            autoReject: this.group?.autoReject,
         };
 
         const schema = yup.object({
             private: yup.bool(),
             reviewPost: yup.bool(),
+            autoReject: yup.bool(),
         });
 
         const { resetForm, setValues, errors, handleSubmit } = useForm({
@@ -144,6 +178,7 @@ export default class ProfileDescribeForm extends GlobalMixin {
             if (response.success) {
                 this.group.private = values.private ?? this.group.private;
                 this.group.reviewPost = values.reviewPost ?? this.group.reviewPost;
+                this.group.autoReject = values.autoReject ?? this.group.autoReject;
                 this.showSuccessNotificationFunction('Cập nhật thành công.');
             } else {
                 this.showErrorNotificationFunction(response?.message || 'Cập nhật thất bại');
@@ -154,10 +189,12 @@ export default class ProfileDescribeForm extends GlobalMixin {
 
         const { value: isPrivate } = useField<string>('private');
         const { value: reviewPost } = useField<string>('reviewPost');
+        const { value: autoReject } = useField<string>('autoReject');
 
         return {
             isPrivate,
             reviewPost,
+            autoReject,
             errors,
             submit,
             clearFormData,
@@ -170,6 +207,7 @@ export default class ProfileDescribeForm extends GlobalMixin {
         this.updatePrivacyForm.setValues({
             private: this.group?.private,
             reviewPost: this.group?.reviewPost,
+            autoReject: this.group?.autoReject,
         });
     }
 

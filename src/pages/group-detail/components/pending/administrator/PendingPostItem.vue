@@ -19,7 +19,7 @@
         </div>
 
         <div class="middle-section">
-            <BasePostMainContent :post="post" />
+            <BasePostMainContent :post="post" :useCensorableContent="false" />
         </div>
 
         <div class="bottom-section">
