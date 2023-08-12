@@ -312,6 +312,7 @@ export interface IGroup {
     }[];
     private: boolean;
     reviewPost: boolean;
+    autoReject?: boolean;
     summary: string;
     coverId: string;
     memberIds: string[];
@@ -346,6 +347,7 @@ export interface ICreateGroupBody {
     name: string;
     private?: boolean;
     reviewPost?: boolean;
+    autoReject?: boolean;
     summary?: string;
     coverId?: string;
 }
@@ -354,6 +356,7 @@ export interface IUpdateGroupBody {
     name?: string;
     private?: boolean;
     reviewPost?: boolean;
+    autoReject?: boolean;
     summary?: string;
     coverId?: string;
 }
