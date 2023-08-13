@@ -1,7 +1,10 @@
 <template>
     <div class="main-content-wrapper">
-        <div class="content">
+        <div class="content" v-if="useCensorableContent">
             <BaseCensorableContent :target="post" />
+        </div>
+        <div class="content" v-else>
+            <el-tag type="danger" v-if="post.isToxic">{{ 'Nội dung xấu' }}</el-tag> {{ post.content }}
         </div>
 
         <div class="post-data">
@@ -28,6 +31,7 @@ import { Prop } from 'vue-property-decorator';
 })
 export default class PostMainContent extends GlobalMixin {
     @Prop() post!: IPost;
+    @Prop({ default: true }) useCensorableContent!: boolean;
 
     openPostDetailDialog() {
         appModule.setPostDetail(this.post);

@@ -87,7 +87,7 @@ export default class SearchPage extends GlobalMixin {
 
 .search-page-container {
     width: 100%;
-    max-width: 1120px;
+    max-width: map-get($grid-breakpoints, md);
     padding: $content-padding;
     margin: auto;
 

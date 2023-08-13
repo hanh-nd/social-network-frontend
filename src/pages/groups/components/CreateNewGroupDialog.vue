@@ -34,6 +34,14 @@
                     :error="translateYupError(createGroupForm.errors.reviewPost as IYupError)"
                 />
             </div>
+            <div class="auto-reject">
+                <BaseSingleSelect
+                    label="Tự động từ chối"
+                    v-model:value="createGroupForm.autoReject"
+                    :options="autoRejectOptions"
+                    :error="translateYupError(createGroupForm.errors.autoReject as IYupError)"
+                />
+            </div>
             <div class="image-chooser">
                 <img v-if="createGroupForm.coverId" :src="getImageSourceById(createGroupForm.coverId)" />
                 <BaseUploadSingleButton @on-file-uploaded="onSelectPictures">Chọn ảnh bìa</BaseUploadSingleButton>
@@ -88,6 +96,19 @@ export default class CreateNewGroupDialog extends GlobalMixin {
         ];
     }
 
+    get autoRejectOptions() {
+        return [
+            {
+                name: 'Không. Các bài viết với nội dung xấu cần duyệt thủ công để hiển thị.',
+                id: false,
+            },
+            {
+                name: 'Có. Các bài viết với nội dung xấu sẽ bị tự động từ chối.',
+                id: true,
+            },
+        ];
+    }
+
     get deviceType() {
         return appModule.deviceType;
     }
@@ -110,12 +131,14 @@ export default class CreateNewGroupDialog extends GlobalMixin {
             private: false,
             reviewPost: false,
             coverId: undefined,
+            autoReject: false,
         };
 
         const schema = yup.object({
             name: yup.string().max(ValidationForm.INPUT_TEXT_MAX_LENGTH).required(),
             private: yup.bool(),
             reviewPost: yup.bool(),
+            autoReject: yup.bool(),
             coverId: yup.string(),
         });
 
@@ -149,12 +172,14 @@ export default class CreateNewGroupDialog extends GlobalMixin {
         const { value: name } = useField<number>('name');
         const { value: isPrivate } = useField<boolean>('private');
         const { value: reviewPost } = useField<boolean>('reviewPost');
+        const { value: autoReject } = useField<boolean>('autoReject');
         const { value: coverId } = useField<string>('coverId');
 
         return {
             name,
             isPrivate,
             reviewPost,
+            autoReject,
             coverId,
             errors,
             submit,

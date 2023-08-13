@@ -63,7 +63,7 @@ export default class PostDetailPage extends GlobalMixin {
 
     .post-detail-page-container {
         width: 100%;
-        max-width: 1120px;
+        max-width: map-get($grid-breakpoints, md);
         padding: $content-padding;
         margin: auto;
         background: $color-white;

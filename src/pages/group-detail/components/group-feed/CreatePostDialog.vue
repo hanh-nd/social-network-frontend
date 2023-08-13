@@ -137,15 +137,15 @@ export default class CreatePostDialog extends GlobalMixin {
         };
 
         const submit = handleSubmit(async (values) => {
-            const response = await groupApiService.createPost(this.group._id, values);
-            if (response.success) {
-                this.showSuccessNotificationFunction('Tạo bài viết mới thành công');
-                groupDetailModule.setIsShowCreatePostDialog(false);
-                EventEmitter.emit(EventName.GROUP_POST_CREATED, response?.data);
-                clearFormData();
-            } else {
-                this.showErrorNotificationFunction(response?.message || 'Tạo bài viết mới thất bại');
-            }
+            const response = groupApiService.createPost(this.group._id, values);
+            // if (response.success) {
+            this.showSuccessNotificationFunction('Bài viết đang được xem xét.');
+            groupDetailModule.setIsShowCreatePostDialog(false);
+            // EventEmitter.emit(EventName.GROUP_POST_CREATED, response?.data);
+            clearFormData();
+            // } else {
+            // this.showErrorNotificationFunction(response?.message || 'Tạo bài viết mới thất bại');
+            // }
         });
 
         const { value: isAnonymous } = useField<string>('isAnonymous');

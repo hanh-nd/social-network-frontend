@@ -39,8 +39,7 @@ export default class NotificationPage extends GlobalMixin {
     .notification-page-container {
         height: 100%;
         width: 100%;
-        // max-width: 575px;
-        max-width: 1120px;
+        max-width: map-get($grid-breakpoints, md);
         padding: $content-padding;
         margin: auto;
         background: $color-white;
