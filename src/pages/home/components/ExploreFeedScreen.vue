@@ -74,7 +74,7 @@ export default class ExploreFeedScreen extends GlobalMixin {
 <style lang="scss" scoped>
 .explore-feed-screen-wrapper {
     margin: auto;
-    max-width: map-get($grid-breakpoints, sm);
+    max-width: map-get($grid-breakpoints, md);
 
     .feed {
         display: flex;
